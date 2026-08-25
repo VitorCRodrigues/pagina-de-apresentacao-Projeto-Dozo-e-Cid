@@ -47,7 +47,7 @@ p{margin:0}
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase}
 .eyebrow--gold{color:var(--gold)}
 .eyebrow--green{color:var(--green)}
-.h1{font-family:var(--serif);font-weight:500;font-size:60px;line-height:1.08;letter-spacing:-.02em;margin-bottom:28px;text-wrap:pretty}
+.h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,4.2vw,56px);line-height:1.06;letter-spacing:-.02em;margin-bottom:26px;text-wrap:pretty}
 .h2{font-family:var(--serif);font-weight:500;font-size:44px;line-height:1.12;letter-spacing:-.02em;color:var(--navy);text-wrap:pretty}
 .h2--onNavy{color:var(--paper)}
 .h2--xl{font-size:52px;line-height:1.1}
@@ -55,18 +55,18 @@ p{margin:0}
 .h2--sm{font-size:40px}
 .h3-serif{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.2;color:var(--navy)}
 .lede{font-size:20px;line-height:1.65;color:var(--ink-soft)}
-.lede--onNavy{font-size:19px;color:var(--on-navy);max-width:620px}
+.lede--onNavy{font-size:18px;line-height:1.6;color:var(--on-navy);max-width:600px}
 .body{font-size:18px;line-height:1.7;color:var(--ink-soft);max-width:520px}
 .body--strong{color:var(--ink);font-weight:500;margin-top:20px}
 .body--sm{font-size:17px}
 .stack-24{display:grid;gap:24px}
 
 /* hero */
-.hero__inner{padding-top:108px;padding-bottom:116px;display:grid;grid-template-columns:1.15fr .85fr;gap:72px;align-items:end}
-.hero .eyebrow{margin-bottom:28px}
-.hero__actions{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:40px}
-.hero__stats{border-left:1px solid rgba(247,244,238,.16);padding-left:40px;display:grid;gap:30px}
-.stat__num{font-family:var(--serif);font-size:40px;color:var(--gold);line-height:1}
+.hero__inner{padding-top:84px;padding-bottom:92px;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:end}
+.hero .eyebrow{margin-bottom:20px}
+.hero__actions{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:38px}
+.hero__stats{border-left:1px solid rgba(247,244,238,.16);padding-left:40px;display:grid;gap:28px}
+.stat__num{font-family:var(--serif);font-size:34px;color:var(--gold);line-height:1}
 .stat__label{font-size:14px;color:var(--on-navy);margin-top:8px;line-height:1.5}
 
 /* grids */

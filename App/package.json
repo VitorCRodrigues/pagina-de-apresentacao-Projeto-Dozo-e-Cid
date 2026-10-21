@@ -1,0 +1,18 @@
+{
+  "name": "opendollars-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc -p .",
+    "paper": "node scripts/paper-run.ts"
+  },
+  "dependencies": {
+    "pg": "8.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.3.0",
+    "@types/pg": "8.15.5",
+    "typescript": "5.9.3"
+  }
+}

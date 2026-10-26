@@ -1,0 +1,17 @@
+{
+  "app": {
+    "name": "OpenDollars"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "pt": "Português",
+    "en": "English"
+  },
+  "dev": {
+    "i18nDemo": {
+      "title": "Teste de idiomas",
+      "body": "Esta página é temporária e serve só para verificar as traduções."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+node_modules
+dist
+dist-ssr
+storybook-static
+*.local
+.env
+.env.*
+!.env.example
+
+# Test output
+coverage
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+*.tsbuildinfo

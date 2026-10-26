@@ -16,7 +16,8 @@ export const resources = {
 } as const;
 
 i18n.on("languageChanged", (lng) => {
-  document.documentElement.lang = lng;
+  // lng can be the raw detected tag (e.g. "es-AR"); expose the locale actually in use.
+  document.documentElement.lang = i18n.resolvedLanguage ?? lng;
 });
 
 void i18n

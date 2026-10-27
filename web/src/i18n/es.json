@@ -8,6 +8,72 @@
     "pt": "Português",
     "en": "English"
   },
+  "common": {
+    "loading": "Cargando",
+    "close": "Cerrar",
+    "optional": "opcional",
+    "retry": "Reintentar"
+  },
+  "select": {
+    "placeholder": "Elegir una opción"
+  },
+  "copy": {
+    "action": "Copiar",
+    "done": "Copiado",
+    "failed": "No se pudo copiar. El texto se puede seleccionar y copiar a mano."
+  },
+  "stepper": {
+    "progress": "Paso {{current}} de {{total}}",
+    "label": "Progreso"
+  },
+  "timeline": {
+    "status": {
+      "done": "Completado",
+      "current": "Paso actual",
+      "upcoming": "Pendiente",
+      "error": "Con problema"
+    }
+  },
+  "costs": {
+    "caption": "Costos de este aporte",
+    "item": "Concepto",
+    "percent": "Porcentaje",
+    "amount": "Monto",
+    "estimated": "estimado",
+    "total": "Costo total",
+    "net": "Llega para invertir",
+    "kind": {
+      "iof": "IOF",
+      "fx_spread": "Spread cambiario",
+      "rail_fee": "Comisión de la transferencia",
+      "allocation_min": "Costo de asignación",
+      "advisory_fee": "Honorarios de asesoría"
+    }
+  },
+  "countdown": {
+    "lastMinute": "Queda menos de un minuto.",
+    "expired": "El plazo venció."
+  },
+  "states": {
+    "loading": "Cargando información",
+    "error": {
+      "title": "No pudimos cargar esta información",
+      "body": "Puede ser un problema de conexión. Tus datos no cambiaron."
+    },
+    "sessionExpired": {
+      "title": "Tu sesión se cerró",
+      "body": "Por seguridad, cerramos la sesión después de un tiempo sin actividad.",
+      "action": "Volver a iniciar sesión"
+    },
+    "maintenance": {
+      "title": "Estamos haciendo mantenimiento",
+      "body": "Tu cuenta y tus inversiones siguen en Interactive Brokers, a tu nombre.",
+      "until": "El acceso vuelve a las {{time}}."
+    }
+  },
+  "risk": {
+    "default": "Invertir implica riesgos. Los resultados pasados no garantizan resultados futuros."
+  },
   "dev": {
     "i18nDemo": {
       "title": "Prueba de idiomas",

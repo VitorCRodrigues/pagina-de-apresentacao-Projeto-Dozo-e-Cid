@@ -8,6 +8,72 @@
     "pt": "Português",
     "en": "English"
   },
+  "common": {
+    "loading": "Carregando",
+    "close": "Fechar",
+    "optional": "opcional",
+    "retry": "Tentar de novo"
+  },
+  "select": {
+    "placeholder": "Escolher uma opção"
+  },
+  "copy": {
+    "action": "Copiar",
+    "done": "Copiado",
+    "failed": "Não foi possível copiar. Selecione o texto e copie manualmente."
+  },
+  "stepper": {
+    "progress": "Etapa {{current}} de {{total}}",
+    "label": "Progresso"
+  },
+  "timeline": {
+    "status": {
+      "done": "Concluído",
+      "current": "Etapa atual",
+      "upcoming": "Pendente",
+      "error": "Com problema"
+    }
+  },
+  "costs": {
+    "caption": "Custos deste aporte",
+    "item": "Item",
+    "percent": "Percentual",
+    "amount": "Valor",
+    "estimated": "estimado",
+    "total": "Custo total",
+    "net": "Chega para investir",
+    "kind": {
+      "iof": "IOF",
+      "fx_spread": "Spread de câmbio",
+      "rail_fee": "Tarifa da transferência",
+      "allocation_min": "Custo de alocação",
+      "advisory_fee": "Taxa de consultoria"
+    }
+  },
+  "countdown": {
+    "lastMinute": "Falta menos de um minuto.",
+    "expired": "O prazo terminou."
+  },
+  "states": {
+    "loading": "Carregando informações",
+    "error": {
+      "title": "Não conseguimos carregar estas informações",
+      "body": "Pode ser um problema de conexão. Seus dados não mudaram."
+    },
+    "sessionExpired": {
+      "title": "Sua sessão foi encerrada",
+      "body": "Por segurança, encerramos a sessão depois de um tempo sem atividade.",
+      "action": "Entrar de novo"
+    },
+    "maintenance": {
+      "title": "Estamos em manutenção",
+      "body": "Sua conta e seus investimentos continuam na Interactive Brokers, no seu nome.",
+      "until": "O acesso volta às {{time}}."
+    }
+  },
+  "risk": {
+    "default": "Investimentos têm risco. Resultados passados não garantem resultados futuros."
+  },
   "dev": {
     "i18nDemo": {
       "title": "Teste de idiomas",

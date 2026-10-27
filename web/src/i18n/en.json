@@ -8,6 +8,72 @@
     "pt": "Português",
     "en": "English"
   },
+  "common": {
+    "loading": "Loading",
+    "close": "Close",
+    "optional": "optional",
+    "retry": "Try again"
+  },
+  "select": {
+    "placeholder": "Choose an option"
+  },
+  "copy": {
+    "action": "Copy",
+    "done": "Copied",
+    "failed": "Could not copy. Select the text and copy it manually."
+  },
+  "stepper": {
+    "progress": "Step {{current}} of {{total}}",
+    "label": "Progress"
+  },
+  "timeline": {
+    "status": {
+      "done": "Done",
+      "current": "Current step",
+      "upcoming": "Upcoming",
+      "error": "Needs attention"
+    }
+  },
+  "costs": {
+    "caption": "Costs of this deposit",
+    "item": "Item",
+    "percent": "Percent",
+    "amount": "Amount",
+    "estimated": "estimated",
+    "total": "Total cost",
+    "net": "Arrives to invest",
+    "kind": {
+      "iof": "IOF",
+      "fx_spread": "Exchange spread",
+      "rail_fee": "Transfer fee",
+      "allocation_min": "Allocation cost",
+      "advisory_fee": "Advisory fee"
+    }
+  },
+  "countdown": {
+    "lastMinute": "Less than a minute left.",
+    "expired": "Time is up."
+  },
+  "states": {
+    "loading": "Loading information",
+    "error": {
+      "title": "We could not load this information",
+      "body": "It may be a connection problem. Your data has not changed."
+    },
+    "sessionExpired": {
+      "title": "Your session ended",
+      "body": "For your security, we end the session after a period of inactivity.",
+      "action": "Sign in again"
+    },
+    "maintenance": {
+      "title": "We are doing maintenance",
+      "body": "Your account and your investments remain at Interactive Brokers, in your name.",
+      "until": "Access returns at {{time}}."
+    }
+  },
+  "risk": {
+    "default": "Investing involves risk. Past performance does not guarantee future results."
+  },
   "dev": {
     "i18nDemo": {
       "title": "Language test",

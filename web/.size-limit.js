@@ -22,6 +22,7 @@ export default [
     name: "Fonts (Fraunces + Inter 400/600, Latin)",
     path: "dist/assets/*.woff2",
     gzip: false,
+    brotli: false,
     limit: "120 kB",
   },
 ];

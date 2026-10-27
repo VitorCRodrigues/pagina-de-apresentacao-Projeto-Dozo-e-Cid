@@ -1,0 +1,146 @@
+{
+  "overview": {
+    "title": "Visual system",
+    "intro": "A private bank statement on a phone: cream paper, generous space and serif figures.",
+    "palette": "Palette",
+    "type": "Typography",
+    "primitives": "Base components",
+    "domain": "Product components",
+    "states": "Page states",
+    "specimen": "Your account and your investments stay at Interactive Brokers, in your name.",
+    "colors": {
+      "navy": "Headers, primary button, navigation",
+      "green": "Completed steps, invested, links",
+      "gold": "Total balance on navy and one key action",
+      "cream": "Background of every screen",
+      "graphite": "Text",
+      "gray": "Borders, secondary text, disabled",
+      "amber": "Warnings: quote expiring, late deposit",
+      "brick": "Errors and returned deposits"
+    },
+    "styles": {
+      "display": "Display",
+      "title": "Title",
+      "heading": "Heading",
+      "body": "Body",
+      "label": "Label",
+      "caption": "Caption",
+      "value": "Value"
+    }
+  },
+  "button": {
+    "primary": "Confirm deposit",
+    "secondary": "View details",
+    "ghost": "Change amount",
+    "destructive": "Cancel plan",
+    "key": "Create monthly plan",
+    "loading": "Confirming"
+  },
+  "balance": {
+    "total": "Total balance",
+    "invested": "Invested",
+    "cash": "Cash",
+    "inFlight": "In transit",
+    "asOf": "Updated {{date}}"
+  },
+  "badge": {
+    "neutral": "Draft",
+    "info": "Under review",
+    "success": "Invested",
+    "warning": "Waiting for your deposit",
+    "error": "Deposit returned"
+  },
+  "field": {
+    "amountLabel": "Monthly amount",
+    "amountHelp": "The minimum is US$250 per month.",
+    "amountError": "The minimum amount is US$250 per month.",
+    "cuitLabel": "CUIL or CUIT",
+    "cuitHelp": "11 digits, no dashes.",
+    "cuitError": "The check digit does not match.",
+    "phoneLabel": "Phone"
+  },
+  "select": {
+    "label": "Deposit day",
+    "day": "Day {{day}} of each month"
+  },
+  "checkbox": {
+    "terms": "I accept the advisory agreement",
+    "termsLink": "Read the full agreement",
+    "consent": "I authorize sending my data to Interactive Brokers, in the US."
+  },
+  "radio": {
+    "label": "How to send",
+    "usdcTitle": "USDC from an exchange",
+    "usdcBody": "0.30% fee, US$1 minimum.",
+    "swiftTitle": "SWIFT transfer",
+    "swiftBody": "From a bank account in your name. Your bank charges fixed fees.",
+    "recommended": "Recommended"
+  },
+  "dialog": {
+    "title": "Cancel the monthly plan?",
+    "body": "Deposits already sent do not change. You can create a new plan at any time.",
+    "confirm": "Cancel plan",
+    "dismiss": "Keep plan"
+  },
+  "sheet": {
+    "title": "How to send USDC",
+    "body": "From your exchange, send only USDC to the deposit address, on the network shown.",
+    "action": "Got it"
+  },
+  "toast": {
+    "saved": "Plan saved",
+    "savedBody": "The next deposit is on December 5.",
+    "error": "Could not save the plan"
+  },
+  "banner": {
+    "infoTitle": "Your account is under review",
+    "infoBody": "Interactive Brokers usually reviews it within a few business days.",
+    "warningTitle": "The quote expires soon",
+    "warningBody": "If it expires, you will need a new quote.",
+    "errorTitle": "Your deposit was returned",
+    "errorBody": "The transfer came from an account that is not in your name.",
+    "action": "Contact support"
+  },
+  "stepper": {
+    "steps": [
+      "Country of residence",
+      "Personal details",
+      "Address",
+      "Investor profile",
+      "Source of funds",
+      "Identity check",
+      "Terms",
+      "Review"
+    ]
+  },
+  "timeline": {
+    "label": "Deposit status",
+    "kyc": "Identity verified",
+    "ibkr": "US account open",
+    "notified": "Waiting for your deposit",
+    "notifiedNote": "The deposit instructions show how to send the money.",
+    "usdcReceived": "USDC received",
+    "fx": "Exchange done",
+    "wire": "Transfer sent",
+    "credited": "Money in your account",
+    "creditedNote": "It is invested in the next window, on {{date}}.",
+    "invested": "Invested",
+    "returned": "Deposit returned",
+    "returnedNote": "The transfer came from an account that is not in your name."
+  },
+  "copy": {
+    "addressLabel": "Deposit address",
+    "referenceLabel": "Required reference"
+  },
+  "qr": {
+    "label": "QR code of the deposit address"
+  },
+  "countdown": {
+    "label": "The quote expires in"
+  },
+  "empty": {
+    "title": "No deposits yet",
+    "body": "Your first deposit will show up here, with its status.",
+    "action": "Make a deposit"
+  }
+}

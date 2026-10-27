@@ -1,0 +1,146 @@
+{
+  "overview": {
+    "title": "Sistema visual",
+    "intro": "Un extracto de banca privada en el celular: fondo crema, mucho aire y números en serifa.",
+    "palette": "Paleta",
+    "type": "Tipografía",
+    "primitives": "Componentes base",
+    "domain": "Componentes del producto",
+    "states": "Estados de página",
+    "specimen": "Tu cuenta y tus inversiones quedan en Interactive Brokers, a tu nombre.",
+    "colors": {
+      "navy": "Cabeceras, botón principal, navegación",
+      "green": "Pasos completados, invertido, enlaces",
+      "gold": "Saldo total sobre azul y una sola acción clave",
+      "cream": "Fondo de todas las pantallas",
+      "graphite": "Texto",
+      "gray": "Bordes, texto secundario, deshabilitado",
+      "amber": "Avisos: cotización por vencer, aporte demorado",
+      "brick": "Errores y depósitos devueltos"
+    },
+    "styles": {
+      "display": "Display",
+      "title": "Title",
+      "heading": "Heading",
+      "body": "Body",
+      "label": "Label",
+      "caption": "Caption",
+      "value": "Value"
+    }
+  },
+  "button": {
+    "primary": "Confirmar aporte",
+    "secondary": "Ver detalle",
+    "ghost": "Cambiar monto",
+    "destructive": "Cancelar plan",
+    "key": "Crear plan mensual",
+    "loading": "Confirmando"
+  },
+  "balance": {
+    "total": "Saldo total",
+    "invested": "Invertido",
+    "cash": "En caja",
+    "inFlight": "En tránsito",
+    "asOf": "Actualizado el {{date}}"
+  },
+  "badge": {
+    "neutral": "Borrador",
+    "info": "En análisis",
+    "success": "Invertido",
+    "warning": "Esperando tu depósito",
+    "error": "Depósito devuelto"
+  },
+  "field": {
+    "amountLabel": "Monto mensual",
+    "amountHelp": "El mínimo es US$ 250 por mes.",
+    "amountError": "El monto mínimo es US$ 250 por mes.",
+    "cuitLabel": "CUIL o CUIT",
+    "cuitHelp": "11 dígitos, sin guiones.",
+    "cuitError": "El dígito verificador no coincide.",
+    "phoneLabel": "Teléfono"
+  },
+  "select": {
+    "label": "Día del aporte",
+    "day": "Día {{day}} de cada mes"
+  },
+  "checkbox": {
+    "terms": "Acepto el contrato de asesoría",
+    "termsLink": "Leer el contrato completo",
+    "consent": "Autorizo el envío de mis datos a Interactive Brokers, en EE. UU."
+  },
+  "radio": {
+    "label": "Medio de envío",
+    "usdcTitle": "USDC desde una exchange",
+    "usdcBody": "Comisión de 0,30%, con mínimo de US$ 1.",
+    "swiftTitle": "Transferencia SWIFT",
+    "swiftBody": "Desde una cuenta bancaria a tu nombre. El banco cobra comisiones fijas.",
+    "recommended": "Recomendado"
+  },
+  "dialog": {
+    "title": "¿Cancelar el plan mensual?",
+    "body": "Los aportes ya enviados no cambian. Se puede crear un plan nuevo en cualquier momento.",
+    "confirm": "Cancelar plan",
+    "dismiss": "Mantener plan"
+  },
+  "sheet": {
+    "title": "Cómo enviar USDC",
+    "body": "Desde la exchange, el envío debe ser solo en USDC, a la dirección de depósito y en la red indicada.",
+    "action": "Entendido"
+  },
+  "toast": {
+    "saved": "Plan guardado",
+    "savedBody": "El próximo aporte es el 5 de diciembre.",
+    "error": "No se pudo guardar el plan"
+  },
+  "banner": {
+    "infoTitle": "Tu cuenta está en análisis",
+    "infoBody": "Interactive Brokers suele revisarla en algunos días hábiles.",
+    "warningTitle": "La cotización vence pronto",
+    "warningBody": "Si vence, hay que pedir una cotización nueva.",
+    "errorTitle": "Tu depósito fue devuelto",
+    "errorBody": "La transferencia salió de una cuenta que no está a tu nombre.",
+    "action": "Hablar con soporte"
+  },
+  "stepper": {
+    "steps": [
+      "País de residencia",
+      "Datos personales",
+      "Domicilio",
+      "Perfil de inversor",
+      "Origen de los fondos",
+      "Verificación de identidad",
+      "Términos",
+      "Revisión"
+    ]
+  },
+  "timeline": {
+    "label": "Estado del aporte",
+    "kyc": "Identidad verificada",
+    "ibkr": "Cuenta en EE. UU. abierta",
+    "notified": "Esperando tu depósito",
+    "notifiedNote": "Las instrucciones de depósito indican cómo enviar el dinero.",
+    "usdcReceived": "USDC recibido",
+    "fx": "Cambio realizado",
+    "wire": "Transferencia enviada",
+    "credited": "Dinero en tu cuenta",
+    "creditedNote": "Se invierte en la próxima ventana, el {{date}}.",
+    "invested": "Invertido",
+    "returned": "Depósito devuelto",
+    "returnedNote": "La transferencia salió de una cuenta que no está a tu nombre."
+  },
+  "copy": {
+    "addressLabel": "Dirección de depósito",
+    "referenceLabel": "Referencia obligatoria"
+  },
+  "qr": {
+    "label": "Código QR de la dirección de depósito"
+  },
+  "countdown": {
+    "label": "La cotización vence en"
+  },
+  "empty": {
+    "title": "Todavía no hay aportes",
+    "body": "El primer aporte va a aparecer acá, con su estado.",
+    "action": "Hacer un aporte"
+  }
+}

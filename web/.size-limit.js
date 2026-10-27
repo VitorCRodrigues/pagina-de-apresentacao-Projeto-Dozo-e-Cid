@@ -17,4 +17,11 @@ export default [
     gzip: true,
     limit: "200 kB",
   },
+  {
+    // woff2 is already compressed, so it is measured as is.
+    name: "Fonts (Fraunces + Inter 400/600, Latin)",
+    path: "dist/assets/*.woff2",
+    gzip: false,
+    limit: "120 kB",
+  },
 ];

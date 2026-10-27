@@ -1,0 +1,60 @@
+/*
+ * Design tokens. The only place where raw colour values live (web/CLAUDE.md).
+ * Brand colours come from docs/brand-brief.md; the rest are derived and checked for
+ * WCAG AA on cream-50 and paper in src/styles/contrast.test.ts.
+ */
+:root {
+  /* Brand */
+  --od-navy-900: #0b1f3a;
+  --od-green-700: #1f6f54;
+  --od-gold-500: #c9a227;
+  --od-cream-50: #f7f4ee;
+  --od-graphite-900: #1c1c1c;
+
+  /* Brand, derived */
+  --od-navy-800: #162c4d; /* primary button hover */
+  --od-navy-50: #e6eaf0; /* info tint */
+  --od-green-50: #e3efe8; /* success tint */
+  --od-gold-600: #b8921d; /* key button hover; never text on cream */
+  --od-paper: #fcfbf8; /* cards: a statement sheet on the cream desk */
+  --od-white: #ffffff;
+
+  /* Warm greys */
+  --od-gray-50: #f1ede5; /* subtle fill, hover */
+  --od-gray-100: #e9e4da; /* skeleton, disabled fill */
+  --od-gray-200: #ddd6ca; /* hairlines and card borders (decorative) */
+  --od-gray-500: #8a8276; /* input borders (3:1), disabled text */
+  --od-gray-600: #6a6258; /* secondary text, placeholders (4.5:1) */
+
+  /* Status */
+  --od-amber-700: #8a5a00; /* warning: quote expiring, late deposit */
+  --od-amber-50: #f5ead2;
+  --od-brick-700: #a23b2a; /* error and returned */
+  --od-brick-50: #f5e2dc;
+
+  /* Type */
+  --od-font-serif: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
+  --od-font-sans:
+    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --od-font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  /* Shape: 8 px for controls, 12 px for cards and sheets. */
+  --od-radius-control: 8px;
+  --od-radius-card: 12px;
+
+  /* Elevation: almost none. A hairline for cards, a soft lift only for overlays. */
+  --od-shadow-hairline: 0 1px 0 rgb(28 28 28 / 0.04);
+  --od-shadow-overlay: 0 16px 40px -20px rgb(11 31 58 / 0.25);
+
+  /* Motion */
+  --od-duration-fast: 150ms;
+  --od-duration-base: 200ms;
+  --od-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --od-duration-fast: 0ms;
+    --od-duration-base: 0ms;
+  }
+}

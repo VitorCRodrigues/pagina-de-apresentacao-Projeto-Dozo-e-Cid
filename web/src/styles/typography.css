@@ -1,0 +1,81 @@
+/*
+ * Semantic type scale. Fraunces for titles and headline figures; Inter for UI.
+ * Every value class sets tabular-nums. On Fraunces it is a no-op (the font has no
+ * tabular figures), so type-value-display is for a single figure, never a column.
+ */
+@utility type-display {
+  font-family: var(--od-font-serif);
+  font-size: 2.5rem;
+  line-height: 2.75rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 144;
+}
+
+@utility type-title {
+  font-family: var(--od-font-serif);
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  font-weight: 540;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 96;
+}
+
+@utility type-heading {
+  font-family: var(--od-font-serif);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 540;
+}
+
+@utility type-body {
+  font-family: var(--od-font-sans);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+}
+
+@utility type-label {
+  font-family: var(--od-font-sans);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+}
+
+@utility type-caption {
+  font-family: var(--od-font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+}
+
+@utility type-value {
+  font-family: var(--od-font-sans);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-value-lg {
+  font-family: var(--od-font-sans);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-value-display {
+  font-family: var(--od-font-serif);
+  font-size: 3rem;
+  line-height: 3.25rem;
+  font-weight: 520;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 144;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-mono {
+  font-family: var(--od-font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,2 +1,54 @@
-/* Tailwind v4: theme tokens arrive in phase 2 via src/styles/tokens.css (@theme). */
 @import "tailwindcss";
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./typography.css";
+
+@config "../../tailwind.config.ts";
+
+@layer base {
+  html {
+    background-color: var(--od-cream-50);
+    color: var(--od-graphite-900);
+    font-family: var(--od-font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--od-navy-900);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--od-navy-50);
+  }
+}
+
+@keyframes od-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes od-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes od-sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes od-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

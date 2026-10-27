@@ -5,7 +5,10 @@
 - Funcional, estados, API, compliance: docs/prd-frontend.md (vence em qualquer conflito)
 - Visual e tom: docs/brand-brief.md
 - Conflitos já resolvidos: docs/decisions.md
+- Lacunas do contrato de API: docs/api-gaps.md
 - Contexto de negócio: docs/business-context.md (nunca usar como fonte de texto ao cliente)
+
+O PRD e o brand brief são a especificação; o Superpowers define o método, não o escopo nem o visual.
 
 ## Produto em uma frase
 
@@ -32,7 +35,7 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 ## Design
 
 - Estética "private banking digital": fundo creme, marinho, muito respiro. Um foco e uma ação primária por tela.
-- Cores e espaçamentos só por tokens (src/styles/tokens.css + tailwind.config). Nunca hex solto em componente.
+- Cores e espaçamentos só por tokens (@theme em src/styles/tokens.css, Tailwind v4). Nunca hex solto em componente.
 - Fraunces em títulos e valores de destaque; Inter na UI; tabular-nums em todo valor monetário.
 - Proibido: gradientes, neon, emoji, ícones de moeda/foguete, linguagem de hype ou de cripto, gráfico de rentabilidade diária.
 - Mobile-first (referência 375 px), WCAG 2.1 AA, respeitar prefers-reduced-motion.

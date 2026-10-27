@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { Dialog as RadixDialog } from "radix-ui";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/lib/cx";
-import { overlayBackdrop, rootProps, type OverlayProps } from "./component-styles";
+import { focusPanel, overlayBackdrop, rootProps, type OverlayProps } from "./component-styles";
 import { Icon } from "./Icon";
 
 export function CloseButton() {
@@ -26,7 +26,9 @@ export function Dialog(props: OverlayProps) {
         <RadixDialog.Overlay className={overlayBackdrop} />
         <RadixDialog.Content
           {...(description ? {} : { "aria-describedby": undefined })}
+          onOpenAutoFocus={focusPanel}
           className={cx(
+            "outline-none",
             "fixed top-1/2 left-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2",
             "flex flex-col gap-4 rounded-card bg-paper p-6 shadow-overlay",
             "data-[state=open]:animate-[od-rise-in_var(--od-duration-base)_var(--od-ease)]",

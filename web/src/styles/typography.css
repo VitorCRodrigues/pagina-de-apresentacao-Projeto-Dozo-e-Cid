@@ -8,17 +8,16 @@
   font-size: 2.5rem;
   line-height: 2.75rem;
   font-weight: 560;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   font-variation-settings: "opsz" 144;
 }
 
+/* Optical size follows the font size here: a forced high opsz at 28 px closes the word gaps. */
 @utility type-title {
   font-family: var(--od-font-serif);
   font-size: 1.75rem;
   line-height: 2.125rem;
   font-weight: 540;
-  letter-spacing: -0.01em;
-  font-variation-settings: "opsz" 96;
 }
 
 @utility type-heading {

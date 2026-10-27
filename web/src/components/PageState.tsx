@@ -2,7 +2,7 @@ import { Clock, Inbox, Wrench, WifiOff, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "@/api/types";
-import { toIntlLocale } from "@/lib/locale";
+import { formatTime } from "@/lib/dates";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 import { Skeleton } from "./Skeleton";
@@ -82,9 +82,7 @@ interface MaintenanceProps {
 
 export function Maintenance({ locale, until }: MaintenanceProps) {
   const { t } = useTranslation();
-  const time =
-    until &&
-    new Intl.DateTimeFormat(toIntlLocale(locale), { timeStyle: "short" }).format(new Date(until));
+  const time = until && formatTime(until, locale);
 
   return (
     <StateLayout

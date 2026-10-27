@@ -51,11 +51,14 @@ export function Button({
         "type-label inline-flex min-h-12 items-center justify-center gap-2 rounded-control px-5",
         "transition-colors duration-fast ease-od",
         variant === "ghost" && "min-h-11",
-        isDisabled && variant !== "ghost"
-          ? "cursor-not-allowed border-0 bg-gray-100 text-gray-500"
-          : isDisabled
-            ? "cursor-not-allowed text-gray-500 no-underline"
-            : variants[variant],
+        // Loading keeps the variant colours: the action is in progress, not unavailable.
+        loading
+          ? cx(variants[variant], "cursor-progress")
+          : disabled && variant !== "ghost"
+            ? "cursor-not-allowed border-0 bg-gray-100 text-gray-500"
+            : disabled
+              ? "cursor-not-allowed text-gray-500 no-underline"
+              : variants[variant],
         widths[fullWidth],
         className,
       )}

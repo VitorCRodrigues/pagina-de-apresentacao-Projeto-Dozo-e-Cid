@@ -14,9 +14,11 @@
       "gold": "Saldo total sobre azul y una sola acción clave",
       "cream": "Fondo de todas las pantallas",
       "graphite": "Texto",
-      "gray": "Bordes, texto secundario, deshabilitado",
       "amber": "Avisos: cotización por vencer, aporte demorado",
-      "brick": "Errores y depósitos devueltos"
+      "brick": "Errores y depósitos devueltos",
+      "gray600": "Texto secundario y textos de ayuda",
+      "gray500": "Bordes de campos, deshabilitado",
+      "gray200": "Líneas finas y bordes de tarjetas"
     },
     "styles": {
       "display": "Display",
@@ -119,6 +121,7 @@
     "ibkr": "Cuenta en EE. UU. abierta",
     "notified": "Esperando tu depósito",
     "notifiedNote": "Las instrucciones de depósito indican cómo enviar el dinero.",
+    "collected": "Recibimos tu dinero",
     "usdcReceived": "USDC recibido",
     "fx": "Cambio realizado",
     "wire": "Transferencia enviada",

@@ -32,3 +32,10 @@ export function rootProps({ open, defaultOpen, onOpenChange }: OverlayProps) {
     ...(onOpenChange && { onOpenChange }),
   };
 }
+
+// Radix focuses the first control (the close button) on open. Focus the panel instead, so the
+// title is announced and no focus ring sits on the X.
+export function focusPanel(event: Event): void {
+  event.preventDefault();
+  if (event.currentTarget instanceof HTMLElement) event.currentTarget.focus();
+}

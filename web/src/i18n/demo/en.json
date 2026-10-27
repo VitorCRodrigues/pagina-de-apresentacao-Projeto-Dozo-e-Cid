@@ -14,9 +14,11 @@
       "gold": "Total balance on navy and one key action",
       "cream": "Background of every screen",
       "graphite": "Text",
-      "gray": "Borders, secondary text, disabled",
       "amber": "Warnings: quote expiring, late deposit",
-      "brick": "Errors and returned deposits"
+      "brick": "Errors and returned deposits",
+      "gray600": "Secondary and help text",
+      "gray500": "Field borders, disabled",
+      "gray200": "Hairlines and card borders"
     },
     "styles": {
       "display": "Display",
@@ -119,6 +121,7 @@
     "ibkr": "US account open",
     "notified": "Waiting for your deposit",
     "notifiedNote": "The deposit instructions show how to send the money.",
+    "collected": "We received your money",
     "usdcReceived": "USDC received",
     "fx": "Exchange done",
     "wire": "Transfer sent",

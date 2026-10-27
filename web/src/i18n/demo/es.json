@@ -11,7 +11,7 @@
     "colors": {
       "navy": "Cabeceras, botón principal, navegación",
       "green": "Pasos completados, invertido, enlaces",
-      "gold": "Saldo total sobre azul y una sola acción clave",
+      "gold": "Solo el saldo total, sobre azul",
       "cream": "Fondo de todas las pantallas",
       "graphite": "Texto",
       "amber": "Avisos: cotización por vencer, aporte demorado",
@@ -35,7 +35,6 @@
     "secondary": "Ver detalle",
     "ghost": "Cambiar monto",
     "destructive": "Cancelar plan",
-    "key": "Crear plan mensual",
     "loading": "Confirmando"
   },
   "balance": {
@@ -75,18 +74,18 @@
     "usdcTitle": "USDC desde una exchange",
     "usdcBody": "Comisión de 0,30%, con mínimo de US$ 1.",
     "swiftTitle": "Transferencia SWIFT",
-    "swiftBody": "Desde una cuenta bancaria a tu nombre. El banco cobra comisiones fijas.",
+    "swiftBody": "Desde una cuenta bancaria a tu nombre. Tu banco cobra comisiones fijas.",
     "recommended": "Recomendado"
   },
   "dialog": {
     "title": "¿Cancelar el plan mensual?",
-    "body": "Los aportes ya enviados no cambian. Se puede crear un plan nuevo en cualquier momento.",
+    "body": "Los aportes que ya enviaste no cambian. Podés crear un plan nuevo cuando quieras.",
     "confirm": "Cancelar plan",
     "dismiss": "Mantener plan"
   },
   "sheet": {
     "title": "Cómo enviar USDC",
-    "body": "Desde la exchange, el envío debe ser solo en USDC, a la dirección de depósito y en la red indicada.",
+    "body": "Desde tu exchange, enviá solo USDC a la dirección de depósito, en la red indicada.",
     "action": "Entendido"
   },
   "toast": {
@@ -98,7 +97,7 @@
     "infoTitle": "Tu cuenta está en análisis",
     "infoBody": "Interactive Brokers suele revisarla en algunos días hábiles.",
     "warningTitle": "La cotización vence pronto",
-    "warningBody": "Si vence, hay que pedir una cotización nueva.",
+    "warningBody": "Si vence, tenés que pedir una cotización nueva.",
     "errorTitle": "Tu depósito fue devuelto",
     "errorBody": "La transferencia salió de una cuenta que no está a tu nombre.",
     "action": "Hablar con soporte"
@@ -120,7 +119,7 @@
     "kyc": "Identidad verificada",
     "ibkr": "Cuenta en EE. UU. abierta",
     "notified": "Esperando tu depósito",
-    "notifiedNote": "Las instrucciones de depósito indican cómo enviar el dinero.",
+    "notifiedNote": "Enviá el dinero siguiendo las instrucciones de depósito.",
     "collected": "Recibimos tu dinero",
     "usdcReceived": "USDC recibido",
     "fx": "Cambio realizado",
@@ -143,7 +142,7 @@
   },
   "empty": {
     "title": "Todavía no hay aportes",
-    "body": "El primer aporte va a aparecer acá, con su estado.",
+    "body": "Cuando hagas tu primer aporte, lo vas a ver acá con su estado.",
     "action": "Hacer un aporte"
   }
 }

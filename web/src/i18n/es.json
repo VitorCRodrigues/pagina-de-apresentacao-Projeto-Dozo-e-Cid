@@ -15,12 +15,12 @@
     "retry": "Reintentar"
   },
   "select": {
-    "placeholder": "Elegir una opción"
+    "placeholder": "Elegí una opción"
   },
   "copy": {
     "action": "Copiar",
     "done": "Copiado",
-    "failed": "No se pudo copiar. El texto se puede seleccionar y copiar a mano."
+    "failed": "No se pudo copiar. Seleccioná el texto y copialo a mano."
   },
   "stepper": {
     "progress": "Paso {{current}} de {{total}}",
@@ -58,11 +58,11 @@
     "loading": "Cargando información",
     "error": {
       "title": "No pudimos cargar esta información",
-      "body": "Puede ser un problema de conexión. Tus datos no cambiaron."
+      "body": "Revisá tu conexión y probá de nuevo. Tus datos no cambiaron."
     },
     "sessionExpired": {
       "title": "Tu sesión se cerró",
-      "body": "Por seguridad, cerramos la sesión después de un tiempo sin actividad.",
+      "body": "Por seguridad, cerramos tu sesión después de un tiempo sin actividad.",
       "action": "Volver a iniciar sesión"
     },
     "maintenance": {

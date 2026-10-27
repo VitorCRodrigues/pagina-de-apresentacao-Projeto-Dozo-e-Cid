@@ -20,10 +20,6 @@ export const Destructive = meta.story({
   render: () => <Button variant="destructive">{i18n.t("demo:button.destructive")}</Button>,
 });
 
-export const Key = meta.story({
-  render: () => <Button variant="key">{i18n.t("demo:button.key")}</Button>,
-});
-
 export const Loading = meta.story({
   render: () => <Button loading>{i18n.t("demo:button.loading")}</Button>,
 });

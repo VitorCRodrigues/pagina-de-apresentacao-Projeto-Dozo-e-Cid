@@ -11,7 +11,7 @@
     "colors": {
       "navy": "Headers, primary button, navigation",
       "green": "Completed steps, invested, links",
-      "gold": "Total balance on navy and one key action",
+      "gold": "Only the total balance, on navy",
       "cream": "Background of every screen",
       "graphite": "Text",
       "amber": "Warnings: quote expiring, late deposit",
@@ -35,7 +35,6 @@
     "secondary": "View details",
     "ghost": "Change amount",
     "destructive": "Cancel plan",
-    "key": "Create monthly plan",
     "loading": "Confirming"
   },
   "balance": {

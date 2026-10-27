@@ -109,7 +109,6 @@ function Primitives() {
       <Stepper steps={i18n.t("demo:stepper.steps", { returnObjects: true })} current={3} />
       <div className="flex flex-col gap-3">
         <Button>{i18n.t("demo:button.primary")}</Button>
-        <Button variant="key">{i18n.t("demo:button.key")}</Button>
         <Button variant="secondary">{i18n.t("demo:button.secondary")}</Button>
         <Button variant="destructive">{i18n.t("demo:button.destructive")}</Button>
         <Button loading>{i18n.t("demo:button.loading")}</Button>

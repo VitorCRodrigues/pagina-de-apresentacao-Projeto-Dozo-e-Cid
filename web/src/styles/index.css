@@ -3,8 +3,6 @@
 @import "./tokens.css";
 @import "./typography.css";
 
-@config "../../tailwind.config.ts";
-
 @layer base {
   html {
     background-color: var(--od-cream-50);

@@ -11,7 +11,7 @@
     "colors": {
       "navy": "Cabeçalhos, botão primário, navegação",
       "green": "Etapas concluídas, investido, links",
-      "gold": "Saldo total sobre azul e uma única ação-chave",
+      "gold": "Só o saldo total, sobre azul",
       "cream": "Fundo de todas as telas",
       "graphite": "Texto",
       "amber": "Avisos: cotação expirando, aporte atrasado",
@@ -35,7 +35,6 @@
     "secondary": "Ver detalhes",
     "ghost": "Alterar valor",
     "destructive": "Cancelar plano",
-    "key": "Criar plano mensal",
     "loading": "Confirmando"
   },
   "balance": {

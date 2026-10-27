@@ -29,6 +29,7 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 - Sem tokens em localStorage. Sem dados pessoais em URL, logs ou analytics.
 - Brasil e trilhos br_* só aparecem se "BR" estiver em config.liveMarkets.
 - Nenhum texto fixo em componente: tudo em src/i18n/{es,pt,en}.json. ES é o padrão.
+- Espanhol com voseo argentino (vos, enviá, tenés); botões no infinitivo.
 - Texto ao cliente segue a seção 10 do PRD. Na dúvida: texto neutro + TODO(compliance).
 - Algo indefinido: opção mais simples + comentário TODO(decisão) + seguir em frente.
 
@@ -36,7 +37,8 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 
 - Estética "private banking digital": fundo creme, marinho, muito respiro. Um foco e uma ação primária por tela.
 - Cores e espaçamentos só por tokens (@theme em src/styles/tokens.css, Tailwind v4). Nunca hex solto em componente.
-- Fraunces em títulos e valores de destaque; Inter na UI; tabular-nums em todo valor monetário.
+- Fraunces em títulos; Inter na UI.
+- Valores em coluna, tabela ou contagem: Inter com tabular-nums. Fraunces só em número isolado de destaque (ex.: saldo total), pois não tem algarismos tabulares.
 - Proibido: gradientes, neon, emoji, ícones de moeda/foguete, linguagem de hype ou de cripto, gráfico de rentabilidade diária.
 - Mobile-first (referência 375 px), WCAG 2.1 AA, respeitar prefers-reduced-motion.
 - Reutilize componentes de src/components antes de criar novos.

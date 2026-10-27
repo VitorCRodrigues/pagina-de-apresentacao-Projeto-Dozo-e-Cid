@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{n as t,r as n}from"./iframe-BLavDL8t.js";import{n as r,t as i}from"./RiskNote-Bf6eRT0q.js";var a,o,s;function c(){return(c=e((()=>{t(),r(),a=n.meta({title:`Domain/RiskNote`,component:i}),o=a.story({}),s=[`Default`]})))()}c();export{o as Default,s as __namedExportsOrder};

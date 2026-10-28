@@ -75,9 +75,111 @@
     "default": "Investing involves risk. Past performance does not guarantee future results."
   },
   "dev": {
-    "i18nDemo": {
-      "title": "Language test",
-      "body": "This page is temporary and only checks the translations."
+    "placeholder": "This screen arrives in a later stage.",
+    "scenarios": {
+      "label": "Test scenario",
+      "groups": {
+        "account": "Account status",
+        "deposit": "Deposit status",
+        "block": "Blocks",
+        "network": "Network and data"
+      }
+    }
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "deposit": "Deposit",
+    "portfolio": "Portfolio",
+    "pending": "To do",
+    "profile": "Profile"
+  },
+  "shell": {
+    "skipToContent": "Skip to content"
+  },
+  "entry": {
+    "headline": "Your US dollar investment account, with monthly deposits.",
+    "custody": "Your account and your investments stay at Interactive Brokers, in your name.",
+    "pilot": "We are in a closed pilot.",
+    "terms": "Read the terms",
+    "signIn": "Sign in",
+    "signInError": "We could not sign you in. Try again."
+  },
+  "waitlist": {
+    "title": "Not available in your country yet",
+    "body": "For now we run a closed pilot. Leave your email and we will let you know when we open in your country.",
+    "emailLabel": "Email",
+    "invalidEmail": "Enter a valid email, for example name@domain.com.",
+    "submit": "Join the waitlist",
+    "done": "Done. We will write to {{email}} when it is available.",
+    "signOut": "Sign out"
+  },
+  "session": {
+    "timeout": {
+      "title": "Are you still there?",
+      "body": "For your security, we will end your session if there is no activity.",
+      "countdownLabel": "Your session ends in",
+      "stay": "Stay signed in",
+      "signOut": "Sign out"
+    }
+  },
+  "notFound": {
+    "title": "We could not find this page",
+    "body": "The address may be mistyped or the page no longer exists.",
+    "action": "Go to the start"
+  },
+  "accountStatus": {
+    "label": "Account status",
+    "draft": "Draft",
+    "submitted": "Submitted",
+    "kyc_review": "Checking identity",
+    "ibkr_pending": "Under review at Interactive Brokers",
+    "action_required": "Documents needed",
+    "open": "Open",
+    "restricted": "Needs attention",
+    "rejected": "Not approved"
+  },
+  "errors": {
+    "validation_failed": "Check the details and try again.",
+    "quote_expired": "The quote expired. Request a new one.",
+    "below_minimum": "The amount is below the minimum.",
+    "account_not_open": "Your account is not open yet.",
+    "account_restricted": "Your account needs attention. Contact support.",
+    "compliance_hold": "This operation is not possible right now. Contact support.",
+    "market_not_live": "Not available in your country yet.",
+    "idempotency_conflict": "This operation was already sent. Check your deposits before repeating it.",
+    "not_found": "We could not find what you were looking for.",
+    "session_expired": "Your session ended. Sign in again.",
+    "maintenance": "We are doing maintenance. Try again in a few minutes.",
+    "rate_limited": "Too many attempts in a row. Wait a moment and try again.",
+    "internal": "Something went wrong on our side. Try again.",
+    "network": "No connection. Check your internet and try again.",
+    "invalid_response": "We received an unexpected response. Try again."
+  },
+  "blockReason": {
+    "ibkr_not_open": {
+      "message": "Your account is under review at Interactive Brokers.",
+      "action": "See what is pending"
+    },
+    "ibkr_restricted": {
+      "message": "Your account needs attention.",
+      "action": "Contact support"
+    },
+    "compliance_hold": {
+      "message": "Deposits are not possible right now.",
+      "action": "Contact support"
+    },
+    "quote_expired": {
+      "message": "The quote expired.",
+      "action": "Request a new quote"
+    },
+    "pix_med_hold": {
+      "message": "Your deposit is in a security hold.",
+      "action": "See the expected date"
+    },
+    "market_not_live": {
+      "message": "Not available in your country yet.",
+      "action": "Join the waitlist"
     }
   }
 }

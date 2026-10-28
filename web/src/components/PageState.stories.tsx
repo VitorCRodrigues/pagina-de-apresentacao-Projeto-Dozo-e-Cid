@@ -9,7 +9,7 @@ const meta = preview.meta({ title: "Domain/PageState", parameters: { frame: fals
 
 // Page states fill the whole 375 px screen, so they render without the story frame.
 function Screen({ children }: { children: ReactNode }) {
-  return <div className="w-[375px]">{children}</div>;
+  return <div className="w-[375px] px-5">{children}</div>;
 }
 
 export const Loading = meta.story({

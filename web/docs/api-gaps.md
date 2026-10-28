@@ -8,7 +8,7 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 
 | Necessidade | Tela | Proposta do front | Status |
 |---|---|---|---|
-| Lista de espera para país fora de `liveMarkets` | T1, T2 | `POST /waitlist` com `{ email, country }`. Resposta `204`. | A confirmar com o Dozo |
+| Lista de espera para país fora de `liveMarkets` | T1, T2 | `POST /waitlist` com `{ email, country }`, com sessão: o país só é conhecido depois de `GET /me`. E-mail inválido → `422 validation_failed` com `fields.email`. Resposta `204`. | A confirmar com o Dozo |
 | Botão "Ya envié" (só avisa o suporte; não muda o estado) | T7, T11 | `POST /deposits/{id}/sent-notice`. Resposta `204`. Idempotente por depósito. | A confirmar com o Dozo |
 | Preferências de notificação (e-mail e push) | T12 | `GET /me/notifications` e `PATCH /me/notifications` com `{ email: boolean, push: boolean }`. | A confirmar com o Dozo |
 | Aceite de termos novos | T11, T12 | `GET /account/terms` (versões vigentes e aceitas) e `POST /account/terms/{id}/accept`. | A confirmar com o Dozo |
@@ -97,3 +97,27 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 | `Portfolio.totalCents` | A fórmula não está no contrato. | Investido + caixa + trânsito, sem custos (decisão 15). | A confirmar com o Dozo |
 | `costPreview` e `mayCollect` | Não se sabe como serão expostos. | Dentro de `POST /deposits/quote`: `costPreview` vira `RailOption.costs`; `mayCollect` falso vira `error.code` ou `Account.blockReasons`. | A confirmar com o Dozo |
 | Idioma dos textos | O contrato não diz como a API escolhe o idioma. | `Accept-Language: es \| pt \| en` em toda chamada; conteúdo editorial traduzido pela API (decisão 12). | A confirmar com o Dozo |
+
+## 9. Definições usadas pelo mock enquanto o contrato não fecha
+
+| Ponto | Valor no mock | Status |
+|---|---|---|
+| `GET /config` sem sessão | Responde sem `Authorization`; o resto das rotas responde `401 session_expired` sem token. | A confirmar com o Dozo |
+| `minDepositUsdCents` | `10000` (US$ 100); o PRD diz "a confirmar". | A confirmar com o Dozo |
+| País antes do login | A T1 não conhece o país; a checagem de `liveMarkets` acontece depois de `GET /me`. | A confirmar com o Dozo |
+
+## 10. Definições do mock completo (28/10)
+
+Detalhes que o mock (`src/mocks/handlers.ts`) precisou fixar para servir o contrato inteiro. Todos seguem o padrão de erro `{ error: { code, message, fields? } }`, com `fields` no formato `{ campo: "invalid" }`.
+
+| Ponto | Comportamento no mock | Status |
+|---|---|---|
+| Formato de `GET /account/terms` | `TermsDocument[]`: `{ id, kind, version, title, url, acceptedAt? }`, com `kind` em `advisory_agreement`, `cost_disclosure`, `privacy_policy` ou `ibkr_data_consent`. Aceite: `POST /account/terms/{id}/accept` → `204`. | A confirmar com o Dozo |
+| `POST /account/documents` | Multipart com `pendingItemId` e `file`; responde a `Account` sem a pendência enviada. | A confirmar com o Dozo |
+| `POST /onboarding/submit` | Só a partir de `draft`; responde a `Account` com `status: "submitted"`. Fora de `draft` → `422`. | A confirmar com o Dozo |
+| Idempotência | `POST /deposits` e `POST /plans`: sem `Idempotency-Key` → `422 validation_failed`; mesma chave e mesmo corpo → a resposta original com `200`; mesma chave e corpo diferente → `409 idempotency_conflict`. A primeira criação responde `201`. | A confirmar com o Dozo |
+| Bloqueios de aporte e plano | País fora de `liveMarkets` → `403 market_not_live`; conta `restricted` → `409 account_restricted`; conta não aberta → `409 account_not_open`. | A confirmar com o Dozo |
+| Cotação | Válida por 300 s; `recommended` no trilho mais barato (`ar_usdc`); `expectedDays` de 0–1 (USDC) e 1–3 (SWIFT). `POST /deposits` com cotação vencida → `409 quote_expired`; cotação desconhecida → `404 not_found`. | A confirmar com o Dozo |
+| `GET /deposits` | `?state=`, `?limit=` (padrão 20) e `?cursor=` opaco; `nextCursor` só quando há mais itens. | A confirmar com o Dozo |
+| `PATCH /me/notifications` | Corpo parcial (`{ push: true }`); responde as preferências completas. | A confirmar com o Dozo |
+| Dados fictícios | USDC na rede "Ethereum (ERC-20)"; tarifa SWIFT estimada em US$ 35; ETFs UCITS reais (IE00B5BMR087, IE00BK5BQT80, IE00B4L5Y983) com quantidades inventadas. Nada disso é decisão de produto. | Só mock |

@@ -6,6 +6,7 @@ function isSupportedLocale(value: string): value is SupportedLocale {
   return (supportedLocales as readonly string[]).includes(value);
 }
 
+// Plain words with the active one underlined, like the active tab in the bottom navigation.
 export function LanguageSwitcher() {
   const { t, i18n } = useTranslation();
 
@@ -18,14 +19,14 @@ export function LanguageSwitcher() {
         if (isSupportedLocale(value)) void i18n.changeLanguage(value);
       }}
       aria-label={t("language.label")}
-      className="inline-flex gap-1"
+      className="-mx-1 inline-flex gap-2"
     >
       {supportedLocales.map((locale) => (
         <ToggleGroup.Item
           key={locale}
           value={locale}
           lang={locale}
-          className="rounded border px-3 py-1 data-[state=on]:font-semibold"
+          className="type-label min-h-11 px-1 text-gray-600 underline-offset-8 transition-colors duration-fast ease-od hover:text-navy-900 data-[state=on]:text-navy-900 data-[state=on]:underline data-[state=on]:decoration-2"
         >
           {t(`language.${locale}`)}
         </ToggleGroup.Item>

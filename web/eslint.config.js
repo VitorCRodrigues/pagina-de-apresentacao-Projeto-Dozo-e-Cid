@@ -45,7 +45,7 @@ export default tseslint.config(
   {
     // Client-facing text must come from src/i18n (web/CLAUDE.md).
     files: ["src/**/*.tsx"],
-    ignores: ["src/**/*.test.tsx", "src/**/*.stories.tsx"],
+    ignores: ["src/**/*.test.tsx", "src/**/*.stories.tsx", "src/test/**"],
     plugins: { i18next },
     rules: {
       "i18next/no-literal-string": [

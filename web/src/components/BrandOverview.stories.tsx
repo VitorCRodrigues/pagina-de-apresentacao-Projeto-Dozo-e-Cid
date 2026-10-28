@@ -227,17 +227,17 @@ function Domain({ locale, quoteExpiresAt }: { locale: Locale; quoteExpiresAt: st
 function States() {
   return (
     <Column title={i18n.t("demo:overview.states")}>
-      <div className="-mx-5 border-b border-gray-200">
+      <div className="border-b border-gray-200">
         <LoadingState />
       </div>
-      <div className="-mx-5 border-b border-gray-200">
+      <div className="border-b border-gray-200">
         <EmptyState
           title={i18n.t("demo:empty.title")}
           body={i18n.t("demo:empty.body")}
           action={<Button>{i18n.t("demo:empty.action")}</Button>}
         />
       </div>
-      <div className="-mx-5">
+      <div>
         <ErrorState onRetry={() => undefined} />
       </div>
     </Column>

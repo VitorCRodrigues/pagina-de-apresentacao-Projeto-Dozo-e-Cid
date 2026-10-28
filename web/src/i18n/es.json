@@ -75,9 +75,111 @@
     "default": "Invertir implica riesgos. Los resultados pasados no garantizan resultados futuros."
   },
   "dev": {
-    "i18nDemo": {
-      "title": "Prueba de idiomas",
-      "body": "Esta página es temporal y solo sirve para comprobar las traducciones."
+    "placeholder": "Esta pantalla llega en una próxima etapa.",
+    "scenarios": {
+      "label": "Escenario de prueba",
+      "groups": {
+        "account": "Estado de la cuenta",
+        "deposit": "Estado del aporte",
+        "block": "Bloqueos",
+        "network": "Red y datos"
+      }
+    }
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "home": "Inicio",
+    "deposit": "Aportar",
+    "portfolio": "Cartera",
+    "pending": "Pendientes",
+    "profile": "Perfil"
+  },
+  "shell": {
+    "skipToContent": "Ir al contenido"
+  },
+  "entry": {
+    "headline": "Tu cuenta de inversión en dólares, con aportes mensuales.",
+    "custody": "Tu cuenta y tus inversiones quedan en Interactive Brokers, a tu nombre.",
+    "pilot": "Estamos en un piloto cerrado.",
+    "terms": "Ver términos",
+    "signIn": "Entrar",
+    "signInError": "No pudimos iniciar sesión. Probá de nuevo."
+  },
+  "waitlist": {
+    "title": "Todavía no está disponible en tu país",
+    "body": "Por ahora funcionamos en un piloto cerrado. Dejanos tu e-mail y te avisamos cuando abramos en tu país.",
+    "emailLabel": "E-mail",
+    "invalidEmail": "Escribí un e-mail válido, por ejemplo nombre@dominio.com.",
+    "submit": "Anotarme en la lista",
+    "done": "Listo. Te vamos a escribir a {{email}} cuando esté disponible.",
+    "signOut": "Cerrar sesión"
+  },
+  "session": {
+    "timeout": {
+      "title": "¿Seguís ahí?",
+      "body": "Por seguridad, vamos a cerrar tu sesión si no hay actividad.",
+      "countdownLabel": "La sesión se cierra en",
+      "stay": "Seguir conectado",
+      "signOut": "Cerrar sesión"
+    }
+  },
+  "notFound": {
+    "title": "No encontramos esta página",
+    "body": "La dirección puede estar mal escrita o la página ya no existe.",
+    "action": "Ir al inicio"
+  },
+  "accountStatus": {
+    "label": "Estado de la cuenta",
+    "draft": "Borrador",
+    "submitted": "Enviada",
+    "kyc_review": "Verificando identidad",
+    "ibkr_pending": "En análisis en Interactive Brokers",
+    "action_required": "Faltan documentos",
+    "open": "Abierta",
+    "restricted": "Necesita atención",
+    "rejected": "No aprobada"
+  },
+  "errors": {
+    "validation_failed": "Revisá los datos e intentá de nuevo.",
+    "quote_expired": "La cotización venció. Pedí una nueva.",
+    "below_minimum": "El monto está por debajo del mínimo.",
+    "account_not_open": "Tu cuenta todavía no está abierta.",
+    "account_restricted": "Tu cuenta necesita atención. Hablá con soporte.",
+    "compliance_hold": "No es posible hacer esta operación en este momento. Hablá con soporte.",
+    "market_not_live": "Todavía no está disponible en tu país.",
+    "idempotency_conflict": "Esta operación ya se envió. Revisá tus aportes antes de repetirla.",
+    "not_found": "No encontramos lo que buscabas.",
+    "session_expired": "Tu sesión se cerró. Iniciá sesión de nuevo.",
+    "maintenance": "Estamos haciendo mantenimiento. Probá en unos minutos.",
+    "rate_limited": "Hiciste muchos intentos seguidos. Esperá un momento y probá de nuevo.",
+    "internal": "Algo salió mal de nuestro lado. Probá de nuevo.",
+    "network": "No hay conexión. Revisá tu internet y probá de nuevo.",
+    "invalid_response": "Recibimos una respuesta inesperada. Probá de nuevo."
+  },
+  "blockReason": {
+    "ibkr_not_open": {
+      "message": "Tu cuenta está en análisis en Interactive Brokers.",
+      "action": "Ver pendientes"
+    },
+    "ibkr_restricted": {
+      "message": "Tu cuenta necesita atención.",
+      "action": "Hablar con soporte"
+    },
+    "compliance_hold": {
+      "message": "No es posible hacer aportes en este momento.",
+      "action": "Hablar con soporte"
+    },
+    "quote_expired": {
+      "message": "La cotización venció.",
+      "action": "Pedir una cotización nueva"
+    },
+    "pix_med_hold": {
+      "message": "Tu aporte está en un período de seguridad.",
+      "action": "Ver la fecha prevista"
+    },
+    "market_not_live": {
+      "message": "Todavía no está disponible en tu país.",
+      "action": "Anotarme en la lista de espera"
     }
   }
 }

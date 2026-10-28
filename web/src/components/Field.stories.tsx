@@ -16,7 +16,7 @@ export const Default = meta.story({
 export const WithHelp = meta.story({
   render: () => (
     <Field label={i18n.t("demo:field.cuitLabel")} help={i18n.t("demo:field.cuitHelp")}>
-      <Input inputMode="numeric" defaultValue="20123456789" />
+      <Input inputMode="numeric" defaultValue="20123456786" />
     </Field>
   ),
 });

@@ -47,6 +47,33 @@ export function formatMoneyParts(cents: number, locale: Locale): Intl.NumberForm
   return currencyFormat(locale).formatToParts(centsToDecimalString(cents));
 }
 
+// Percentage of an amount, rounded half up, in integers only (30 bp = 0.30%).
+export function applyBasisPoints(cents: number, basisPoints: number): number {
+  assertCents(cents);
+  assertCents(basisPoints);
+  return Math.floor((cents * basisPoints + 5000) / 10000);
+}
+
+// What the client types in an amount field, read in their locale: "1.234,5" in es/pt,
+// "1,234.50" in en. Anything ambiguous or out of range is null, never a guess.
+export function parseAmountToCents(input: string, locale: Locale): number | null {
+  const decimal = locale === "en" ? "." : ",";
+  const group = locale === "en" ? "," : ".";
+  const text = input.replace(/US\$|\$|\s/gu, "");
+  if (text === "") return null;
+
+  const d = `\\${decimal}`;
+  const g = `\\${group}`;
+  const pattern = new RegExp(`^(\\d{1,3}(?:${g}\\d{3})+|\\d+)(?:${d}(\\d{1,2}))?$`);
+  const match = pattern.exec(text);
+  if (!match) return null;
+
+  const whole = (match[1] ?? "").replaceAll(group, "");
+  const fraction = (match[2] ?? "").padEnd(2, "0");
+  const cents = Number.parseInt(`${whole}${fraction}`, 10);
+  return Number.isSafeInteger(cents) ? cents : null;
+}
+
 // Ratios such as CostLine.percent (0.011 = 1.1%) are display-only values from the API.
 export function formatPercent(ratio: number, locale: Locale): string {
   return new Intl.NumberFormat(toIntlLocale(locale), {

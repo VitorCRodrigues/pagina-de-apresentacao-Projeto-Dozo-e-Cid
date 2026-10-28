@@ -1,4 +1,4 @@
-import { Clock, Inbox, Wrench, WifiOff, type LucideIcon } from "lucide-react";
+import { Clock, Inbox, SearchX, Wrench, WifiOff, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "@/api/types";
@@ -15,9 +15,10 @@ interface StateLayoutProps {
 }
 
 // Left aligned like the rest of the statement; the page states direct, they do not decorate.
+// No side padding: they sit inside AppShell, which owns the page margins.
 function StateLayout({ icon, title, body, action }: StateLayoutProps) {
   return (
-    <section className="flex flex-col items-start gap-3 px-5 py-12">
+    <section className="flex flex-col items-start gap-3 py-6">
       <Icon icon={icon} size={24} className="text-gray-600" />
       <h2 className="type-title text-navy-900">{title}</h2>
       {body && <p className="type-body max-w-prose text-gray-600">{body}</p>}
@@ -29,7 +30,7 @@ function StateLayout({ icon, title, body, action }: StateLayoutProps) {
 export function LoadingState() {
   const { t } = useTranslation();
   return (
-    <div role="status" className="flex flex-col gap-4 px-5 py-8">
+    <div role="status" className="flex flex-col gap-4 py-2">
       <span className="sr-only">{t("states.loading")}</span>
       <Skeleton className="h-4 w-24" />
       <Skeleton className="h-11 w-48" />
@@ -58,6 +59,18 @@ export function ErrorState({ onRetry }: { onRetry: () => void }) {
       title={t("states.error.title")}
       body={t("states.error.body")}
       action={<Button onClick={onRetry}>{t("common.retry")}</Button>}
+    />
+  );
+}
+
+export function NotFoundState({ onHome }: { onHome: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <StateLayout
+      icon={SearchX}
+      title={t("notFound.title")}
+      body={t("notFound.body")}
+      action={<Button onClick={onHome}>{t("notFound.action")}</Button>}
     />
   );
 }

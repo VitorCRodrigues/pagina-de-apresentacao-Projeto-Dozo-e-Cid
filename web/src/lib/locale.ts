@@ -10,3 +10,10 @@ const intlLocales: Record<Locale, string> = {
 export function toIntlLocale(locale: Locale): string {
   return intlLocales[locale];
 }
+
+// i18next language (possibly undefined or a regional tag such as "pt-BR") to a supported
+// Locale; ES by default.
+export function asLocale(language: string | undefined): Locale {
+  const primary = language?.split("-")[0];
+  return primary === "pt" || primary === "en" ? primary : "es";
+}

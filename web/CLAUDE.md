@@ -52,5 +52,5 @@ i18next, MSW, Vitest + Testing Library, Playwright, Storybook.
 
 - npm run typecheck && npm run lint && npm test && npm run build passam.
 - Toda tela tem story para cada estado (carregando, vazio, erro e os estados de negócio) e teste.
-- Commits pequenos, Conventional Commits em inglês.
+- - Nunca faça git commit nem git push. Deixe as mudanças no working tree. Ao terminar, liste os arquivos alterados agrupados por assunto e sugira uma mensagem de commit para cada grupo.
 - Não mexer em App/ (backend) nem na landing page da branch main.

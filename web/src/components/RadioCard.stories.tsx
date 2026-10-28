@@ -1,6 +1,5 @@
 import i18n from "@/i18n";
 import preview from "../../.storybook/preview";
-import { Badge } from "./Badge";
 import { RadioCard, RadioCardGroup } from "./RadioCard";
 
 const meta = preview.meta({ title: "Primitives/RadioCard", component: RadioCard });
@@ -12,7 +11,7 @@ function Rails({ value, swiftDisabled = false }: { value?: string; swiftDisabled
         value="ar_usdc"
         title={i18n.t("demo:radio.usdcTitle")}
         description={i18n.t("demo:radio.usdcBody")}
-        aside={<Badge tone="success">{i18n.t("demo:radio.recommended")}</Badge>}
+        recommendation={i18n.t("demo:radio.recommendation")}
       />
       <RadioCard
         value="ar_swift"

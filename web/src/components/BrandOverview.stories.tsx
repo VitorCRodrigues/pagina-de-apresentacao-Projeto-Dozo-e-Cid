@@ -6,13 +6,14 @@ import { storyLocale } from "../../.storybook/locale";
 import { Badge } from "./Badge";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
-import { Card, CardRow } from "./Card";
+import { Card } from "./Card";
 import { Checkbox } from "./Checkbox";
 import { CopyField } from "./CopyField";
 import { CostTable } from "./CostTable";
 import { Countdown } from "./Countdown";
 import { Field } from "./Field";
 import { Input } from "./Input";
+import { Ledger, LedgerRow } from "./Ledger";
 import { Money } from "./Money";
 import { EmptyState, ErrorState, LoadingState } from "./PageState";
 import { QrCode } from "./QrCode";
@@ -141,7 +142,7 @@ function Primitives() {
           value="ar_usdc"
           title={i18n.t("demo:radio.usdcTitle")}
           description={i18n.t("demo:radio.usdcBody")}
-          aside={<Badge tone="success">{i18n.t("demo:radio.recommended")}</Badge>}
+          recommendation={i18n.t("demo:radio.recommendation")}
         />
         <RadioCard
           value="ar_swift"
@@ -174,20 +175,17 @@ function Domain({ locale, quoteExpiresAt }: { locale: Locale; quoteExpiresAt: st
         <p className="type-label">{i18n.t("demo:balance.total")}</p>
         <Money cents={1248050} locale={locale} size="display" className="text-gold-500" />
       </Card>
-      <Card className="py-2">
-        <CardRow>
-          <span className="type-body">{i18n.t("demo:balance.invested")}</span>
-          <Money cents={1190050} locale={locale} className="type-value" />
-        </CardRow>
-        <CardRow>
-          <span className="type-body">{i18n.t("demo:balance.cash")}</span>
-          <Money cents={58000} locale={locale} className="type-value" />
-        </CardRow>
-        <CardRow>
-          <span className="type-body">{i18n.t("demo:balance.inFlight")}</span>
-          <Money cents={0} locale={locale} className="type-value" />
-        </CardRow>
-      </Card>
+      <Ledger>
+        <LedgerRow label={i18n.t("demo:balance.invested")}>
+          <Money cents={1190050} locale={locale} />
+        </LedgerRow>
+        <LedgerRow label={i18n.t("demo:balance.cash")}>
+          <Money cents={58000} locale={locale} />
+        </LedgerRow>
+        <LedgerRow label={i18n.t("demo:balance.inFlight")}>
+          <Money cents={0} locale={locale} />
+        </LedgerRow>
+      </Ledger>
       <RiskNote />
       <Countdown expiresAt={quoteExpiresAt} label={i18n.t("demo:countdown.label")} />
       <CostTable

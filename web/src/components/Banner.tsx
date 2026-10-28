@@ -1,14 +1,14 @@
-import { CircleAlert, Info, TriangleAlert, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { cx } from "@/lib/cx";
-import { Icon } from "./Icon";
 
 export type BannerTone = "info" | "warning" | "error";
 
-const tones: Record<BannerTone, { className: string; icon: LucideIcon }> = {
-  info: { className: "bg-navy-50 text-navy-900", icon: Info },
-  warning: { className: "bg-amber-50 text-amber-700", icon: TriangleAlert },
-  error: { className: "bg-brick-50 text-brick-700", icon: CircleAlert },
+// A margin note on the statement: a thin side rule and text, no tinted box. The tone lives in the
+// rule and the title colour; the title itself always says what happened.
+const tones: Record<BannerTone, { rule: string; title: string }> = {
+  info: { rule: "border-navy-900", title: "text-navy-900" },
+  warning: { rule: "border-amber-700", title: "text-amber-700" },
+  error: { rule: "border-brick-700", title: "text-brick-700" },
 };
 
 interface BannerProps {
@@ -20,19 +20,14 @@ interface BannerProps {
 }
 
 export function Banner({ tone = "info", title, children, action, className }: BannerProps) {
-  const { className: toneClass, icon } = tones[tone];
-
   return (
     <div
       role={tone === "error" ? "alert" : "status"}
-      className={cx("flex gap-3 rounded-control p-4", toneClass, className)}
+      className={cx("flex flex-col gap-1 border-l-2 py-1 pl-4", tones[tone].rule, className)}
     >
-      <Icon icon={icon} className="mt-0.5 shrink-0" />
-      <div className="flex flex-col gap-1">
-        <p className="type-label">{title}</p>
-        {children && <div className="type-caption text-graphite-900">{children}</div>}
-        {action && <div className="mt-1">{action}</div>}
-      </div>
+      <p className={cx("type-label", tones[tone].title)}>{title}</p>
+      {children && <div className="type-caption text-graphite-900">{children}</div>}
+      {action && <div className="mt-1">{action}</div>}
     </div>
   );
 }

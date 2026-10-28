@@ -75,7 +75,7 @@
     "usdcBody": "Taxa de 0,30%, com mínimo de US$ 1.",
     "swiftTitle": "Transferência SWIFT",
     "swiftBody": "De uma conta bancária no seu nome. O banco cobra tarifas fixas.",
-    "recommended": "Recomendado"
+    "recommendation": "Recomendado: o menor custo para este valor."
   },
   "dialog": {
     "title": "Cancelar o plano mensal?",
@@ -144,5 +144,8 @@
     "title": "Ainda não há aportes",
     "body": "O primeiro aporte vai aparecer aqui, com o status dele.",
     "action": "Fazer um aporte"
+  },
+  "plan": {
+    "title": "Plano mensal"
   }
 }

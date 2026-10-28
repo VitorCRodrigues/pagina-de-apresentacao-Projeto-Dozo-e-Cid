@@ -60,8 +60,8 @@ export function Wordmark({ size = "sm", tone = "default", className }: WordmarkP
       </svg>
       <span
         className={cx(
-          "font-serif font-semibold tracking-tight",
-          size === "lg" ? "text-[1.625rem] leading-none" : "text-lg leading-none",
+          // Sizes from the type scale: heading in the header, title on the entry screen.
+          size === "lg" ? "type-title" : "type-heading",
         )}
       >
         {t("app.name")}

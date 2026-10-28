@@ -75,7 +75,7 @@
     "usdcBody": "0.30% fee, US$1 minimum.",
     "swiftTitle": "SWIFT transfer",
     "swiftBody": "From a bank account in your name. Your bank charges fixed fees.",
-    "recommended": "Recommended"
+    "recommendation": "Recommended: the lowest cost for this amount."
   },
   "dialog": {
     "title": "Cancel the monthly plan?",
@@ -144,5 +144,8 @@
     "title": "No deposits yet",
     "body": "Your first deposit will show up here, with its status.",
     "action": "Make a deposit"
+  },
+  "plan": {
+    "title": "Monthly plan"
   }
 }

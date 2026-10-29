@@ -10,7 +10,9 @@ describe("routing by account status", () => {
   it("keeps a client in ibkr_pending out of /aportar", async () => {
     const { router } = renderApp({ path: "/aportar", scenario: "ibkr_pending" });
 
-    expect(await screen.findByText("En análisis en Interactive Brokers")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "Interactive Brokers está analizando tu cuenta" }),
+    ).toBeInTheDocument();
     expect(router.state.location.pathname).toBe("/cuenta");
     expect(screen.queryByRole("navigation", { name: "Navegación principal" })).toBeNull();
   });

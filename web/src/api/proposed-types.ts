@@ -1,7 +1,6 @@
 // Proposed in docs/api-gaps.md, pending confirmation with Dozo. Section 8 types stay in types.ts.
 import type {
   BlockReason,
-  Country,
   Deposit,
   DepositInstructionsUsdc,
   DepositInstructionsWire,
@@ -37,9 +36,10 @@ export interface ApiErrorBody {
   };
 }
 
+// Any ISO 3166-1 alpha-2 code: onboarding step 1 offers countries outside Country.
 export interface WaitlistRequest {
   email: string;
-  country: Country;
+  country: string;
 }
 
 // api-gaps.md, item 2.
@@ -65,10 +65,18 @@ export interface Questionnaire {
   version: string;
   questions: {
     id: string;
-    kind: "single" | "multi" | "number";
+    // Brackets (income, net worth) are single choices with closed options from the API.
+    kind: "single" | "multi";
     label: string;
-    options?: { value: string; label: string }[];
+    options: { value: string; label: string }[];
   }[];
+}
+
+// Draft body of PUT /onboarding/terms (api-gaps.md, item 2).
+export interface TermsAcceptance {
+  id: string;
+  version: string;
+  acceptedAt: string;
 }
 
 // api-gaps.md, item 1 (GET /notifications).

@@ -164,4 +164,86 @@ describe("api client", () => {
       unexpected: true,
     });
   });
+
+  describe("upload", () => {
+    const account = { status: "action_required", pending: [], blockReasons: [] };
+
+    // Just enough XMLHttpRequest to replay an upload: progress events, then the response.
+    function fakeXhr(status: number, body: unknown, progress: [number, number][] = []) {
+      const sent: {
+        method?: string;
+        url?: string;
+        headers: Record<string, string>;
+        body?: unknown;
+      } = { headers: {} };
+      class FakeXhr {
+        status = status;
+        responseText = body === null ? "" : JSON.stringify(body);
+        upload: { onprogress: ((event: Partial<ProgressEvent>) => void) | null } = {
+          onprogress: null,
+        };
+        onload: (() => void) | null = null;
+        onerror: (() => void) | null = null;
+        open(method: string, url: string) {
+          sent.method = method;
+          sent.url = url;
+        }
+        setRequestHeader(name: string, value: string) {
+          sent.headers[name] = value;
+        }
+        getResponseHeader(name: string) {
+          return name.toLowerCase() === "content-type" ? "application/json" : null;
+        }
+        send(payload: unknown) {
+          sent.body = payload;
+          for (const [loaded, total] of progress) {
+            this.upload.onprogress?.({ lengthComputable: true, loaded, total });
+          }
+          this.onload?.();
+        }
+      }
+      return { sent, xhr: () => new FakeXhr() as unknown as XMLHttpRequest };
+    }
+
+    const upload = (xhr: () => XMLHttpRequest, onProgress?: (fraction: number) => void) => {
+      const formData = new FormData();
+      formData.set("pendingItemId", "doc-1");
+      return createApiClient({ getToken: () => "t-1", getLocale: () => "es", xhr }).upload(
+        "/account/documents",
+        formData,
+        { response: "account", ...(onProgress && { onProgress }) },
+      );
+    };
+
+    it("reports progress as fractions and resolves to the response", async () => {
+      const { xhr } = fakeXhr(200, account, [
+        [25, 100],
+        [100, 100],
+      ]);
+      const fractions: number[] = [];
+      await expect(upload(xhr, (fraction) => fractions.push(fraction))).resolves.toEqual(account);
+      expect(fractions).toEqual([0.25, 1]);
+    });
+
+    it("sends bearer and Accept-Language, and the form data as the body", async () => {
+      const { sent, xhr } = fakeXhr(200, account);
+      await upload(xhr);
+      expect(sent.method).toBe("POST");
+      expect(sent.url).toBe("/api/v1/account/documents");
+      expect(sent.headers).toMatchObject({ Authorization: "Bearer t-1", "Accept-Language": "es" });
+      expect(sent.headers).not.toHaveProperty("Content-Type");
+      expect(sent.body).toBeInstanceOf(FormData);
+    });
+
+    it("resolves to undefined for an empty success, like request()", async () => {
+      await expect(upload(fakeXhr(204, null).xhr)).resolves.toBeUndefined();
+      await expect(upload(fakeXhr(205, null).xhr)).resolves.toBeUndefined();
+      await expect(upload(fakeXhr(200, null).xhr)).resolves.toBeUndefined();
+    });
+
+    it("turns an error body into ApiError", async () => {
+      const { xhr } = fakeXhr(422, { error: { code: "validation_failed", message: "x" } });
+      await expect(upload(xhr)).rejects.toMatchObject({ code: "validation_failed", status: 422 });
+    });
+  });
 });

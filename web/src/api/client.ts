@@ -34,12 +34,20 @@ export interface ApiClient {
     options: BaseOptions & { response: K },
   ): Promise<ResponseTypes[K]>;
   request(method: HttpMethod, path: string, options?: BaseOptions): Promise<undefined>;
+  // Multipart POST with upload progress (fetch cannot report it). `onProgress` gets 0–1.
+  upload<K extends ResponseName>(
+    path: string,
+    formData: FormData,
+    options: { response: K; onProgress?: (fraction: number) => void },
+  ): Promise<ResponseTypes[K] | undefined>;
 }
 
 interface ClientOptions {
   getToken: () => string | null;
   getLocale: () => Locale;
   fetch?: typeof fetch;
+  // XMLHttpRequest factory for upload(); tests replay progress events with a fake.
+  xhr?: () => XMLHttpRequest;
   // Validate responses against the Zod schemas: on in development and tests, off in production,
   // where schemas.ts (and Zod) is never loaded.
   validate?: boolean;
@@ -68,6 +76,7 @@ export function createApiClient({
   getToken,
   getLocale,
   fetch: fetchImpl,
+  xhr: createXhr = () => new XMLHttpRequest(),
   validate = import.meta.env.DEV || import.meta.env.MODE === "test",
 }: ClientOptions): ApiClient {
   async function request(
@@ -103,5 +112,44 @@ export function createApiClient({
     return validate ? validated(options.response, data, method, path, response.status) : data;
   }
 
-  return { request } as ApiClient;
+  function upload(
+    path: string,
+    formData: FormData,
+    { response, onProgress }: { response: ResponseName; onProgress?: (fraction: number) => void },
+  ): Promise<unknown> {
+    return new Promise((resolve, reject) => {
+      const xhr = createXhr();
+      xhr.open("POST", `${API_BASE}${path}`);
+      // Same headers as request(); the browser sets the multipart Content-Type with its boundary.
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.setRequestHeader("Accept-Language", getLocale());
+      const token = getToken();
+      if (token) xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable && event.total > 0) onProgress?.(event.loaded / event.total);
+      };
+      xhr.onerror = () => {
+        reject(new ApiError({ status: 0, code: "network", message: "Network request failed" }));
+      };
+      xhr.onload = () => {
+        const settle = async () => {
+          // An empty success answers undefined, like request() does for 204.
+          if (xhr.status >= 200 && xhr.status < 300 && !xhr.responseText) return undefined;
+          // Reuses the fetch path for errors and validation by wrapping the reply in a Response.
+          const reply = new Response(xhr.responseText, {
+            status: xhr.status,
+            headers: { "Content-Type": xhr.getResponseHeader("Content-Type") ?? "" },
+          });
+          if (!reply.ok) throw await toApiError(reply);
+          const data: unknown = await reply.json();
+          return validate ? validated(response, data, "POST", path, reply.status) : data;
+        };
+        settle().then(resolve, reject);
+      };
+      xhr.send(formData);
+    });
+  }
+
+  return { request, upload } as ApiClient;
 }

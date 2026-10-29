@@ -134,6 +134,17 @@ describe("schemas", () => {
     expect(appConfigSchema.safeParse({ ...config, liveMarkets: ["UY"] }).success).toBe(false);
   });
 
+  it("accepts single and multi questions only, each with options", () => {
+    const question = { id: "q", label: "Q", kind: "single", options: [{ value: "a", label: "A" }] };
+    const parse = (q: object) =>
+      questionnaireSchema.safeParse({ version: "1", questions: [q] }).success;
+    expect(parse(question)).toBe(true);
+    expect(parse({ ...question, kind: "multi" })).toBe(true);
+    expect(parse({ ...question, kind: "number" })).toBe(false);
+    expect(parse({ ...question, options: [] })).toBe(false);
+    expect(parse({ id: "q", label: "Q", kind: "single" })).toBe(false);
+  });
+
   it("rejects an unknown account status", () => {
     const me = {
       id: "u1",

@@ -83,6 +83,17 @@ export function PreOpenLayout() {
   );
 }
 
+// T3 lives here for every status: without navigation before the account opens, with it after
+// (a restricted account keeps the navigation; decisions.md, item 14).
+export function AccountStatusLayout() {
+  const { data: me } = useMe();
+  return (
+    <AppShell nav={me ? hasOpenedAccount(me.accountStatus) : false}>
+      <Outlet />
+    </AppShell>
+  );
+}
+
 // Route guard: deposit, portfolio and the rest of the app need an opened account.
 export function RequireOpenAccount() {
   const { data: me } = useMe();

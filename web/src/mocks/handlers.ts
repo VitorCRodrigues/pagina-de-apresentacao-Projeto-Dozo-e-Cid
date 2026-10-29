@@ -88,6 +88,26 @@ function railOptions(db: MockDb, amountCents: number): RailOption[] {
 }
 
 // PRD section 8 contract plus the docs/api-gaps.md proposals.
+// The pending item id and whether a file came along. Browsers and Node parse multipart with
+// formData(); jsdom's XMLHttpRequest sends a body undici refuses to parse, so tests fall back
+// to reading the parts as text.
+async function readUpload(request: Request): Promise<{ itemId: string | null; hasFile: boolean }> {
+  const copy = request.clone();
+  try {
+    const form = await request.formData();
+    const itemId = form.get("pendingItemId");
+    const file = form.get("file");
+    return {
+      itemId: typeof itemId === "string" ? itemId : null,
+      hasFile: file !== null && typeof file !== "string",
+    };
+  } catch {
+    const body = await copy.text();
+    const itemId = /name="pendingItemId"\r?\n\r?\n([^\r\n]+)/.exec(body)?.[1] ?? null;
+    return { itemId, hasFile: /name="file"; filename="/.test(body) };
+  }
+}
+
 export function createHandlers(getDb: () => MockDb) {
   return [
     http.get(api("/health"), () => HttpResponse.json({ status: "ok" })),
@@ -127,8 +147,12 @@ export function createHandlers(getDb: () => MockDb) {
       }
       const body = await readJson(request);
       if (typeof body !== "object" || body === null) return invalid([{ path: ["body"] }]);
+      // currentStep is the first unsaved step; editing an earlier one never moves it back.
+      const saved = onboardingSteps.indexOf(step as OnboardingStep);
+      const current = onboardingSteps.indexOf(db.onboarding.currentStep);
+      const next = Math.min(saved + 1, onboardingSteps.length - 1);
       db.onboarding = {
-        currentStep: step as OnboardingStep,
+        currentStep: onboardingSteps[Math.max(current, next)] ?? "review",
         steps: { ...db.onboarding.steps, [step]: body as Record<string, unknown> },
       };
       return HttpResponse.json(db.onboarding);
@@ -155,9 +179,8 @@ export function createHandlers(getDb: () => MockDb) {
     http.post(api("/account/documents"), async ({ request }) => {
       const db = await prepare(request, getDb);
       if (db instanceof Response) return db;
-      const form = await request.formData().catch(() => null);
-      const itemId = form?.get("pendingItemId");
-      if (typeof itemId !== "string" || !(form?.get("file") instanceof File)) {
+      const { itemId, hasFile } = await readUpload(request);
+      if (!itemId || !hasFile) {
         return errorResponse(422, "validation_failed", "pendingItemId and file are required");
       }
       const exists = db.account.pending.some((item) => item.id === itemId);

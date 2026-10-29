@@ -8,7 +8,7 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 
 | Necessidade | Tela | Proposta do front | Status |
 |---|---|---|---|
-| Lista de espera para país fora de `liveMarkets` | T1, T2 | `POST /waitlist` com `{ email, country }`, com sessão: o país só é conhecido depois de `GET /me`. E-mail inválido → `422 validation_failed` com `fields.email`. Resposta `204`. | A confirmar com o Dozo |
+| Lista de espera para país fora de `liveMarkets` | T1, T2 | `POST /waitlist` com `{ email, country }`, com sessão. `country` é qualquer código ISO 3166-1 alfa-2 (não só `Country`), porque a etapa 1 do onboarding oferece países fora do piloto; código fora do formato → `422`. E-mail inválido → `422 validation_failed` com `fields.email`. Resposta `204`. | A confirmar com o Dozo |
 | Botão "Ya envié" (só avisa o suporte; não muda o estado) | T7, T11 | `POST /deposits/{id}/sent-notice`. Resposta `204`. Idempotente por depósito. | A confirmar com o Dozo |
 | Preferências de notificação (e-mail e push) | T12 | `GET /me/notifications` e `PATCH /me/notifications` com `{ email: boolean, push: boolean }`. | A confirmar com o Dozo |
 | Aceite de termos novos | T11, T12 | `GET /account/terms` (versões vigentes e aceitas) e `POST /account/terms/{id}/accept`. | A confirmar com o Dozo |
@@ -19,9 +19,9 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 
 | Endpoint | Problema | Proposta do front | Status |
 |---|---|---|---|
-| `GET /onboarding` | O formato do rascunho não está definido. | `{ currentStep: OnboardingStep, steps: Partial<Record<OnboardingStep, unknown>> }`, com `OnboardingStep = "residence" \| "personal" \| "address" \| "suitability" \| "funds" \| "identity" \| "terms" \| "review"`. | A confirmar com o Dozo |
-| `PUT /onboarding/{step}` | Os nomes de `step` e o corpo de cada etapa não estão definidos. | Usar os nomes acima; corpo validado por um schema Zod por etapa, compartilhável com o backend. Erros de campo em `error.fields: Record<string, code>`. | A confirmar com o Dozo |
-| `GET /onboarding/questionnaire` | Não há schema das perguntas. | `{ version, questions: { id, kind: "single" \| "multi" \| "number", label, options?: { value, label }[] }[] }`, já traduzido pelo `Accept-Language`. | A confirmar com o Dozo |
+| `GET /onboarding` | O formato do rascunho não está definido. | `{ currentStep: OnboardingStep, steps: Partial<Record<OnboardingStep, unknown>> }`, com `OnboardingStep = "residence" \| "personal" \| "address" \| "suitability" \| "funds" \| "identity" \| "terms" \| "review"`. `currentStep` é a primeira etapa ainda não salva: cada `PUT` a avança para a etapa seguinte à salva e nunca a faz voltar (editar uma etapa a partir da revisão mantém `review`). O front retoma o assistente em `currentStep`. | A confirmar com o Dozo |
+| `PUT /onboarding/{step}` | Os nomes de `step` e o corpo de cada etapa não estão definidos. | Usar os nomes acima; corpo validado por um schema Zod por etapa (`src/features/onboarding/schemas.ts`), compartilhável com o backend. Erros de campo em `error.fields: Record<string, code>`. Etapa `terms`: `{ accepted: { id, version, acceptedAt }[] }`, um item por documento de `GET /account/terms`, com `acceptedAt` em ISO 8601 UTC do momento em que o cliente marcou a caixa; o backend registra o aceite no `POST /onboarding/submit`. | A confirmar com o Dozo |
+| `GET /onboarding/questionnaire` | Não há schema das perguntas. | `{ version, questions: { id, kind: "single" \| "multi", label, options: { value, label }[] }[] }`, já traduzido pelo `Accept-Language`. Faixas (renda, patrimônio) são perguntas `single` com opções fechadas; não há campo numérico livre. `options` tem ao menos um item. | A confirmar com o Dozo |
 | `POST /deposits/quote` | O corpo da requisição não está definido. | `{ amountCents: number, planId?: string }`. O país vem do cliente autenticado. Resposta: `Quote`. | A confirmar com o Dozo |
 | `POST /deposits` | Não está claro se a resposta já traz as instruções. | Corpo `{ quoteId, rail }`. Resposta: `Deposit` com `instructions` preenchido, para o front ir direto ao T7. | A confirmar com o Dozo |
 | `POST /plans` | O corpo não está definido. | `{ amountCents, dayOfMonth, rail }`, com `dayOfMonth` de 1 a 28 e `rail` obrigatório (decisão 16). Resposta: `Plan`. | A confirmar com o Dozo |

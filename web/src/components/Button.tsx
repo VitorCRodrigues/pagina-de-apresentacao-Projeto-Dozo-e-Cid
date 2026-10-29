@@ -1,32 +1,17 @@
 import { LoaderCircle } from "lucide-react";
 import type { ComponentProps } from "react";
+export type { ButtonVariant } from "./component-styles";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/lib/cx";
+import { buttonBase, buttonVariants, buttonWidths, type ButtonVariant } from "./component-styles";
 import { Icon } from "./Icon";
-
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
 
 interface ButtonProps extends ComponentProps<"button"> {
   variant?: ButtonVariant;
   loading?: boolean;
   // "mobile": full width below 640 px, auto above (the default for screen actions).
-  fullWidth?: "mobile" | "always" | "never";
+  fullWidth?: keyof typeof buttonWidths;
 }
-
-// Primary is always navy; gold is never a button (decisions.md, 27/10).
-const variants: Record<ButtonVariant, string> = {
-  primary: "bg-navy-900 text-cream-50 hover:bg-navy-800",
-  secondary: "border border-navy-900 text-navy-900 hover:bg-gray-50",
-  // Reads as a text link: everything that is not the one primary action (direction doc).
-  ghost: "text-green-700 underline decoration-1 underline-offset-4 hover:decoration-2 px-1",
-  destructive: "bg-brick-700 text-white hover:opacity-90",
-};
-
-const widths = {
-  mobile: "w-full sm:w-auto",
-  always: "w-full",
-  never: "",
-} as const;
 
 export function Button({
   variant = "primary",
@@ -47,18 +32,17 @@ export function Button({
       disabled={isDisabled}
       aria-busy={loading || undefined}
       className={cx(
-        "type-label inline-flex min-h-12 items-center justify-center gap-2 rounded-control px-5",
-        "transition-colors duration-fast ease-od",
+        buttonBase,
         variant === "ghost" && "min-h-11",
         // Loading keeps the variant colours: the action is in progress, not unavailable.
         loading
-          ? cx(variants[variant], "cursor-progress")
+          ? cx(buttonVariants[variant], "cursor-progress")
           : disabled && variant !== "ghost"
             ? "cursor-not-allowed border-0 bg-gray-100 text-gray-500"
             : disabled
               ? "cursor-not-allowed text-gray-500 no-underline"
-              : variants[variant],
-        widths[fullWidth],
+              : buttonVariants[variant],
+        buttonWidths[fullWidth],
         className,
       )}
       {...props}

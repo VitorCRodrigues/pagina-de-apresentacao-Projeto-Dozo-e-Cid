@@ -9,7 +9,7 @@ import { ApiProvider } from "../ApiProvider";
 import { createMockAuthClient } from "../auth";
 import { AuthProvider } from "../AuthProvider";
 import type { DepositDetail } from "../proposed-types";
-import { useMe } from "./account";
+import { useMe, useTermsDocuments } from "./account";
 import { useConfig } from "./config";
 import { depositPollingInterval, useCreateDeposit, useDeposits } from "./deposits";
 import { usePortfolio } from "./portfolio";
@@ -42,6 +42,14 @@ const deposit: DepositDetail = {
 const descriptions = { es: "Empresas de EE. UU.", pt: "Empresas dos EUA", en: "US companies" };
 
 describe("query hooks", () => {
+  it("useTermsDocuments returns the four documents, the IBKR consent included", async () => {
+    const { result } = renderHook(() => useTermsDocuments(), { wrapper });
+    await waitFor(() => {
+      expect(result.current.data).toHaveLength(4);
+    });
+    expect(result.current.data?.map((doc) => doc.kind)).toContain("ibkr_data_consent");
+  });
+
   it("useConfig returns the mock config", async () => {
     const { result } = renderHook(() => useConfig(), { wrapper });
     await waitFor(() => {

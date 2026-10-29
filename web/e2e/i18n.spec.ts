@@ -40,6 +40,8 @@ test("keeps a client pending at IBKR away from deposits", async ({ page }) => {
   await page.getByRole("button", { name: "Entrar" }).click();
 
   await expect(page).toHaveURL(/\/cuenta$/);
-  await expect(page.getByText("En análisis en Interactive Brokers")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Interactive Brokers está analizando tu cuenta" }),
+  ).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Navegación principal" })).toHaveCount(0);
 });

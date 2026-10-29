@@ -181,5 +181,183 @@
       "message": "Not available in your country yet.",
       "action": "Join the waitlist"
     }
+  },
+  "custody": {
+    "note": "Your account is opened at Interactive Brokers, in your name. OpenDollars is your investment adviser."
+  },
+  "onboarding": {
+    "steps": {
+      "residence": "Country",
+      "personal": "Personal details",
+      "address": "Address",
+      "suitability": "Investor profile",
+      "funds": "Source of funds",
+      "identity": "Identity",
+      "terms": "Terms",
+      "review": "Review"
+    },
+    "actions": {
+      "continue": "Continue",
+      "back": "Back",
+      "edit": "Edit",
+      "submit": "Submit application",
+      "joinWaitlist": "Join the list"
+    },
+    "errors": {
+      "required": "Fill in this field.",
+      "invalidName": "Use letters, spaces, apostrophes or hyphens only, as on your ID.",
+      "nameTwoWords": "Write your first and last name, as on your ID.",
+      "invalidDate": "Check the date.",
+      "underage": "You must be 18 or older to open an account.",
+      "invalidDni": "The DNI has 7 or 8 digits.",
+      "invalidCuit": "The CUIL has 11 digits.",
+      "cuitCheckDigit": "This CUIL is not valid. Check the digits.",
+      "cuitDniMismatch": "This CUIL does not match the DNI you entered.",
+      "invalidEmail": "Enter a valid email, for example name@domain.com.",
+      "invalidPhone": "Enter your mobile with country and area code, for example +54 9 11 5555-0142.",
+      "invalidPostalCode": "Use the 8-character postal code (C1043AAZ) or the 4-digit one.",
+      "termsRequired": "To continue, you need to accept this document.",
+      "identityRequired": "Complete the verification to continue."
+    },
+    "residence": {
+      "title": "Where do you live?",
+      "lead": "For now we open accounts for people who live in Argentina.",
+      "country": "Country of residence",
+      "nationality": "Nationality",
+      "waitlistTitle": "We don't open accounts in {{country}} yet",
+      "waitlistBody": "We are in a closed pilot in Argentina. Leave your email and we'll let you know when we open in your country.",
+      "changeCountry": "Change the country"
+    },
+    "personal": {
+      "title": "Your details",
+      "lead": "We use them to open your account at Interactive Brokers. Write them as they appear on your ID.",
+      "fullName": "Full name",
+      "fullNameHelp": "As it appears on your ID.",
+      "birthDate": "Date of birth",
+      "dni": "DNI",
+      "dniHelp": "Digits only.",
+      "cuil": "CUIL or CUIT",
+      "cuilHelp": "11 digits. It is on your payslip or your ANSES certificate.",
+      "email": "Email",
+      "phone": "Mobile phone",
+      "phoneHelp": "With country and area code."
+    },
+    "address": {
+      "title": "Your address",
+      "lead": "Where you live today. Interactive Brokers may ask for proof of address.",
+      "street": "Street and number",
+      "unit": "Floor and apartment",
+      "city": "City",
+      "province": "Province",
+      "postalCode": "Postal code",
+      "postalCodeHelp": "For example C1043AAZ."
+    },
+    "suitability": {
+      "title": "Your investor profile",
+      "lead": "Your answers shape a recommendation that suits you. There are no right answers.",
+      "multiHint": "You can choose more than one."
+    },
+    "funds": {
+      "title": "Source of funds",
+      "lead": "Two questions the law requires before opening an investment account.",
+      "occupation": "Occupation",
+      "occupations": {
+        "employee": "Employee",
+        "self_employed": "Self-employed",
+        "business_owner": "Business owner",
+        "retired": "Retired",
+        "student": "Student",
+        "other": "Other"
+      },
+      "source": "Where does the money you will invest come from?",
+      "sourceWhy": "We ask because the law requires us to know where invested money comes from.",
+      "sources": {
+        "salary": "Salary",
+        "business": "Income from my work or business",
+        "savings": "Savings",
+        "investments": "Investments",
+        "inheritance": "Inheritance or gift",
+        "property_sale": "Sale of a property",
+        "other": "Other"
+      },
+      "pep": "Are you a politically exposed person?",
+      "pepWhy": "Someone who holds or held a prominent public office, or a close relative. We ask because of anti-money-laundering rules.",
+      "yes": "Yes",
+      "no": "No",
+      "pepRole": "Which office do you or did you hold?"
+    },
+    "identity": {
+      "title": "Verify your identity",
+      "lead": "You'll take a photo of both sides of your ID and a selfie. A specialised provider handles it.",
+      "need": "Have your ID at hand and find a well-lit place.",
+      "start": "Start verification",
+      "running": "We are verifying your identity.",
+      "approved": "Your identity is verified.",
+      "failed": "We couldn't complete the verification. Try again."
+    },
+    "terms": {
+      "title": "Terms and consents",
+      "lead": "Read each document and tick the box to accept it.",
+      "accept": "I accept: {{title}}",
+      "read": "Read the document",
+      "ibkrConsent": "Interactive Brokers is in the United States. To open your account in your name, we send it your personal and identity data. We do so only with your consent, under Law 25,326 on personal data protection."
+    },
+    "review": {
+      "title": "Review your application",
+      "lead": "If something isn't right, edit it before you submit.",
+      "editSection": "Edit {{section}}",
+      "verified": "Verified",
+      "after": "Once you submit, we review it and request your account at Interactive Brokers. It usually takes a few business days.",
+      "termsAccepted_one": "{{count}} document accepted",
+      "termsAccepted_other": "{{count}} documents accepted"
+    }
+  },
+  "account": {
+    "timeline": {
+      "label": "Opening your account",
+      "submitted": "We received your application",
+      "kyc_review": "We verify your identity",
+      "ibkr_pending": "Interactive Brokers opens your account in your name",
+      "open": "Account open",
+      "actionNote": "Documents are missing. See the list below."
+    },
+    "title": {
+      "draft": "Your application isn't finished",
+      "submitted": "We received your application",
+      "kyc_review": "We are verifying your identity",
+      "ibkr_pending": "Interactive Brokers is reviewing your account",
+      "action_required": "Interactive Brokers needs documents",
+      "open": "Your account is open",
+      "rejected": "We couldn't open your account",
+      "restricted": "Your account needs attention"
+    },
+    "body": {
+      "draft": "Pick up where you left off: we saved every step.",
+      "waiting": "It usually takes a few business days. We'll email you when there's news.",
+      "action_required": "To continue opening your account, send these documents. Interactive Brokers asks for them.",
+      "open": "Your Interactive Brokers account is now in your name. The next step is to create your monthly plan.",
+      "rejected": "We reviewed your application and can't open the account at this time. If you have questions, write to us.",
+      "restricted": "For now you can't make deposits. Your investments remain at Interactive Brokers, in your name. Write to us to sort it out."
+    },
+    "actions": {
+      "continue": "Continue the application",
+      "createPlan": "Create monthly plan",
+      "contact": "Write to support"
+    },
+    "accountNumber": "Account number",
+    "supportEmail": "Support email",
+    "upload": {
+      "choose": "Choose file",
+      "change": "Choose another file",
+      "accepted": "JPG, PNG or PDF, up to 10 MB.",
+      "send": "Send document",
+      "progress": "Sending the document",
+      "preview": "Preview of {{name}}",
+      "tooBig": "The file is larger than 10 MB.",
+      "wrongType": "Use a JPG, PNG or PDF file.",
+      "empty": "The file is empty."
+    },
+    "allSent": "We received every document. Interactive Brokers reviews them and we'll email you.",
+    "documents": "Requested documents"
   }
 }

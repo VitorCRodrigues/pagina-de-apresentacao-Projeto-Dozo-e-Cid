@@ -199,21 +199,43 @@ export const questionnaire = {
     },
     {
       id: "income",
-      kind: "number" as const,
+      kind: "single" as const,
       label: {
-        es: "Ingreso mensual aproximado, en USD",
-        pt: "Renda mensal aproximada, em USD",
-        en: "Approximate monthly income, in USD",
+        es: "¿Cuánto ganás por mes, aproximadamente?",
+        pt: "Quanto você ganha por mês, aproximadamente?",
+        en: "Roughly how much do you earn a month?",
       },
+      options: [
+        option("lt1k", "Menos de US$ 1.000", "Menos de US$ 1.000", "Under US$1,000"),
+        option("1k3k", "De US$ 1.000 a 3.000", "De US$ 1.000 a 3.000", "US$1,000 to 3,000"),
+        option("3k10k", "De US$ 3.000 a 10.000", "De US$ 3.000 a 10.000", "US$3,000 to 10,000"),
+        option("gt10k", "Más de US$ 10.000", "Mais de US$ 10.000", "Over US$10,000"),
+      ],
     },
     {
       id: "netWorth",
-      kind: "number" as const,
+      kind: "single" as const,
       label: {
-        es: "Patrimonio aproximado, en USD",
-        pt: "Patrimônio aproximado, em USD",
-        en: "Approximate net worth, in USD",
+        es: "¿Cuál es tu patrimonio aproximado?",
+        pt: "Qual é o seu patrimônio aproximado?",
+        en: "What is your approximate net worth?",
       },
+      options: [
+        option("lt25k", "Menos de US$ 25.000", "Menos de US$ 25.000", "Under US$25,000"),
+        option(
+          "25k100k",
+          "De US$ 25.000 a 100.000",
+          "De US$ 25.000 a 100.000",
+          "US$25,000 to 100,000",
+        ),
+        option(
+          "100k500k",
+          "De US$ 100.000 a 500.000",
+          "De US$ 100.000 a 500.000",
+          "US$100,000 to 500,000",
+        ),
+        option("gt500k", "Más de US$ 500.000", "Mais de US$ 500.000", "Over US$500,000"),
+      ],
     },
     {
       id: "experience",

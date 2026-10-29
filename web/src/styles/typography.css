@@ -7,24 +7,26 @@
   font-family: var(--od-font-serif);
   font-size: 2.5rem;
   line-height: 2.75rem;
-  font-weight: 560;
-  letter-spacing: -0.01em;
-  font-variation-settings: "opsz" 144;
+  font-weight: 480;
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72;
 }
 
-/* Optical size follows the font size here: a forced high opsz at 28 px closes the word gaps. */
+/* Lighter weight and a moderate optical size (variant A): titles read as headings, not posters. */
 @utility type-title {
   font-family: var(--od-font-serif);
   font-size: 1.75rem;
   line-height: 2.125rem;
-  font-weight: 540;
+  font-weight: 460;
+  font-variation-settings: "opsz" 36;
 }
 
 @utility type-heading {
   font-family: var(--od-font-serif);
   font-size: 1.25rem;
   line-height: 1.75rem;
-  font-weight: 540;
+  font-weight: 460;
+  font-variation-settings: "opsz" 24;
 }
 
 @utility type-body {

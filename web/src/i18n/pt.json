@@ -181,5 +181,183 @@
       "message": "Ainda não disponível no seu país.",
       "action": "Entrar na lista de espera"
     }
+  },
+  "custody": {
+    "note": "Sua conta é aberta na Interactive Brokers, no seu nome. A OpenDollars é sua consultora de investimentos."
+  },
+  "onboarding": {
+    "steps": {
+      "residence": "País",
+      "personal": "Dados pessoais",
+      "address": "Endereço",
+      "suitability": "Perfil de investidor",
+      "funds": "Origem dos recursos",
+      "identity": "Identidade",
+      "terms": "Termos",
+      "review": "Revisão"
+    },
+    "actions": {
+      "continue": "Continuar",
+      "back": "Voltar",
+      "edit": "Editar",
+      "submit": "Enviar solicitação",
+      "joinWaitlist": "Entrar na lista"
+    },
+    "errors": {
+      "required": "Preencha este dado.",
+      "invalidName": "Use só letras, espaços, apóstrofos ou hífens, como no seu documento.",
+      "nameTwoWords": "Escreva seu nome e sobrenome, como no seu documento.",
+      "invalidDate": "Confira a data.",
+      "underage": "Para abrir uma conta você precisa ter 18 anos ou mais.",
+      "invalidDni": "O DNI tem 7 ou 8 números.",
+      "invalidCuit": "O CUIL tem 11 números.",
+      "cuitCheckDigit": "Este CUIL não é válido. Confira os números.",
+      "cuitDniMismatch": "Este CUIL não corresponde ao DNI informado.",
+      "invalidEmail": "Escreva um e-mail válido, por exemplo nome@dominio.com.",
+      "invalidPhone": "Escreva o celular com código do país e de área, por exemplo +54 9 11 5555-0142.",
+      "invalidPostalCode": "Use o código postal de 8 caracteres (C1043AAZ) ou o de 4 números.",
+      "termsRequired": "Para seguir, você precisa aceitar este documento.",
+      "identityRequired": "Conclua a verificação para seguir."
+    },
+    "residence": {
+      "title": "Onde você mora?",
+      "lead": "Por enquanto abrimos contas para quem mora na Argentina.",
+      "country": "País de residência",
+      "nationality": "Nacionalidade",
+      "waitlistTitle": "Ainda não abrimos contas em {{country}}",
+      "waitlistBody": "Estamos em um piloto fechado na Argentina. Deixe seu e-mail e avisamos quando abrirmos no seu país.",
+      "changeCountry": "Mudar o país"
+    },
+    "personal": {
+      "title": "Seus dados",
+      "lead": "Usamos esses dados para abrir sua conta na Interactive Brokers. Escreva como estão no seu documento.",
+      "fullName": "Nome completo",
+      "fullNameHelp": "Como está no seu documento.",
+      "birthDate": "Data de nascimento",
+      "dni": "DNI",
+      "dniHelp": "Só números.",
+      "cuil": "CUIL ou CUIT",
+      "cuilHelp": "11 números. Está no seu recibo de salário ou na constância da ANSES.",
+      "email": "E-mail",
+      "phone": "Celular",
+      "phoneHelp": "Com código do país e de área."
+    },
+    "address": {
+      "title": "Seu endereço",
+      "lead": "O endereço onde você mora hoje. A Interactive Brokers pode pedir um comprovante.",
+      "street": "Rua e número",
+      "unit": "Andar e apartamento",
+      "city": "Cidade",
+      "province": "Província",
+      "postalCode": "Código postal",
+      "postalCodeHelp": "Por exemplo C1043AAZ."
+    },
+    "suitability": {
+      "title": "Seu perfil de investidor",
+      "lead": "Com suas respostas montamos uma recomendação adequada para você. Não há respostas certas.",
+      "multiHint": "Você pode escolher mais de uma."
+    },
+    "funds": {
+      "title": "Origem dos recursos",
+      "lead": "Duas perguntas que a lei exige antes de abrir uma conta de investimento.",
+      "occupation": "Ocupação",
+      "occupations": {
+        "employee": "Empregado",
+        "self_employed": "Autônomo",
+        "business_owner": "Dono ou sócio de empresa",
+        "retired": "Aposentado",
+        "student": "Estudante",
+        "other": "Outra"
+      },
+      "source": "De onde vem o dinheiro que você vai investir?",
+      "sourceWhy": "Perguntamos porque a lei exige conhecer a origem do dinheiro investido.",
+      "sources": {
+        "salary": "Salário",
+        "business": "Renda da minha atividade ou empresa",
+        "savings": "Poupança",
+        "investments": "Investimentos",
+        "inheritance": "Herança ou doação",
+        "property_sale": "Venda de um imóvel",
+        "other": "Outro"
+      },
+      "pep": "Você é uma pessoa politicamente exposta?",
+      "pepWhy": "É quem ocupa ou ocupou um cargo público relevante, ou um familiar próximo. Perguntamos pelas normas de prevenção à lavagem de dinheiro.",
+      "yes": "Sim",
+      "no": "Não",
+      "pepRole": "Qual cargo você ocupa ou ocupou?"
+    },
+    "identity": {
+      "title": "Verifique sua identidade",
+      "lead": "Você vai tirar uma foto do documento, frente e verso, e uma selfie. Quem faz é um fornecedor especializado.",
+      "need": "Tenha o documento em mãos e procure um lugar bem iluminado.",
+      "start": "Começar a verificação",
+      "running": "Estamos verificando sua identidade.",
+      "approved": "Sua identidade está verificada.",
+      "failed": "Não conseguimos concluir a verificação. Tente de novo."
+    },
+    "terms": {
+      "title": "Termos e consentimentos",
+      "lead": "Leia cada documento e marque a caixa para aceitá-lo.",
+      "accept": "Aceito: {{title}}",
+      "read": "Ler o documento",
+      "ibkrConsent": "A Interactive Brokers fica nos Estados Unidos. Para abrir sua conta no seu nome, enviamos seus dados pessoais e de identidade. Fazemos isso só com o seu consentimento, conforme a Lei 25.326 de proteção de dados pessoais."
+    },
+    "review": {
+      "title": "Revise sua solicitação",
+      "lead": "Se algo não estiver certo, edite antes de enviar.",
+      "editSection": "Editar {{section}}",
+      "verified": "Verificada",
+      "after": "Depois do envio, revisamos e pedimos a abertura da sua conta na Interactive Brokers. Costuma levar alguns dias úteis.",
+      "termsAccepted_one": "{{count}} documento aceito",
+      "termsAccepted_other": "{{count}} documentos aceitos"
+    }
+  },
+  "account": {
+    "timeline": {
+      "label": "Abertura da sua conta",
+      "submitted": "Recebemos sua solicitação",
+      "kyc_review": "Verificamos sua identidade",
+      "ibkr_pending": "A Interactive Brokers abre sua conta no seu nome",
+      "open": "Conta aberta",
+      "actionNote": "Faltam documentos. Veja a lista abaixo."
+    },
+    "title": {
+      "draft": "Sua solicitação não foi concluída",
+      "submitted": "Recebemos sua solicitação",
+      "kyc_review": "Estamos verificando sua identidade",
+      "ibkr_pending": "A Interactive Brokers está analisando sua conta",
+      "action_required": "A Interactive Brokers precisa de documentos",
+      "open": "Sua conta está aberta",
+      "rejected": "Não conseguimos abrir sua conta",
+      "restricted": "Sua conta precisa de atenção"
+    },
+    "body": {
+      "draft": "Continue de onde parou: salvamos cada etapa.",
+      "waiting": "Costuma levar alguns dias úteis. Avisamos por e-mail quando houver novidades.",
+      "action_required": "Para seguir com a abertura, envie estes documentos. Quem pede é a Interactive Brokers.",
+      "open": "Sua conta na Interactive Brokers já está no seu nome. O próximo passo é criar seu plano mensal.",
+      "rejected": "Revisamos sua solicitação e não podemos abrir a conta neste momento. Se tiver dúvidas, escreva para nós.",
+      "restricted": "Por enquanto você não pode fazer aportes. Seus investimentos continuam na Interactive Brokers, no seu nome. Escreva para resolvermos."
+    },
+    "actions": {
+      "continue": "Continuar a solicitação",
+      "createPlan": "Criar plano mensal",
+      "contact": "Escrever para o suporte"
+    },
+    "accountNumber": "Número da conta",
+    "supportEmail": "E-mail do suporte",
+    "upload": {
+      "choose": "Escolher arquivo",
+      "change": "Escolher outro arquivo",
+      "accepted": "JPG, PNG ou PDF, até 10 MB.",
+      "send": "Enviar documento",
+      "progress": "Enviando o documento",
+      "preview": "Pré-visualização de {{name}}",
+      "tooBig": "O arquivo tem mais de 10 MB.",
+      "wrongType": "Use um arquivo JPG, PNG ou PDF.",
+      "empty": "O arquivo está vazio."
+    },
+    "allSent": "Recebemos todos os documentos. A Interactive Brokers revisa e avisamos por e-mail.",
+    "documents": "Documentos solicitados"
   }
 }

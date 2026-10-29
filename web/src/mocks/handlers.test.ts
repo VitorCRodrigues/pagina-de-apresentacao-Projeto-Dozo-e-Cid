@@ -251,4 +251,34 @@ describe("mock API handlers", () => {
     expect(submitted.json.status).toBe("submitted");
     expect((await call<Me>("GET", "/me")).json.accountStatus).toBe("submitted");
   });
+
+  it("advances currentStep to the first unsaved step and never moves it back", async () => {
+    scenario("draft");
+    const saved = await call<OnboardingDraft>("PUT", "/onboarding/address", { body: {} });
+    expect(saved.json.currentStep).toBe("suitability");
+    const edited = await call<OnboardingDraft>("PUT", "/onboarding/residence", {
+      body: { country: "AR", nationality: "AR" },
+    });
+    expect(edited.json.currentStep).toBe("suitability");
+    const review = await call<OnboardingDraft>("PUT", "/onboarding/review", { body: {} });
+    expect(review.json.currentStep).toBe("review");
+  });
+
+  it("serves income and net worth as closed single-choice brackets", async () => {
+    const { json } = await call<Questionnaire>("GET", "/onboarding/questionnaire");
+    const kinds = new Set(json.questions.map((q) => q.kind));
+    expect([...kinds].sort()).toEqual(["multi", "single"]);
+    for (const id of ["income", "netWorth"]) {
+      const question = json.questions.find((q) => q.id === id);
+      expect(question?.kind).toBe("single");
+      expect(question?.options.length).toBeGreaterThan(2);
+    }
+  });
+
+  it("puts any ISO country on the waitlist", async () => {
+    const ok = await call("POST", "/waitlist", { body: { email: "a@b.co", country: "UY" } });
+    expect(ok.status).toBe(204);
+    const bad = await call("POST", "/waitlist", { body: { email: "a@b.co", country: "uru" } });
+    expect(bad.status).toBe(422);
+  });
 });

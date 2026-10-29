@@ -1,6 +1,7 @@
 import { createBrowserRouter, Outlet, type RouteObject } from "react-router";
 import { RouteFallback } from "@/components/RouteFallback";
 import {
+  AccountStatusLayout,
   PreOpenLayout,
   RequireOpenAccount,
   RequireSession,
@@ -42,8 +43,41 @@ export const routes: RouteObject[] = [
           {
             element: <PreOpenLayout />,
             children: [
-              { path: "onboarding", lazy: placeholder("OnboardingScreen") },
-              { path: "cuenta", lazy: placeholder("AccountStatusScreen") },
+              {
+                path: "onboarding",
+                lazy: async () => ({
+                  Component: (await import("@/features/onboarding/OnboardingLayout"))
+                    .OnboardingLayout,
+                }),
+                children: [
+                  {
+                    index: true,
+                    lazy: async () => ({
+                      Component: (await import("@/features/onboarding/OnboardingLayout"))
+                        .OnboardingResume,
+                    }),
+                  },
+                  {
+                    path: ":slug",
+                    lazy: async () => ({
+                      Component: (await import("@/features/onboarding/OnboardingLayout"))
+                        .OnboardingStepRoute,
+                    }),
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            element: <AccountStatusLayout />,
+            children: [
+              {
+                path: "cuenta",
+                lazy: async () => ({
+                  Component: (await import("@/features/account/AccountStatusScreen"))
+                    .AccountStatusScreen,
+                }),
+              },
             ],
           },
           {
@@ -54,6 +88,7 @@ export const routes: RouteObject[] = [
               { path: "cartera", lazy: placeholder("PortfolioScreen") },
               { path: "pendientes", lazy: placeholder("PendingScreen") },
               { path: "perfil", lazy: placeholder("ProfileScreen") },
+              { path: "plan", lazy: placeholder("PlanScreen") },
             ],
           },
         ],

@@ -4,6 +4,8 @@ import { Badge } from "./Badge";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
 import { Card } from "./Card";
+import { CopyField } from "./CopyField";
+import { Countdown } from "./Countdown";
 import { Input } from "./Input";
 import { Ledger, LedgerRow } from "./Ledger";
 import { EmptyState, ErrorState } from "./PageState";
@@ -119,6 +121,34 @@ describe("statement language", () => {
     const terms = screen.getAllByRole("term");
     expect(terms.map((term) => term.textContent)).toEqual(["Invertido", "En caja"]);
     expect(screen.getAllByRole("definition")[1]).toHaveTextContent("US$ 580,00");
+  });
+
+  it("Countdown is a ruled line, with no tinted box, in every phase", () => {
+    const now = () => Date.parse("2026-10-27T12:00:00Z");
+    const phases = {
+      calm: "2026-10-27T12:05:00Z",
+      warning: "2026-10-27T12:00:30Z",
+      expired: "2026-10-27T11:59:00Z",
+    };
+    const classes = Object.entries(phases).map(([phase, expiresAt]) => {
+      const { container, unmount } = render(
+        <Countdown expiresAt={expiresAt} label="La cotización vence en" now={now} />,
+      );
+      const line = container.firstElementChild as HTMLElement;
+      expect(line.className, phase).toMatch(/\bborder-l-2\b/);
+      expect(line.className, phase).not.toMatch(/\bbg-|\brounded-control\b|animate-/);
+      unmount();
+      return line.className;
+    });
+    // The last minute and expiry change the colour of the text and of the rule.
+    expect(new Set(classes).size).toBe(3);
+  });
+
+  it("CopyField sits on a rule, with no grey box", () => {
+    const { container } = render(<CopyField label="Dirección" value="0xabc" />);
+    const html = container.innerHTML;
+    expect(html).not.toMatch(/\bbg-gray-50\b|\brounded-control\b/);
+    expect(screen.getByText("0xabc").parentElement?.className).toMatch(/\bborder-b\b/);
   });
 
   it("Ledger keeps the label on one line and lets a long text value wrap", () => {

@@ -319,7 +319,8 @@ function base(status: AccountStatus, now: Date): MockDb {
           address: {
             street: "Av. Corrientes 1234, 5° B",
             city: "Buenos Aires",
-            postalCode: "C1043",
+            province: "C",
+            postalCode: "C1043AAZ",
           },
         }),
       },
@@ -472,9 +473,7 @@ export function questionnairePayload(_db: MockDb, lang: Locale): Questionnaire {
       id: q.id,
       kind: q.kind,
       label: pick(q.label, lang),
-      ...(q.options && {
-        options: q.options.map((o) => ({ value: o.value, label: pick(o.label, lang) })),
-      }),
+      options: q.options.map((o) => ({ value: o.value, label: pick(o.label, lang) })),
     })),
   };
 }

@@ -43,11 +43,12 @@ export function CopyField({ label, value, mono = true }: CopyFieldProps) {
       <span id={`${id}-label`} className="type-label text-graphite-900">
         {label}
       </span>
-      <div className="flex items-stretch overflow-hidden rounded-control border border-gray-200 bg-gray-50">
+      {/* A statement line: the value on a hairline, the copy action at its end. */}
+      <div className="flex items-start gap-3 border-b border-gray-200 pb-2">
         <p
           id={`${id}-value`}
           className={cx(
-            "min-w-0 flex-1 px-3 py-3 break-all text-graphite-900 select-all",
+            "min-w-0 flex-1 break-all text-graphite-900 select-all",
             mono ? "type-mono" : "type-body",
           )}
         >
@@ -58,8 +59,8 @@ export function CopyField({ label, value, mono = true }: CopyFieldProps) {
           onClick={() => void copy()}
           aria-describedby={`${id}-label`}
           className={cx(
-            "type-label inline-flex min-w-24 shrink-0 items-center justify-center gap-1.5 border-l border-gray-200 px-3",
-            "transition-colors duration-fast ease-od hover:bg-gray-100",
+            "type-label -my-2 inline-flex min-h-11 min-w-24 shrink-0 items-center justify-end gap-1.5",
+            "transition-colors duration-fast ease-od hover:underline",
             state === "copied" ? "text-green-700" : "text-navy-900",
           )}
         >

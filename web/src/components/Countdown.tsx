@@ -60,12 +60,14 @@ export function Countdown({
   const expiredMessage = expiredText ?? t("countdown.expired");
 
   return (
+    // A statement line with a side rule, like Banner: the last minute and expiry change only
+    // the colour of the text and the rule.
     <div
       className={cx(
-        "flex items-center gap-2 rounded-control px-3 py-2",
-        expired && "bg-brick-50 text-brick-700",
-        warning && "bg-amber-50 text-amber-700",
-        !expired && !warning && "bg-gray-50 text-gray-600",
+        "flex items-center gap-2 border-l-2 py-1 pl-3 transition-colors duration-base ease-od",
+        expired && "border-brick-700 text-brick-700",
+        warning && "border-amber-700 text-amber-700",
+        !expired && !warning && "border-gray-200 text-gray-600",
       )}
     >
       <Icon icon={Clock} size={16} className="shrink-0" />
@@ -74,7 +76,11 @@ export function Countdown({
       ) : (
         <>
           <span className="type-caption flex-1">{label}</span>
-          <span role="timer" aria-live="off" className="type-value text-graphite-900">
+          <span
+            role="timer"
+            aria-live="off"
+            className={cx("type-value", !warning && "text-graphite-900")}
+          >
             {format(remaining)}
           </span>
         </>

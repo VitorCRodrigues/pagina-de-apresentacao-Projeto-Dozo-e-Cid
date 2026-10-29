@@ -43,11 +43,24 @@ export function getAccount(api: ApiClient) {
   return api.request("GET", "/account", { response: "account" });
 }
 
-export function uploadDocument(api: ApiClient, pendingItemId: string, file: File) {
+// docs/api-gaps.md, item 10.
+export function getTerms(api: ApiClient) {
+  return api.request("GET", "/account/terms", { response: "terms" });
+}
+
+export function uploadDocument(
+  api: ApiClient,
+  pendingItemId: string,
+  file: File,
+  onProgress?: (fraction: number) => void,
+) {
   const formData = new FormData();
   formData.set("pendingItemId", pendingItemId);
   formData.set("file", file);
-  return api.request("POST", "/account/documents", { formData, response: "account" });
+  return api.upload("/account/documents", formData, {
+    response: "account",
+    ...(onProgress && { onProgress }),
+  });
 }
 
 export function getPortfolio(api: ApiClient) {

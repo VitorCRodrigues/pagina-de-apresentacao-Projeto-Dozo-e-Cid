@@ -76,7 +76,8 @@ export function Timeline({ label, steps, locale }: TimelineProps) {
               {!isLast && (
                 <span
                   className={cx(
-                    "absolute top-6 -bottom-0.5 w-px",
+                    // Down through the item's bottom padding (pb-6) to the next dot (pt-0.5).
+                    "absolute top-6 -bottom-6 w-px",
                     step.status === "done" ? "bg-green-700" : "bg-gray-200",
                   )}
                 />

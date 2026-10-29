@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { useMe } from "@/api/hooks/account";
-import { Badge } from "@/components/Badge";
 
 // TODO(decisão): stand-ins so routing and navigation work end to end. Each one is replaced
 // by its real screen (T2–T12) in the next phases.
@@ -42,21 +40,8 @@ export function ProfileScreen() {
   return <Placeholder title={t("nav.profile")} />;
 }
 
-export function OnboardingScreen() {
+// TODO(decisão): T5 (monthly plan) replaces this; the open account's CTA already points here.
+export function PlanScreen() {
   const { t } = useTranslation();
-  return <Placeholder title={t("accountStatus.draft")} />;
-}
-
-export function AccountStatusScreen() {
-  const { t } = useTranslation();
-  const { data: me } = useMe();
-  return (
-    <Placeholder title={t("accountStatus.label")}>
-      {me && (
-        <Badge tone="info" className="self-start">
-          {t(`accountStatus.${me.accountStatus}`)}
-        </Badge>
-      )}
-    </Placeholder>
-  );
+  return <Placeholder title={t("account.actions.createPlan")} />;
 }

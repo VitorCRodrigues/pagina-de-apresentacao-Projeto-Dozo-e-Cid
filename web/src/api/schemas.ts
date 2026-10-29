@@ -196,7 +196,10 @@ export const apiErrorBodySchema = z.object({
   }),
 });
 
-export const waitlistRequestSchema = z.object({ email: z.email(), country: countrySchema });
+export const waitlistRequestSchema = z.object({
+  email: z.email(),
+  country: z.string().regex(/^[A-Z]{2}$/),
+});
 
 export const onboardingStepSchema = z.enum(onboardingSteps);
 
@@ -210,9 +213,9 @@ export const questionnaireSchema = z.object({
   questions: z.array(
     z.object({
       id: z.string(),
-      kind: z.enum(["single", "multi", "number"]),
+      kind: z.enum(["single", "multi"]),
       label: z.string(),
-      options: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+      options: z.array(z.object({ value: z.string(), label: z.string() })).min(1),
     }),
   ),
 });

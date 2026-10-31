@@ -56,7 +56,7 @@ export function OnboardingResume() {
 
 // /onboarding/:slug. A step not reached yet (or unknown) goes back to the current one.
 export function OnboardingStepRoute() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const { slug } = useParams();
   const { draft } = useOnboardingContext();
   const step = stepFromSlug(slug);

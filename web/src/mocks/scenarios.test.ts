@@ -58,7 +58,9 @@ describe("mock scenarios", () => {
       expect(portfolioSchema.safeParse(portfolioPayload(db, lang)).error).toBeUndefined();
       expect(questionnaireSchema.safeParse(questionnairePayload(db, lang)).error).toBeUndefined();
       for (const deposit of db.deposits) {
-        expect(depositDetailSchema.safeParse(depositPayload(deposit, lang)).error).toBeUndefined();
+        expect(
+          depositDetailSchema.safeParse(depositPayload(db, deposit, lang)).error,
+        ).toBeUndefined();
       }
       for (const item of notificationsPayload(db, lang)) {
         expect(notificationSchema.safeParse(item).error).toBeUndefined();
@@ -105,11 +107,11 @@ describe("mock scenarios", () => {
     expect(buildMockDb("fx_executed", now).deposits[0]?.rail).toBe("ar_swift");
     expect(buildMockDb("wire_sent", now).deposits[0]?.rail).toBe("ar_swift");
     expect(buildMockDb("deposit_notified", now).deposits[0]?.rail).toBe("ar_usdc");
-    expect(buildMockDb("deposit_notified", now).deposits[0]?.isFirstDeposit).toBe(true);
     expect(buildMockDb("deposit_notified", now).deposits[0]?.instructions?.type).toBe("usdc");
-    const returned = buildMockDb("returned", now).deposits[0];
+    const returnedDb = buildMockDb("returned", now);
+    const returned = returnedDb.deposits[0];
     for (const lang of supportedLocales) {
-      expect(returned && depositPayload(returned, lang).returnReason).toBeTruthy();
+      expect(returned && depositPayload(returnedDb, returned, lang).returnReason).toBeTruthy();
     }
   });
 

@@ -14,6 +14,8 @@ interface BaseOptions {
   query?: Record<string, string | undefined>;
   idempotencyKey?: string;
   signal?: AbortSignal;
+  // Sees the raw response before its body is read (headers such as Date).
+  onResponse?: (response: Response) => void;
 }
 
 function withQuery(path: string, query: BaseOptions["query"]): string {
@@ -105,6 +107,7 @@ export function createApiClient({
       throw new ApiError({ status: 0, code: "network", message: "Network request failed" });
     }
 
+    options.onResponse?.(response);
     if (!response.ok) throw await toApiError(response);
     if (response.status === 204 || !options.response) return undefined;
 

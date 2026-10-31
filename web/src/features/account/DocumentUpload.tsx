@@ -23,7 +23,7 @@ interface DocumentUploadProps {
 // One document Interactive Brokers asked for: pick a file, check it, preview it, send it.
 // A statement line like the rest of the screen; progress is a thin bar, as in the Stepper.
 export function DocumentUpload({ item, upload }: DocumentUploadProps) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("account");
   const inputId = useId();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

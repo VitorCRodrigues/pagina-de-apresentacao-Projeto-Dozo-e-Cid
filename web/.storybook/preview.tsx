@@ -3,7 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { setupWorker } from "msw/browser";
 import addonMsw from "msw-storybook-addon";
 import { createQueryClient } from "@/api/queryClient";
-import i18n, { defaultLocale, supportedLocales } from "@/i18n";
+import i18n, { defaultLocale, namespaces, supportedLocales } from "@/i18n";
 import { loadDemoResources } from "@/i18n/demo";
 import { handlers } from "@/mocks/handlers";
 import { storyLocale } from "./locale";
@@ -30,6 +30,8 @@ export default definePreview({
   // Switch language before render, so stories can call i18n.t directly.
   loaders: [
     async ({ globals }) => {
+      // Stories render any area in any language: load everything the app loads on demand.
+      await i18n.loadNamespaces([...namespaces]);
       await i18n.changeLanguage(storyLocale(globals));
     },
   ],

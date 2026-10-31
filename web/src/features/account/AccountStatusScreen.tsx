@@ -56,7 +56,7 @@ export function AccountStatusScreen() {
 }
 
 function AccountStatusView({ account }: { account: Account }) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("account");
   const upload = useUploadDocument();
   const { status } = account;
   const timeline = accountTimeline(status);

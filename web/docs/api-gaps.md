@@ -76,6 +76,8 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 
 **Proposta do front:** campo `isFirstDeposit: boolean` em `Deposit` (ou `firstDepositAt?: string` em `Account`), calculado no backend. Deduzir pela lista no front é frágil por causa da paginação e dos depósitos devolvidos.
 
+**Origem (31/10):** `isFirstDeposit` vem do backend em cada `Deposit` (`GET /deposits`, `GET /deposits/{id}` e a resposta de `POST /deposits`). É `true` quando o cliente não tem nenhum aporte anterior que não tenha sido devolvido (`returned` não conta). O front não deduz nada pela lista. O mock calcula o campo a partir da sua lista de aportes com essa mesma regra (`depositPayload` em `src/mocks/db.ts`). O front usa o campo para recomendar o envio de teste (T7) e para mostrar `kyc_passed` e `ibkr_open` como contexto na linha do tempo (T8).
+
 **Status:** a confirmar com o Dozo.
 
 ## 7. Endereço USDC e referência SWIFT: por conta ou por aporte
@@ -96,6 +98,7 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 | `ar_usdc` passando por `fx_executed` e `wire_sent` | Pendência conhecida do backend. | O front já esconde esses estados no `ar_usdc` e não depende deles. | A confirmar com o Dozo |
 | `Portfolio.totalCents` | A fórmula não está no contrato. | Investido + caixa + trânsito, sem custos (decisão 15). | A confirmar com o Dozo |
 | `costPreview` e `mayCollect` | Não se sabe como serão expostos. | Dentro de `POST /deposits/quote`: `costPreview` vira `RailOption.costs`; `mayCollect` falso vira `error.code` ou `Account.blockReasons`. | A confirmar com o Dozo |
+| Relógio da cotação | O relógio do aparelho pode estar adiantado ou atrasado, e a contagem de `Quote.expiresAt` usa o horário local. | Toda resposta de `POST /deposits/quote` traz o header HTTP `Date`. O front calcula a diferença entre ele e o relógio local e usa essa diferença no Countdown e na expiração local. Diferenças abaixo de 1 s são ignoradas (o header tem segundos inteiros). O `409 quote_expired` do `POST /deposits` continua sendo a palavra final. | A confirmar com o Dozo |
 | Idioma dos textos | O contrato não diz como a API escolhe o idioma. | `Accept-Language: es \| pt \| en` em toda chamada; conteúdo editorial traduzido pela API (decisão 12). | A confirmar com o Dozo |
 
 ## 9. Definições usadas pelo mock enquanto o contrato não fecha

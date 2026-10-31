@@ -22,7 +22,7 @@ export function IdentityVerification({
   onResult,
   approved = false,
 }: IdentityVerificationProps) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("onboarding");
   const [phase, setPhase] = useState<Phase>(approved ? "approved" : "idle");
   const cleanup = useRef<(() => void) | null>(null);
 

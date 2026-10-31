@@ -17,7 +17,7 @@ const empty: ResidenceForm = { country: "", nationality: "" };
 
 // Step 1. A country outside config.liveMarkets ends the assistant with the waitlist.
 export function ResidenceStep() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("onboarding");
   const errorText = useErrorText();
   const { me, config } = useOnboardingContext();
   const { form, onSubmit, back, saving, saveError } = useStepForm({

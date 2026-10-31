@@ -9,6 +9,7 @@ import type {
   TermsDocument,
 } from "@/api/proposed-types";
 import type { Account, Locale, Me, Plan, Portfolio, Quote } from "@/api/types";
+import { depositStates } from "@/api/schemas";
 import { getMockDb } from "./mock-store";
 import type { ScenarioId } from "./scenarios";
 import { setScenario } from "./scenario-state";
@@ -234,6 +235,38 @@ describe("mock API handlers", () => {
     expect(terms.json.map((t) => t.title)).toContain("Advisory agreement");
     expect((await call("POST", "/account/terms/terms-privacy/accept")).status).toBe(204);
     expect((await call("POST", "/auth/logout", { token: false })).status).toBe(204);
+  });
+
+  it("deduces isFirstDeposit from the client's deposits (api-gaps.md, item 6)", async () => {
+    scenario("empty");
+    const firstQuote = await quote();
+    const first = await call<DepositDetail>("POST", "/deposits", {
+      body: { quoteId: firstQuote.id, rail: "ar_usdc" },
+      key: "k-first",
+    });
+    expect(first.json.isFirstDeposit).toBe(true);
+    const secondQuote = await quote();
+    const second = await call<DepositDetail>("POST", "/deposits", {
+      body: { quoteId: secondQuote.id, rail: "ar_usdc" },
+      key: "k-second",
+    });
+    expect(second.json.isFirstDeposit).toBe(false);
+    const again = await call<DepositDetail>("GET", `/deposits/${first.json.id}`);
+    expect(again.json.isFirstDeposit).toBe(true);
+  });
+
+  it.each(depositStates)("%s scenario: each flag matches the deposit list", async (state) => {
+    scenario(state);
+    const { json } = await call<DepositsPage>("GET", "/deposits?limit=50");
+    for (const deposit of json.items) {
+      const earlier = json.items.some(
+        (other) =>
+          other.id !== deposit.id &&
+          other.state !== "returned" &&
+          other.createdAt < deposit.createdAt,
+      );
+      expect(deposit.isFirstDeposit, deposit.id).toBe(!earlier);
+    }
   });
 
   it("saves onboarding steps and submits the application", async () => {

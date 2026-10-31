@@ -14,7 +14,10 @@ interface AppShellProps {
 export function AppShell({ nav = false, children }: AppShellProps) {
   const { t } = useTranslation();
   return (
-    <div className="flex min-h-dvh flex-col pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)]">
+    <div
+      {...(nav && { "data-nav": "" })}
+      className="flex min-h-dvh flex-col pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)]"
+    >
       <a
         href="#main"
         className="type-label sr-only rounded-control bg-navy-900 px-4 py-2 text-cream-50 focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50"

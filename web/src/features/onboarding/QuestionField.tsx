@@ -17,7 +17,7 @@ interface QuestionFieldProps {
 
 // One question per block: the question as the legend, the options as statement lines.
 export function QuestionField({ question, value, onChange, error }: QuestionFieldProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const errorId = useId();
 
   return (

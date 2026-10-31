@@ -22,7 +22,7 @@ const empty = {
 
 // Step 3. Argentina only: other countries never get past step 1.
 export function AddressStep() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const errorText = useErrorText();
   const { form, onSubmit, back, saving, saveError } = useStepForm({
     step: "address",

@@ -19,7 +19,7 @@ export function TermsStep() {
 }
 
 function TermsForm({ docs }: { docs: TermsDocument[] }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const errorText = useErrorText();
   const schema = useMemo(() => termsSchema(docs), [docs]);
 

@@ -1,5 +1,8 @@
+import type { ComponentType } from "react";
 import { createBrowserRouter, Outlet, type RouteObject } from "react-router";
 import { RouteFallback } from "@/components/RouteFallback";
+import type { Namespace } from "@/i18n";
+import { loadNamespace } from "@/i18n/load-namespace";
 import {
   AccountStatusLayout,
   PreOpenLayout,
@@ -12,6 +15,19 @@ const placeholder = (name: keyof typeof import("@/features/placeholders")) => as
   const screens = await import("@/features/placeholders");
   return { Component: screens[name] };
 };
+
+// Area screens: their texts (i18n namespace) and their chunk load in parallel, not one after
+// the other, so the first visit costs a single round trip.
+function area<M extends Record<string, unknown>>(
+  namespace: Namespace,
+  load: () => Promise<M>,
+  name: keyof M,
+) {
+  return async () => {
+    const [module] = await Promise.all([load(), loadNamespace(namespace)]);
+    return { Component: module[name] as ComponentType };
+  };
+}
 
 export const routes: RouteObject[] = [
   {
@@ -45,10 +61,11 @@ export const routes: RouteObject[] = [
             children: [
               {
                 path: "onboarding",
-                lazy: async () => ({
-                  Component: (await import("@/features/onboarding/OnboardingLayout"))
-                    .OnboardingLayout,
-                }),
+                lazy: area(
+                  "onboarding",
+                  () => import("@/features/onboarding/OnboardingLayout"),
+                  "OnboardingLayout",
+                ),
                 children: [
                   {
                     index: true,
@@ -73,10 +90,11 @@ export const routes: RouteObject[] = [
             children: [
               {
                 path: "cuenta",
-                lazy: async () => ({
-                  Component: (await import("@/features/account/AccountStatusScreen"))
-                    .AccountStatusScreen,
-                }),
+                lazy: area(
+                  "account",
+                  () => import("@/features/account/AccountStatusScreen"),
+                  "AccountStatusScreen",
+                ),
               },
             ],
           },
@@ -84,7 +102,30 @@ export const routes: RouteObject[] = [
             element: <RequireOpenAccount />,
             children: [
               { path: "inicio", lazy: placeholder("HomeScreen") },
-              { path: "aportar", lazy: placeholder("DepositScreen") },
+              {
+                path: "aportar",
+                lazy: area(
+                  "deposit",
+                  () => import("@/features/deposits/DepositsHome"),
+                  "DepositsHome",
+                ),
+              },
+              {
+                path: "aportar/nuevo",
+                lazy: area(
+                  "deposit",
+                  () => import("@/features/deposits/NewDepositScreen"),
+                  "NewDepositScreen",
+                ),
+              },
+              {
+                path: "aportar/:id",
+                lazy: area(
+                  "deposit",
+                  () => import("@/features/deposits/DepositDetailScreen"),
+                  "DepositDetailScreen",
+                ),
+              },
               { path: "cartera", lazy: placeholder("PortfolioScreen") },
               { path: "pendientes", lazy: placeholder("PendingScreen") },
               { path: "perfil", lazy: placeholder("ProfileScreen") },

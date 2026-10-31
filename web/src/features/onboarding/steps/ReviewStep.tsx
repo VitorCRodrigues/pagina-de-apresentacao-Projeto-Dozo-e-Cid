@@ -24,7 +24,7 @@ type Row = [label: string, value: ReactNode];
 // The application as a statement: one section per step, label above value, hairlines between
 // lines. Labels can be whole questions, so they stack instead of sharing a line with the value.
 function ReviewSection({ step, rows }: { step: OnboardingStep; rows: Row[] | null }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const navigate = useNavigate();
   const headingId = useId();
   const title = t(`onboarding.steps.${step}`);
@@ -72,7 +72,7 @@ const text = (value: unknown) => (typeof value === "string" ? value : "");
 
 // Step 8. Every section can be edited (it comes back here), then POST /onboarding/submit.
 export function ReviewStep() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("onboarding");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const api = useApi();

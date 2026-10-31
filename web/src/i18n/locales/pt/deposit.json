@@ -1,0 +1,118 @@
+{
+  "deposit": {
+    "title": "Aportar",
+    "home": {
+      "new": "Novo aporte",
+      "inProgress": "Em andamento",
+      "none": "Você não tem aportes em andamento.",
+      "historyLater": "O histórico completo de aportes chega em breve.",
+      "row": "{{amount}} · {{rail}}"
+    },
+    "steps": {
+      "amount": "Valor",
+      "rail": "Meio de envio",
+      "preview": "Revisão"
+    },
+    "amount": {
+      "title": "Quanto você quer aportar?",
+      "label": "Valor em dólares",
+      "help": "O mínimo é {{min}}. Abaixo desse valor, os custos fixos de envio pesam demais sobre o que você investe.",
+      "invalidAmount": "Escreva um valor em dólares, por exemplo 500 ou 1.250,50.",
+      "belowMinimum": "O mínimo é {{min}}: com menos, os custos fixos levam uma parte grande demais."
+    },
+    "rail": {
+      "title": "Como você vai enviar o dinheiro?",
+      "label": "Meio de envio",
+      "names": {
+        "ar_usdc": "USDC a partir de uma exchange",
+        "ar_swift": "Transferência bancária SWIFT",
+        "br_efx": "Pix com parceiro de câmbio",
+        "br_fxbank": "Banco de câmbio"
+      },
+      "summary": "Custo total {{cost}} ({{percent}}). Chega em {{days}}.",
+      "days_one": "{{min}} a {{count}} dia útil",
+      "days_other": "{{min}} a {{count}} dias úteis",
+      "recommended": "Recomendado: o menor custo para este valor."
+    },
+    "preview": {
+      "title": "Revise seu aporte",
+      "lead": "Isto é o que custa enviar {{amount}} e o que chega para investir.",
+      "net": "Chega para investir",
+      "countdown": "A cotação vence em",
+      "expired": "A cotação venceu",
+      "expiredBody": "Os custos podem ter mudado. Gere uma nova cotação para seguir.",
+      "newQuote": "Gerar nova cotação",
+      "confirm": "Confirmar aporte",
+      "next": "Depois de confirmar mostramos como enviar o dinheiro."
+    },
+    "actions": {
+      "continue": "Continuar",
+      "back": "Voltar",
+      "support": "Escrever para o suporte",
+      "followUp": "Ver o status da sua conta"
+    },
+    "state": {
+      "kyc_passed": "Identidade verificada",
+      "ibkr_open": "Conta nos EUA aberta",
+      "deposit_notified": "Aguardando seu depósito",
+      "partner_collected": "Recebemos seu dinheiro",
+      "partner_collected_usdc": "USDC recebido",
+      "fx_executed": "Câmbio realizado",
+      "wire_sent": "Transferência enviada",
+      "broker_credited": "Dinheiro na sua conta",
+      "invested": "Investido",
+      "returned": "Depósito devolvido"
+    },
+    "detail": {
+      "title": "Aporte de {{amount}}",
+      "timeline": "Status do aporte",
+      "values": "Valores",
+      "sent": "Enviado",
+      "costs": "Custos",
+      "credited": "Creditado na sua conta",
+      "invested": "Investido",
+      "rail": "Meio de envio",
+      "quote": "Cotação usada",
+      "window": "Seu dinheiro aguarda na sua conta da Interactive Brokers até a próxima janela de investimento, em {{date}}. Investimos uma vez por mês.",
+      "overdue": "Esta etapa está demorando mais que o normal.",
+      "overdueBody": "Você não precisa fazer nada. Se quiser, escreva para nós e verificamos.",
+      "returned": "Devolvemos este depósito",
+      "refund": "O dinheiro volta para a conta de origem. O prazo e os custos da devolução dependem do meio de envio.",
+      "hold": "Seu aporte está em período de segurança",
+      "holdBody": "Ele segue quando terminar, por volta de {{date}}.",
+      "blocked": "As instruções de depósito não estão disponíveis enquanto sua conta precisa de atenção.",
+      "notFound": "Não encontramos este aporte"
+    },
+    "instructions": {
+      "title": "Como enviar o dinheiro",
+      "exactAmount": "Valor exato a enviar",
+      "exactAmountNote": "Envie exatamente este valor. Um valor diferente pode atrasar seu aporte.",
+      "usdc": {
+        "locked": "USDC · rede {{network}}",
+        "lockedLabel": "Moeda e rede deste depósito",
+        "address": "Endereço de depósito",
+        "memo": "Memo",
+        "memoNote": "Se sua exchange pedir memo ou tag, copie daqui.",
+        "qr": "QR code do endereço de depósito",
+        "warning": "Envie somente USDC nesta rede. Outra moeda ou outra rede podem resultar na perda do dinheiro.",
+        "usdt": "Tem USDT? Converta para USDC na sua exchange antes de enviar.",
+        "testSend": "É seu primeiro depósito: recomendamos enviar antes um valor pequeno de teste e, quando ele for creditado, o restante."
+      },
+      "wire": {
+        "beneficiary": "Beneficiário",
+        "account": "Número da conta",
+        "bank": "Banco",
+        "swift": "SWIFT/BIC",
+        "reference": "Referência",
+        "referenceNote": "Obrigatória. Escreva exatamente assim no campo de descrição da transferência: sem ela não conseguimos identificar seu dinheiro.",
+        "ownAccount": "A transferência precisa sair de uma conta no seu nome. Se sair da conta de outra pessoa, é devolvida.",
+        "bankFees": "Seu banco pode cobrar tarifas próprias por transferências ao exterior."
+      },
+      "sent": {
+        "action": "Já enviei",
+        "help": "Avisa nossa equipe. O status muda quando o dinheiro chega.",
+        "done": "Avisamos a equipe. Escrevemos quando recebermos."
+      }
+    }
+  }
+}

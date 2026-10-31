@@ -23,7 +23,7 @@ function pepValue(isPep: boolean | undefined): string {
 
 // Step 5. Each question says why we ask it. TODO(compliance): wording pending legal review.
 export function FundsStep() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const errorText = useErrorText();
   const { form, onSubmit, back, saving, saveError } = useStepForm({
     step: "funds",

@@ -20,11 +20,6 @@ export function HomeScreen() {
   return <Placeholder title={t("nav.home")} />;
 }
 
-export function DepositScreen() {
-  const { t } = useTranslation();
-  return <Placeholder title={t("nav.deposit")} />;
-}
-
 export function PortfolioScreen() {
   const { t } = useTranslation();
   return <Placeholder title={t("nav.portfolio")} />;
@@ -43,5 +38,5 @@ export function ProfileScreen() {
 // TODO(decisão): T5 (monthly plan) replaces this; the open account's CTA already points here.
 export function PlanScreen() {
   const { t } = useTranslation();
-  return <Placeholder title={t("account.actions.createPlan")} />;
+  return <Placeholder title={t("nav.plan")} />;
 }

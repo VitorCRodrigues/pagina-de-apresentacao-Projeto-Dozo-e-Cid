@@ -1,0 +1,50 @@
+{
+  "account": {
+    "timeline": {
+      "label": "Abertura da sua conta",
+      "submitted": "Recebemos sua solicitação",
+      "kyc_review": "Verificamos sua identidade",
+      "ibkr_pending": "A Interactive Brokers abre sua conta no seu nome",
+      "open": "Conta aberta",
+      "actionNote": "Faltam documentos. Veja a lista abaixo."
+    },
+    "title": {
+      "draft": "Sua solicitação não foi concluída",
+      "submitted": "Recebemos sua solicitação",
+      "kyc_review": "Estamos verificando sua identidade",
+      "ibkr_pending": "A Interactive Brokers está analisando sua conta",
+      "action_required": "A Interactive Brokers precisa de documentos",
+      "open": "Sua conta está aberta",
+      "rejected": "Não conseguimos abrir sua conta",
+      "restricted": "Sua conta precisa de atenção"
+    },
+    "body": {
+      "draft": "Continue de onde parou: salvamos cada etapa.",
+      "waiting": "Costuma levar alguns dias úteis. Avisamos por e-mail quando houver novidades.",
+      "action_required": "Para seguir com a abertura, envie estes documentos. Quem pede é a Interactive Brokers.",
+      "open": "Sua conta na Interactive Brokers já está no seu nome. O próximo passo é criar seu plano mensal.",
+      "rejected": "Revisamos sua solicitação e não podemos abrir a conta neste momento. Se tiver dúvidas, escreva para nós.",
+      "restricted": "Por enquanto você não pode fazer aportes. Seus investimentos continuam na Interactive Brokers, no seu nome. Escreva para resolvermos."
+    },
+    "actions": {
+      "continue": "Continuar a solicitação",
+      "createPlan": "Criar plano mensal",
+      "contact": "Escrever para o suporte"
+    },
+    "accountNumber": "Número da conta",
+    "supportEmail": "E-mail do suporte",
+    "upload": {
+      "choose": "Escolher arquivo",
+      "change": "Escolher outro arquivo",
+      "accepted": "JPG, PNG ou PDF, até 10 MB.",
+      "send": "Enviar documento",
+      "progress": "Enviando o documento",
+      "preview": "Pré-visualização de {{name}}",
+      "tooBig": "O arquivo tem mais de 10 MB.",
+      "wrongType": "Use um arquivo JPG, PNG ou PDF.",
+      "empty": "O arquivo está vazio."
+    },
+    "allSent": "Recebemos todos os documentos. A Interactive Brokers revisa e avisamos por e-mail.",
+    "documents": "Documentos solicitados"
+  }
+}

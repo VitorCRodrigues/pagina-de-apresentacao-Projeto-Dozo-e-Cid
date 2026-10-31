@@ -79,8 +79,16 @@ export function updatePlan(api: ApiClient, id: string, body: UpdatePlanRequest) 
   return api.request("PATCH", `/plans/${encodeURIComponent(id)}`, { body, response: "plan" });
 }
 
-export function createQuote(api: ApiClient, body: QuoteRequest) {
-  return api.request("POST", "/deposits/quote", { body, response: "quote" });
+export function createQuote(
+  api: ApiClient,
+  body: QuoteRequest,
+  onResponse?: (response: Response) => void,
+) {
+  return api.request("POST", "/deposits/quote", {
+    body,
+    response: "quote",
+    ...(onResponse && { onResponse }),
+  });
 }
 
 export function createDeposit(api: ApiClient, body: CreateDepositRequest, idempotencyKey: string) {
@@ -107,4 +115,10 @@ export function getNotifications(api: ApiClient) {
 // docs/api-gaps.md, item 1.
 export function joinWaitlist(api: ApiClient, body: WaitlistRequest) {
   return api.request("POST", "/waitlist", { body });
+}
+
+// "Ya envié": tells support the client sent the money; the deposit state does not change
+// (PRD section 6; docs/api-gaps.md, item 1).
+export function notifyDepositSent(api: ApiClient, id: string) {
+  return api.request("POST", `/deposits/${encodeURIComponent(id)}/sent-notice`);
 }

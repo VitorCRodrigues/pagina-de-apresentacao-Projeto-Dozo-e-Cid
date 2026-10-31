@@ -1,0 +1,50 @@
+{
+  "account": {
+    "timeline": {
+      "label": "Apertura de tu cuenta",
+      "submitted": "Recibimos tu solicitud",
+      "kyc_review": "Verificamos tu identidad",
+      "ibkr_pending": "Interactive Brokers abre tu cuenta a tu nombre",
+      "open": "Cuenta abierta",
+      "actionNote": "Faltan documentos. Mirá la lista de abajo."
+    },
+    "title": {
+      "draft": "Tu solicitud está sin terminar",
+      "submitted": "Recibimos tu solicitud",
+      "kyc_review": "Estamos verificando tu identidad",
+      "ibkr_pending": "Interactive Brokers está analizando tu cuenta",
+      "action_required": "Interactive Brokers necesita documentos",
+      "open": "Tu cuenta está abierta",
+      "rejected": "No pudimos abrir tu cuenta",
+      "restricted": "Tu cuenta necesita atención"
+    },
+    "body": {
+      "draft": "Retomá desde donde la dejaste: guardamos cada paso.",
+      "waiting": "Suele tardar algunos días hábiles. Te avisamos por e-mail cuando haya novedades.",
+      "action_required": "Para seguir con la apertura, enviá estos documentos. Los pide Interactive Brokers.",
+      "open": "Tu cuenta en Interactive Brokers ya está a tu nombre. El próximo paso es crear tu plan mensual.",
+      "rejected": "Revisamos tu solicitud y no podemos abrir la cuenta en este momento. Si tenés preguntas, escribinos.",
+      "restricted": "Por ahora no podés hacer aportes. Tus inversiones siguen en Interactive Brokers, a tu nombre. Escribinos para resolverlo."
+    },
+    "actions": {
+      "continue": "Continuar la solicitud",
+      "createPlan": "Crear plan mensual",
+      "contact": "Escribir a soporte"
+    },
+    "accountNumber": "Número de cuenta",
+    "supportEmail": "E-mail de soporte",
+    "upload": {
+      "choose": "Elegir archivo",
+      "change": "Elegir otro archivo",
+      "accepted": "JPG, PNG o PDF, hasta 10 MB.",
+      "send": "Enviar documento",
+      "progress": "Enviando el documento",
+      "preview": "Vista previa de {{name}}",
+      "tooBig": "El archivo pesa más de 10 MB.",
+      "wrongType": "Usá un archivo JPG, PNG o PDF.",
+      "empty": "El archivo está vacío."
+    },
+    "allSent": "Recibimos todos los documentos. Interactive Brokers los revisa y te avisamos por e-mail.",
+    "documents": "Documentos pedidos"
+  }
+}

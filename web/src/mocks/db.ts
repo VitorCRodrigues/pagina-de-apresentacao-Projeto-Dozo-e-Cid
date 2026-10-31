@@ -46,7 +46,8 @@ export interface MockPendingItem extends Omit<PendingItem, "title" | "descriptio
   description: Localized;
 }
 
-export interface MockDeposit extends Omit<DepositDetail, "returnReason"> {
+// isFirstDeposit is not stored: depositPayload deduces it from the list.
+export interface MockDeposit extends Omit<DepositDetail, "returnReason" | "isFirstDeposit"> {
   returnReason?: Localized;
 }
 
@@ -189,7 +190,6 @@ function deposit(
     costs,
     history: history(state, start),
     createdAt: iso(start),
-    isFirstDeposit: false,
     ...(open && reached("broker_credited") && { creditedCents: net }),
     ...(state === "invested" && { creditedCents: net, investedCents: net }),
     ...(open && { expectedBy: iso(daysFrom(now, 3)) }),
@@ -345,7 +345,6 @@ function withScenarioDeposit(db: MockDb, state: DepositState, now: Date): MockDb
   const rail: Rail = state === "fx_executed" || state === "wire_sent" ? "ar_swift" : "ar_usdc";
   const current: MockDeposit = {
     ...deposit("dep-scenario", state, rail, 50000, daysFrom(now, -1), now),
-    isFirstDeposit: state === "deposit_notified",
   };
   const inFlight = ["partner_collected", "fx_executed", "wire_sent"].includes(state)
     ? current.amountCents
@@ -446,9 +445,24 @@ export function portfolioPayload(db: MockDb, lang: Locale): Portfolio {
   };
 }
 
-export function depositPayload(item: MockDeposit, lang: Locale): DepositDetail {
+// isFirstDeposit is deduced from the client's own deposits, as the backend would compute it
+// (api-gaps.md, item 6): no earlier deposit that was not returned.
+export function depositPayload(db: MockDb, item: MockDeposit, lang: Locale): DepositDetail {
   const { returnReason, ...rest } = item;
-  return { ...rest, ...(returnReason && { returnReason: pick(returnReason, lang) }) };
+  // The list is newest first: on a createdAt tie, the one further down came first.
+  const position = db.deposits.findIndex((other) => other.id === item.id);
+  const earlier = db.deposits.some(
+    (other, index) =>
+      other.id !== item.id &&
+      other.state !== "returned" &&
+      (other.createdAt < item.createdAt ||
+        (other.createdAt === item.createdAt && index > position)),
+  );
+  return {
+    ...rest,
+    isFirstDeposit: !earlier,
+    ...(returnReason && { returnReason: pick(returnReason, lang) }),
+  };
 }
 
 // Pending items (documents, deposits waiting on the client) plus general notices.
@@ -494,13 +508,12 @@ export function termsPayload(db: MockDb, lang: Locale): TermsDocument[] {
 }
 
 // POST /deposits: a new deposit waiting for the client's money, built from the accepted quote.
-export function newDepositFromQuote(db: MockDb, quote: Quote, rail: Rail, now: Date): MockDeposit {
+export function newDepositFromQuote(quote: Quote, rail: Rail, now: Date): MockDeposit {
   const id = `dep-${crypto.randomUUID().slice(0, 8)}`;
   const option = quote.options.find((o) => o.rail === rail);
   return {
     ...deposit(id, "deposit_notified", rail, quote.amountCents, now, now),
     ...(option && { costs: option.costs }),
-    isFirstDeposit: db.deposits.length === 0,
     quote: { id: quote.id, createdAt: iso(now) },
   };
 }

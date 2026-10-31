@@ -10,7 +10,7 @@ import { useStepForm } from "../useStepForm";
 
 // Step 2. Everything as on the DNI: Interactive Brokers matches it against the document.
 export function PersonalStep() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const errorText = useErrorText();
   const { me } = useOnboardingContext();
   const empty: PersonalForm = {

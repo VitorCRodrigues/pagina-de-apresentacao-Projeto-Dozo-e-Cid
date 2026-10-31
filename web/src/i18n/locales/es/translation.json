@@ -1,0 +1,178 @@
+{
+  "app": {
+    "name": "OpenDollars"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "pt": "Português",
+    "en": "English"
+  },
+  "common": {
+    "loading": "Cargando",
+    "close": "Cerrar",
+    "optional": "opcional",
+    "retry": "Reintentar"
+  },
+  "select": {
+    "placeholder": "Elegí una opción"
+  },
+  "copy": {
+    "action": "Copiar",
+    "done": "Copiado",
+    "failed": "No se pudo copiar. Seleccioná el texto y copialo a mano."
+  },
+  "stepper": {
+    "progress": "Paso {{current}} de {{total}}",
+    "label": "Progreso"
+  },
+  "timeline": {
+    "status": {
+      "done": "Completado",
+      "current": "Paso actual",
+      "upcoming": "Pendiente",
+      "error": "Con problema"
+    }
+  },
+  "costs": {
+    "caption": "Costos de este aporte",
+    "item": "Concepto",
+    "percent": "Porcentaje",
+    "amount": "Monto",
+    "estimated": "estimado",
+    "total": "Costo total",
+    "net": "Llega para invertir",
+    "kind": {
+      "iof": "IOF",
+      "fx_spread": "Spread cambiario",
+      "rail_fee": "Comisión de la transferencia",
+      "allocation_min": "Costo de asignación",
+      "advisory_fee": "Honorarios de asesoría"
+    }
+  },
+  "countdown": {
+    "lastMinute": "Queda menos de un minuto.",
+    "expired": "El plazo venció."
+  },
+  "states": {
+    "loading": "Cargando información",
+    "error": {
+      "title": "No pudimos cargar esta información",
+      "body": "Revisá tu conexión y probá de nuevo. Tus datos no cambiaron."
+    },
+    "sessionExpired": {
+      "title": "Tu sesión se cerró",
+      "body": "Por seguridad, cerramos tu sesión después de un tiempo sin actividad.",
+      "action": "Volver a iniciar sesión"
+    },
+    "maintenance": {
+      "title": "Estamos haciendo mantenimiento",
+      "body": "Tu cuenta y tus inversiones siguen en Interactive Brokers, a tu nombre.",
+      "until": "El acceso vuelve a las {{time}}."
+    }
+  },
+  "risk": {
+    "default": "Invertir implica riesgos. Los resultados pasados no garantizan resultados futuros."
+  },
+  "dev": {
+    "placeholder": "Esta pantalla llega en una próxima etapa.",
+    "scenarios": {
+      "label": "Escenario de prueba",
+      "groups": {
+        "account": "Estado de la cuenta",
+        "deposit": "Estado del aporte",
+        "block": "Bloqueos",
+        "network": "Red y datos"
+      }
+    }
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "home": "Inicio",
+    "deposit": "Aportar",
+    "portfolio": "Cartera",
+    "pending": "Pendientes",
+    "profile": "Perfil",
+    "plan": "Plan mensual"
+  },
+  "shell": {
+    "skipToContent": "Ir al contenido"
+  },
+  "entry": {
+    "headline": "Tu cuenta de inversión en dólares, con aportes mensuales.",
+    "custody": "Tu cuenta y tus inversiones quedan en Interactive Brokers, a tu nombre.",
+    "pilot": "Estamos en un piloto cerrado.",
+    "terms": "Ver términos",
+    "signIn": "Entrar",
+    "signInError": "No pudimos iniciar sesión. Probá de nuevo."
+  },
+  "waitlist": {
+    "title": "Todavía no está disponible en tu país",
+    "body": "Por ahora funcionamos en un piloto cerrado. Dejanos tu e-mail y te avisamos cuando abramos en tu país.",
+    "emailLabel": "E-mail",
+    "invalidEmail": "Escribí un e-mail válido, por ejemplo nombre@dominio.com.",
+    "submit": "Anotarme en la lista",
+    "done": "Listo. Te vamos a escribir a {{email}} cuando esté disponible.",
+    "signOut": "Cerrar sesión"
+  },
+  "session": {
+    "timeout": {
+      "title": "¿Seguís ahí?",
+      "body": "Por seguridad, vamos a cerrar tu sesión si no hay actividad.",
+      "countdownLabel": "La sesión se cierra en",
+      "stay": "Seguir conectado",
+      "signOut": "Cerrar sesión"
+    }
+  },
+  "notFound": {
+    "title": "No encontramos esta página",
+    "body": "La dirección puede estar mal escrita o la página ya no existe.",
+    "action": "Ir al inicio"
+  },
+  "errors": {
+    "validation_failed": "Revisá los datos e intentá de nuevo.",
+    "quote_expired": "La cotización venció. Pedí una nueva.",
+    "below_minimum": "El monto está por debajo del mínimo.",
+    "account_not_open": "Tu cuenta todavía no está abierta.",
+    "account_restricted": "Tu cuenta necesita atención. Hablá con soporte.",
+    "compliance_hold": "No es posible hacer esta operación en este momento. Hablá con soporte.",
+    "market_not_live": "Todavía no está disponible en tu país.",
+    "idempotency_conflict": "Esta operación ya se envió. Revisá tus aportes antes de repetirla.",
+    "not_found": "No encontramos lo que buscabas.",
+    "session_expired": "Tu sesión se cerró. Iniciá sesión de nuevo.",
+    "maintenance": "Estamos haciendo mantenimiento. Probá en unos minutos.",
+    "rate_limited": "Hiciste muchos intentos seguidos. Esperá un momento y probá de nuevo.",
+    "internal": "Algo salió mal de nuestro lado. Probá de nuevo.",
+    "network": "No hay conexión. Revisá tu internet y probá de nuevo.",
+    "invalid_response": "Recibimos una respuesta inesperada. Probá de nuevo."
+  },
+  "blockReason": {
+    "ibkr_not_open": {
+      "message": "Tu cuenta está en análisis en Interactive Brokers.",
+      "action": "Ver pendientes"
+    },
+    "ibkr_restricted": {
+      "message": "Tu cuenta necesita atención.",
+      "action": "Hablar con soporte"
+    },
+    "compliance_hold": {
+      "message": "No es posible hacer aportes en este momento.",
+      "action": "Hablar con soporte"
+    },
+    "quote_expired": {
+      "message": "La cotización venció.",
+      "action": "Pedir una cotización nueva"
+    },
+    "pix_med_hold": {
+      "message": "Tu aporte está en un período de seguridad.",
+      "action": "Ver la fecha prevista"
+    },
+    "market_not_live": {
+      "message": "Todavía no está disponible en tu país.",
+      "action": "Anotarme en la lista de espera"
+    }
+  },
+  "custody": {
+    "note": "Tu cuenta se abre en Interactive Brokers, a tu nombre. OpenDollars es tu asesora de inversiones."
+  }
+}

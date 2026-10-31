@@ -11,6 +11,8 @@ export const paths = {
   // TODO(decisão): placeholder until T5 (monthly plan).
   plan: "/plan",
   deposit: "/aportar",
+  newDeposit: "/aportar/nuevo",
+  depositDetail: (id: string) => `/aportar/${encodeURIComponent(id)}`,
   portfolio: "/cartera",
   pending: "/pendientes",
   profile: "/perfil",

@@ -32,7 +32,7 @@ export function StepPage({
   children,
   after,
 }: StepPageProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation("onboarding");
   const formId = useId();
 
   return (

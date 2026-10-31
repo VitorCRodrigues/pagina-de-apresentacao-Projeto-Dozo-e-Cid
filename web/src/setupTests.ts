@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach } from "vitest";
-import i18n, { defaultLocale } from "@/i18n";
+import i18n, { defaultLocale, namespaces, supportedLocales } from "@/i18n";
 import { server } from "@/mocks/node";
 import { DEFAULT_SCENARIO } from "@/mocks/scenarios";
 import { setScenario } from "@/mocks/scenario-state";
@@ -30,8 +30,11 @@ if (!("ResizeObserver" in globalThis)) {
   });
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   server.listen({ onUnhandledFrame: "error" });
+  // Tests read every language and area; the app loads them on demand.
+  await i18n.loadNamespaces([...namespaces]);
+  await i18n.loadLanguages([...supportedLocales]);
 });
 
 beforeEach(async () => {

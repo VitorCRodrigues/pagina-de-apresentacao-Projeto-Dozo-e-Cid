@@ -334,7 +334,9 @@ export function createHandlers(getDb: () => MockDb) {
       if (previous) {
         if (previous.body !== body) return errorResponse(409, "idempotency_conflict", "Key reused");
         const existing = db.deposits.find((d) => d.id === previous.depositId);
-        return existing ? HttpResponse.json(depositPayload(existing, lang(request))) : notFound();
+        return existing
+          ? HttpResponse.json(depositPayload(db, existing, lang(request)))
+          : notFound();
       }
 
       const quote = db.quotes.get(parsed.data.quoteId);
@@ -346,10 +348,10 @@ export function createHandlers(getDb: () => MockDb) {
         return invalid([{ path: ["rail"] }]);
       }
 
-      const created = newDepositFromQuote(db, quote, parsed.data.rail, new Date());
+      const created = newDepositFromQuote(quote, parsed.data.rail, new Date());
       db.deposits = [created, ...db.deposits];
       db.depositsByKey.set(key, { body, depositId: created.id });
-      return HttpResponse.json(depositPayload(created, lang(request)), { status: 201 });
+      return HttpResponse.json(depositPayload(db, created, lang(request)), { status: 201 });
     }),
 
     http.get(api("/deposits"), async ({ request }) => {
@@ -365,7 +367,7 @@ export function createHandlers(getDb: () => MockDb) {
       const page = matching.slice(offset, offset + limit);
       const next = offset + limit < matching.length ? String(offset + limit) : undefined;
       return HttpResponse.json({
-        items: page.map((d) => depositPayload(d, lang(request))),
+        items: page.map((d) => depositPayload(db, d, lang(request))),
         ...(next && { nextCursor: next }),
       });
     }),
@@ -374,7 +376,7 @@ export function createHandlers(getDb: () => MockDb) {
       const db = await prepare(request, getDb);
       if (db instanceof Response) return db;
       const found = db.deposits.find((d) => d.id === params.id);
-      return found ? HttpResponse.json(depositPayload(found, lang(request))) : notFound();
+      return found ? HttpResponse.json(depositPayload(db, found, lang(request))) : notFound();
     }),
 
     // "Ya envié": tells support only; the state does not change (PRD section 6).

@@ -10,6 +10,9 @@ interface CostTableProps {
   netToInvestCents: number;
   locale: Locale;
   caption?: string;
+  // false leaves out the amount that arrives to invest, for a screen that shows it apart as
+  // its headline figure (T6). Fraunces never goes inside the table columns.
+  netRow?: boolean;
 }
 
 const amountCell = "py-3 text-right whitespace-nowrap tabular-nums";
@@ -26,6 +29,7 @@ export function CostTable({
   netToInvestCents,
   locale,
   caption,
+  netRow = true,
 }: CostTableProps) {
   const { t } = useTranslation();
   // Display-only ratio; the amounts themselves stay integers.
@@ -65,15 +69,17 @@ export function CostTable({
           <td className={percentCell}>{formatPercent(totalRatio, locale)}</td>
           <td className={cx("type-value", amountCell)}>{formatMoney(totalCostCents, locale)}</td>
         </tr>
-        <tr className="border-t-[3px] border-double border-graphite-900 align-baseline">
-          <th scope="row" className="type-label pt-4 text-left text-green-700">
-            {t("costs.net")}
-          </th>
-          <td />
-          <td className={cx("type-value-lg pt-4 text-right whitespace-nowrap text-green-700")}>
-            {formatMoney(netToInvestCents, locale)}
-          </td>
-        </tr>
+        {netRow && (
+          <tr className="border-t-[3px] border-double border-graphite-900 align-baseline">
+            <th scope="row" className="type-label pt-4 text-left text-green-700">
+              {t("costs.net")}
+            </th>
+            <td />
+            <td className="type-value-lg pt-4 text-right whitespace-nowrap text-green-700">
+              {formatMoney(netToInvestCents, locale)}
+            </td>
+          </tr>
+        )}
       </tfoot>
     </table>
   );

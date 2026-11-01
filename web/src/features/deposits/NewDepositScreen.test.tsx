@@ -268,6 +268,51 @@ describe("new deposit (T6)", () => {
   });
 });
 
+describe("new deposit from the monthly plan's reminder (?plan=)", () => {
+  const amountField = () => screen.findByLabelText("Valor en dólares", {}, { timeout: 4000 });
+
+  it("fills in the plan's amount from the API, sends planId, and leaves no query in the URL", async () => {
+    const bodies: unknown[] = [];
+    server.events.on("request:start", ({ request }) => {
+      if (request.url.endsWith("/deposits/quote")) {
+        void request
+          .clone()
+          .json()
+          .then((body: unknown) => bodies.push(body));
+      }
+    });
+    const user = userEvent.setup();
+    const { router } = renderApp({ path: "/aportar/nuevo?plan=plan-1" });
+    expect(await amountField()).toHaveValue("500,00");
+    await waitFor(() => {
+      expect(router.state.location.search).toBe("");
+    });
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
+    await waitFor(() => {
+      expect(bodies).toEqual([{ amountCents: 50000, planId: "plan-1" }]);
+    });
+    server.events.removeAllListeners();
+  });
+
+  it("an unknown plan starts empty, without an error", async () => {
+    renderApp({ path: "/aportar/nuevo?plan=nope" });
+    expect(await amountField()).toHaveValue("");
+    expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("a cancelled plan starts empty", async () => {
+    server.use(
+      http.get("/api/v1/plans", () =>
+        HttpResponse.json([
+          { id: "plan-1", amountCents: 50000, dayOfMonth: 5, rail: "ar_usdc", status: "cancelled" },
+        ]),
+      ),
+    );
+    renderApp({ path: "/aportar/nuevo?plan=plan-1" });
+    expect(await amountField()).toHaveValue("");
+  });
+});
+
 describe("deposit tab (/aportar)", () => {
   it("offers a new deposit and lists those in progress", async () => {
     renderApp({ path: "/aportar", scenario: "deposit_notified" });

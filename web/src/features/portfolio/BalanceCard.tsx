@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { Locale, Portfolio } from "@/api/types";
 import { Card } from "@/components/Card";
 import { Money } from "@/components/Money";
+import { formatMoney } from "@/lib/money";
 import { reportIssue } from "@/lib/report";
 import { bucketsTotalCents } from "./balances";
 
@@ -31,7 +32,13 @@ export function BalanceCard({ portfolio, locale, note, children }: BalanceCardPr
     <Card tone="inverse" className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <p className="type-label text-cream-50">{t("portfolio.total")}</p>
-        <Money cents={totalCents} locale={locale} size="display" className="text-gold-500" />
+        {totalCents <= 0 ? (
+          // Nothing to celebrate (no balance yet, or cash owed for a fee): gold and Fraunces
+          // wait until there is a balance.
+          <p className="type-value-lg text-cream-50">{formatMoney(totalCents, locale)}</p>
+        ) : (
+          <Money cents={totalCents} locale={locale} size="display" className="text-gold-500" />
+        )}
       </div>
       {children}
       <p className="type-caption text-cream-50">{note}</p>

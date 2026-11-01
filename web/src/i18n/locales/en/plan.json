@@ -1,0 +1,57 @@
+{
+  "plan": {
+    "title": "Monthly plan",
+    "intro": "You choose how much and which day. The money is invested in the monthly investment window, and on that day we remind you: “Time for your deposit”.",
+    "form": {
+      "amount": "Amount per month",
+      "amountHelp": "The minimum is {{min}} a month. Below that, fixed transfer costs weigh too much on what you invest.",
+      "day": "Day of the month",
+      "dayHelp": "From 1 to 28, so it exists in every month.",
+      "dayOption": "Day {{day}}",
+      "rail": "Transfer method",
+      "continue": "Continue",
+      "errors": {
+        "invalidAmount": "Enter an amount in dollars, for example 500 or 1,250.50.",
+        "belowMinimum": "The monthly minimum is {{min}}: with less, fixed transfer costs take too large a share.",
+        "invalidDay": "Choose a day from 1 to 28.",
+        "invalidRail": "Choose a transfer method."
+      }
+    },
+    "review": {
+      "title": "Review your plan",
+      "costs": "Estimated costs per deposit",
+      "estimated": "Estimate: each deposit uses the rate of the day you make it.",
+      "unavailable": "We couldn't work out the costs for this transfer method. Try again.",
+      "save": "Save plan",
+      "saveChanges": "Save changes",
+      "back": "Back"
+    },
+    "summary": {
+      "amount": "Amount per month",
+      "day": "Day",
+      "dayValue": "Day {{day}} of each month",
+      "rail": "Transfer method",
+      "next": "Next deposit",
+      "status": "Status",
+      "statuses": {
+        "active": "Active",
+        "paused": "Paused"
+      }
+    },
+    "actions": {
+      "pause": "Pause plan",
+      "resume": "Resume plan",
+      "edit": "Edit plan",
+      "cancel": "Cancel plan"
+    },
+    "paused": "Your plan is paused. We won't remind you until you resume it.",
+    "cancelled": "Your previous plan was cancelled. You can create a new one.",
+    "noRails": "There are no transfer methods for your country yet.",
+    "cancelDialog": {
+      "title": "Cancel the monthly plan?",
+      "body": "We stop reminding you each month. Your deposits and investments don't change.",
+      "confirm": "Cancel plan",
+      "back": "Back"
+    }
+  }
+}

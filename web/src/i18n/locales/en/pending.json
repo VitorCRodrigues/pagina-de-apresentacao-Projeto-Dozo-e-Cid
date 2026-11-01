@@ -1,0 +1,32 @@
+{
+  "pending": {
+    "title": "Pending",
+    "groups": {
+      "deposit_action": "Deposits",
+      "document": "Documents",
+      "terms": "Terms to accept",
+      "notice": "Notices"
+    },
+    "due": "By {{date}}",
+    "overdue": "Was due {{date}}",
+    "actions": {
+      "instructions": "View instructions",
+      "deposit": "Make the deposit",
+      "document": "Send document",
+      "terms": "Review and accept",
+      "notice": "Got it"
+    },
+    "empty": {
+      "title": "You're all caught up",
+      "body": "Nothing needs your attention. If Interactive Brokers or we ask you for something, it shows up here."
+    },
+    "terms": {
+      "read": "Read the document (version {{version}})",
+      "readFirst": "Open the document to be able to accept it.",
+      "accept": "I have read and accept “{{title}}”",
+      "confirm": "Accept",
+      "back": "Back",
+      "missing": "We couldn't find this document. Try again later."
+    }
+  }
+}

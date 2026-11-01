@@ -47,6 +47,17 @@ export function formatMoneyParts(cents: number, locale: Locale): Intl.NumberForm
   return currencyFormat(locale).formatToParts(centsToDecimalString(cents));
 }
 
+// "US$" in es and pt, "$" in en: whatever the client's locale writes for dollars.
+export function currencySymbol(locale: Locale): string {
+  return formatMoneyParts(0, locale).find((part) => part.type === "currency")?.value ?? "";
+}
+
+// A saved amount as the client would type it in an amount field (no symbol, no grouping),
+// so parseAmountToCents reads it back: 50000 -> "500,00" in es/pt, "500.00" in en.
+export function centsToInputText(cents: number, locale: Locale): string {
+  return centsToDecimalString(cents).replace(".", locale === "en" ? "." : ",");
+}
+
 // Percentage of an amount, rounded half up, in integers only (30 bp = 0.30%).
 export function applyBasisPoints(cents: number, basisPoints: number): number {
   assertCents(cents);

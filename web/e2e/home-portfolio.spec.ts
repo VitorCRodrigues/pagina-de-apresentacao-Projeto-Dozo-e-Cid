@@ -40,7 +40,7 @@ test("home, portfolio and history at 375 px", async ({ page }) => {
   await expect(page.getByText(/^Actualizado el /)).toBeVisible();
   await expect(page.getByText(/se actualizan una vez por día/)).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /Ver extractos oficiales en Interactive Brokers/ }),
+    page.getByRole("link", { name: /Ver extractos en Interactive Brokers/ }),
   ).toBeVisible();
   await expect(page.getByText(/Invertir implica riesgos/)).toBeVisible();
   await expectNoHorizontalScroll(page);

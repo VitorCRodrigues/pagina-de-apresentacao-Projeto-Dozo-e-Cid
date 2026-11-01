@@ -15,18 +15,7 @@ function Placeholder({ title, children }: { title: string; children?: ReactNode 
   );
 }
 
-export function PendingScreen() {
-  const { t } = useTranslation();
-  return <Placeholder title={t("nav.pending")} />;
-}
-
 export function ProfileScreen() {
   const { t } = useTranslation();
   return <Placeholder title={t("nav.profile")} />;
-}
-
-// TODO(decisão): T5 (monthly plan) replaces this; the open account's CTA already points here.
-export function PlanScreen() {
-  const { t } = useTranslation();
-  return <Placeholder title={t("nav.plan")} />;
 }

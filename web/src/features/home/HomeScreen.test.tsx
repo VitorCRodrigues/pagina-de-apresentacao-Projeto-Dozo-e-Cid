@@ -92,6 +92,7 @@ describe("home (T4)", () => {
     const next = await card("Próximo aporte");
     expect(await within(next).findByText("US$ 500,00")).toBeInTheDocument();
     expect(within(next).getByText(/El 5 nov 2026/)).toBeInTheDocument();
+    expect(within(next).getByRole("link", { name: "Ver plan" })).toHaveAttribute("href", "/plan");
   });
 
   it("next deposit: a way to create a plan when there is none, a note when paused", async () => {
@@ -109,6 +110,41 @@ describe("home (T4)", () => {
     await open();
     const next = await card("Próximo aporte");
     expect(await within(next).findByText("Tu plan mensual está pausado.")).toBeInTheDocument();
+  });
+
+  it("next deposit: the same plan as the plan screen (the first one not cancelled)", async () => {
+    serve({
+      plans: [
+        { id: "a", amountCents: 30000, dayOfMonth: 5, rail: "ar_usdc", status: "paused" },
+        {
+          id: "b",
+          amountCents: 90000,
+          dayOfMonth: 5,
+          rail: "ar_usdc",
+          status: "active",
+          nextRunAt: "2026-11-05T14:00:00Z",
+        },
+      ],
+    });
+    await open();
+    const next = await card("Próximo aporte");
+    expect(await within(next).findByText("Tu plan mensual está pausado.")).toBeInTheDocument();
+  });
+
+  it("a negative total (cash owed for a fee) is never shown in gold", async () => {
+    server.use(
+      http.get("/api/v1/portfolio", () =>
+        HttpResponse.json({
+          totalCents: -500,
+          buckets: { investedCents: 0, ibkrCashCents: -500, inFlightCents: 0, feesPaidCents: 0 },
+          positions: [],
+          asOf: "2026-10-31T06:00:00Z",
+        }),
+      ),
+    );
+    await open();
+    expect(await screen.findByText(/^-\s?US\$\s?5,00$/, { selector: "p" })).toBeInTheDocument();
+    expect(document.querySelector(".text-gold-500")).toBeNull();
   });
 
   it("deposits in progress: friendly state (USDC recibido), at most three, each opens T8", async () => {
@@ -225,6 +261,13 @@ describe("home (T4)", () => {
     const split = await screen.findByRole("list", { name: "Cómo se divide" });
     expect(split).toHaveTextContent(/En tránsito\s*US\$ 500,00/);
     expect(split).toHaveTextContent(/Invertido\s*US\$ 0,00/);
+  });
+
+  it("zero balance: a neutral US$ 0,00, never the gold display figure", async () => {
+    await open("empty");
+    expect(await screen.findByText("US$ 0,00", { selector: "p" })).toBeInTheDocument();
+    expect(document.querySelector(".type-value-display")).toBeNull();
+    expect(document.querySelector(".text-gold-500")).toBeNull();
   });
 
   it("new client: one primary action, the first deposit, and no second link for it", async () => {

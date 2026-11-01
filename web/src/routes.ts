@@ -8,7 +8,6 @@ export const paths = {
   onboardingStep: (step: OnboardingStep) => `/onboarding/${stepSlugs[step]}`,
   accountStatus: "/cuenta",
   home: "/inicio",
-  // TODO(decisão): placeholder until T5 (monthly plan).
   plan: "/plan",
   deposit: "/aportar",
   newDeposit: "/aportar/nuevo",

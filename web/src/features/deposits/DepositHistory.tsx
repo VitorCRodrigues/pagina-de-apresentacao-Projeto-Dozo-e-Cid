@@ -108,7 +108,7 @@ function FilterChips({
           />
           <span
             className={cx(
-              "type-caption inline-flex min-h-11 items-center rounded-full border px-4",
+              "type-caption inline-flex min-h-11 items-center rounded-control border px-4",
               "transition-colors duration-fast motion-reduce:transition-none",
               "border-gray-200 text-graphite-900 hover:border-navy-900",
               "peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-cream-50",

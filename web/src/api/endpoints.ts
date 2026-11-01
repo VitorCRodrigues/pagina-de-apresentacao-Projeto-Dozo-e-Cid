@@ -4,6 +4,7 @@ import type {
   CreatePlanRequest,
   OnboardingStep,
   QuoteRequest,
+  TermsAcceptance,
   UpdatePlanRequest,
   WaitlistRequest,
 } from "./proposed-types";
@@ -112,6 +113,17 @@ export function getDeposit(api: ApiClient, id: string) {
 
 export function getNotifications(api: ApiClient) {
   return api.request("GET", "/notifications", { response: "notifications" });
+}
+
+// New terms accepted from T11, with the same { id, version, acceptedAt } as onboarding step 7
+// (docs/api-gaps.md, item 1).
+export function acceptTerms(api: ApiClient, body: TermsAcceptance) {
+  return api.request("POST", `/account/terms/${encodeURIComponent(body.id)}/accept`, { body });
+}
+
+// A notice the client has read ("Entendido") leaves the list (docs/api-gaps.md, item 1).
+export function markNotificationRead(api: ApiClient, id: string) {
+  return api.request("POST", `/notifications/${encodeURIComponent(id)}/read`);
 }
 
 // docs/api-gaps.md, item 1.

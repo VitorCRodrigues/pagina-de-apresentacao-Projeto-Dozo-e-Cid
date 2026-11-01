@@ -58,6 +58,15 @@ describe("deposit history (T10), inside Aportar", () => {
     );
   });
 
+  it("filter chips share the buttons' radius, not a pill shape", async () => {
+    await open();
+    for (const radio of screen.getAllByRole("radio")) {
+      const chip = radio.nextElementSibling as HTMLElement;
+      expect(chip.className).toMatch(/\brounded-control\b/);
+      expect(chip.className).not.toMatch(/\brounded-full\b/);
+    }
+  });
+
   it("filters by state through the API", async () => {
     await open("returned");
     await historyList();

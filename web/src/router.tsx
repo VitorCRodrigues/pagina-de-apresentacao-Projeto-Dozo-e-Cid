@@ -142,9 +142,25 @@ export const routes: RouteObject[] = [
                   "PortfolioScreen",
                 ),
               },
-              { path: "pendientes", lazy: placeholder("PendingScreen") },
+              {
+                path: "pendientes",
+                // DocumentUpload reads the account texts; deposit states, the deposit ones.
+                lazy: area(
+                  ["pending", "account", "deposit"],
+                  () => import("@/features/pending/PendingScreen"),
+                  "PendingScreen",
+                ),
+              },
               { path: "perfil", lazy: placeholder("ProfileScreen") },
-              { path: "plan", lazy: placeholder("PlanScreen") },
+              {
+                path: "plan",
+                // Rail names and the amount field read the deposit texts.
+                lazy: area(
+                  ["plan", "deposit"],
+                  () => import("@/features/plans/PlanScreen"),
+                  "PlanScreen",
+                ),
+              },
             ],
           },
         ],

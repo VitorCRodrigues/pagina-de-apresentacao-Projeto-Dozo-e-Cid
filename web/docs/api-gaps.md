@@ -11,8 +11,9 @@ Convenções que valem para todas as propostas: base `/api/v1`, JSON, dinheiro e
 | Lista de espera para país fora de `liveMarkets` | T1, T2 | `POST /waitlist` com `{ email, country }`, com sessão. `country` é qualquer código ISO 3166-1 alfa-2 (não só `Country`), porque a etapa 1 do onboarding oferece países fora do piloto; código fora do formato → `422`. E-mail inválido → `422 validation_failed` com `fields.email`. Resposta `204`. | A confirmar com o Dozo |
 | Botão "Ya envié" (só avisa o suporte; não muda o estado) | T7, T11 | `POST /deposits/{id}/sent-notice`. Resposta `204`. Idempotente por depósito. | A confirmar com o Dozo |
 | Preferências de notificação (e-mail e push) | T12 | `GET /me/notifications` e `PATCH /me/notifications` com `{ email: boolean, push: boolean }`. | A confirmar com o Dozo |
-| Aceite de termos novos | T11, T12 | `GET /account/terms` (versões vigentes e aceitas) e `POST /account/terms/{id}/accept`. | A confirmar com o Dozo |
-| Formato de `GET /notifications` | T11 | Reusar `PendingItem[]`, ordenado por `dueAt`, mais `createdAt` e `readAt?`. | A confirmar com o Dozo |
+| Aceite de termos novos | T11, T12 | `GET /account/terms` (versões vigentes e aceitas) e `POST /account/terms/{id}/accept` com o corpo `{ id, version, acceptedAt }`, o mesmo da etapa 7 do onboarding: `id` igual ao da rota, `version` a vigente e `acceptedAt` em ISO 8601 UTC do momento em que o cliente marcou a caixa. Versão antiga, `id` diferente ou corpo incompleto → `422 validation_failed`. Resposta `204`; a pendência de termos correspondente sai de `GET /notifications`. | A confirmar com o Dozo |
+| Formato de `GET /notifications` | T11 | Reusar `PendingItem[]` mais `createdAt`, `readAt?`, `planId?` e `termsId?`. `planId` marca o lembrete mensal do plano ("Hora de tu aporte", `kind: "deposit_action"`), que abre o T6 com `?plan=<id>`; o valor nunca vai na URL e o front o lê de `GET /plans`. `termsId` diz qual documento de `GET /account/terms` uma pendência `kind: "terms"` pede para aceitar. O front agrupa por `kind` e ordena por prazo (decisão de T11), então a ordem da API não importa. | A confirmar com o Dozo |
+| Marcar aviso como lido | T11 | `POST /notifications/{id}/read` → `204`; o aviso (`kind: "notice"`) deixa de aparecer em `GET /notifications`. Id desconhecido → `404`. | A confirmar com o Dozo |
 | Encerrar sessão | T12 | Depende do provedor OIDC. Proposta: `POST /auth/logout`, que invalida o refresh token e limpa o cookie. | A confirmar com o Dozo |
 
 ## 2. Corpos de requisição e resposta não definidos
@@ -116,7 +117,7 @@ Detalhes que o mock (`src/mocks/handlers.ts`) precisou fixar para servir o contr
 
 | Ponto | Comportamento no mock | Status |
 |---|---|---|
-| Formato de `GET /account/terms` | `TermsDocument[]`: `{ id, kind, version, title, url, acceptedAt? }`, com `kind` em `advisory_agreement`, `cost_disclosure`, `privacy_policy` ou `ibkr_data_consent`. Aceite: `POST /account/terms/{id}/accept` → `204`. | A confirmar com o Dozo |
+| Formato de `GET /account/terms` | `TermsDocument[]`: `{ id, kind, version, title, url, acceptedAt? }`, com `kind` em `advisory_agreement`, `cost_disclosure`, `privacy_policy` ou `ibkr_data_consent`. Aceite: `POST /account/terms/{id}/accept` com `{ id, version, acceptedAt }` → `204` (versão diferente da vigente → `422`). Cenário `terms_update`: o contrato de assessoria republicado na versão `2026-11`, com a pendência de termos correspondente. | A confirmar com o Dozo |
 | `POST /account/documents` | Multipart com `pendingItemId` e `file`; responde a `Account` sem a pendência enviada. | A confirmar com o Dozo |
 | `POST /onboarding/submit` | Só a partir de `draft`; responde a `Account` com `status: "submitted"`. Fora de `draft` → `422`. | A confirmar com o Dozo |
 | Idempotência | `POST /deposits` e `POST /plans`: sem `Idempotency-Key` → `422 validation_failed`; mesma chave e mesmo corpo → a resposta original com `200`; mesma chave e corpo diferente → `409 idempotency_conflict`. A primeira criação responde `201`. | A confirmar com o Dozo |

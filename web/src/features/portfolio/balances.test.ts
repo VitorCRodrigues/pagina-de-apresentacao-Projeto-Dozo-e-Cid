@@ -57,6 +57,32 @@ describe("bucketShares", () => {
     expect(bucketShares(buckets(2, 1, 0))).toEqual({ invested: 6667, ibkrCash: 3333, inFlight: 0 });
   });
 
+  it("never gives a negative bucket a share: it counts as zero (cash owed for a fee)", () => {
+    expect(bucketShares(buckets(100000, -500, 0))).toEqual({
+      invested: 10000,
+      ibkrCash: 0,
+      inFlight: 0,
+    });
+    expect(bucketShares(buckets(0, -500, 0))).toEqual({ invested: 0, ibkrCash: 0, inFlight: 0 });
+  });
+
+  it("still adds the negative bucket to the total", () => {
+    expect(bucketsTotalCents(buckets(100000, -500, 0))).toBe(99500);
+  });
+
+  it("adds up to 10000 with negative buckets too, whenever one bucket is positive", () => {
+    let seed = 11;
+    const next = () => {
+      seed = (seed * 48271) % 2147483647;
+      return (seed % 5_000_000) - 1_000_000;
+    };
+    for (let i = 0; i < 200; i++) {
+      const shares = bucketShares(buckets(next(), next(), Math.abs(next()) + 1));
+      expect(Math.min(shares.invested, shares.ibkrCash, shares.inFlight)).toBeGreaterThanOrEqual(0);
+      expect(shares.invested + shares.ibkrCash + shares.inFlight).toBe(10000);
+    }
+  });
+
   it("always adds up to 10000 when there is money", () => {
     let seed = 7;
     const next = () => {

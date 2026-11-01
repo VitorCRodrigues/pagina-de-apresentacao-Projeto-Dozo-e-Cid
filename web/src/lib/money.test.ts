@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   applyBasisPoints,
   centsToDecimalString,
+  centsToInputText,
+  currencySymbol,
   formatMoney,
   formatPercent,
   parseAmountToCents,
@@ -70,6 +72,13 @@ describe("money", () => {
   it("formats display-only ratios as percentages", () => {
     expect(formatPercent(0.011, "es")).toBe("1,1%");
     expect(formatPercent(0.003, "en")).toBe("0.3%");
+  });
+
+  it("writes a saved amount the way the client types it, and the locale's dollar sign", () => {
+    expect(centsToInputText(50000, "es")).toBe("500,00");
+    expect(centsToInputText(125050, "en")).toBe("1250.50");
+    expect(currencySymbol("es")).toBe("US$");
+    expect(currencySymbol("en")).toBe("$");
   });
 
   it("can fix the number of decimals, so a column of shares lines up", () => {

@@ -7,24 +7,35 @@ import { parseAmountToCents } from "@/lib/money";
 
 export type AmountError = "invalidAmount" | "belowMinimum";
 
-// One-off deposits use config.minDepositUsdCents. Errors are codes on the "amount" field;
-// screens translate them. The output is the amount in whole cents.
-export function amountSchema(config: AppConfig, locale: Locale) {
+// One-off deposits use config.minDepositUsdCents, the monthly plan (T5) minRecurringUsdCents.
+// Errors are codes on the "amount" field; screens translate them. The output is whole cents.
+export function amountField(
+  config: AppConfig,
+  locale: Locale,
+  kind: "oneOff" | "recurring" = "oneOff",
+) {
+  const minimum = kind === "recurring" ? config.minRecurringUsdCents : config.minDepositUsdCents;
+  return z.string().transform((text, ctx) => {
+    const cents = parseAmountToCents(text, locale);
+    if (cents === null) {
+      ctx.addIssue({ code: "custom", message: "invalidAmount" satisfies AmountError });
+      return z.NEVER;
+    }
+    if (cents < minimum) {
+      ctx.addIssue({ code: "custom", message: "belowMinimum" satisfies AmountError });
+      return z.NEVER;
+    }
+    return cents;
+  });
+}
+
+export function amountSchema(
+  config: AppConfig,
+  locale: Locale,
+  kind: "oneOff" | "recurring" = "oneOff",
+) {
   return z
-    .object({
-      amount: z.string().transform((text, ctx) => {
-        const cents = parseAmountToCents(text, locale);
-        if (cents === null) {
-          ctx.addIssue({ code: "custom", message: "invalidAmount" satisfies AmountError });
-          return z.NEVER;
-        }
-        if (cents < config.minDepositUsdCents) {
-          ctx.addIssue({ code: "custom", message: "belowMinimum" satisfies AmountError });
-          return z.NEVER;
-        }
-        return cents;
-      }),
-    })
+    .object({ amount: amountField(config, locale, kind) })
     .transform(({ amount }) => ({ amountCents: amount }));
 }
 

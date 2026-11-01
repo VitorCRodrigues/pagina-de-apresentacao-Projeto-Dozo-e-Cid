@@ -2,14 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApi } from "../api-context";
 import { useAuth } from "../auth-context";
 import {
+  acceptTerms,
   getAccount,
   getMe,
   getNotifications,
   getTerms,
   joinWaitlist,
+  markNotificationRead,
   uploadDocument,
 } from "../endpoints";
-import type { WaitlistRequest } from "../proposed-types";
+import type { TermsAcceptance, WaitlistRequest } from "../proposed-types";
 import { queryKeys } from "../query-keys";
 
 export function useMe() {
@@ -75,6 +77,37 @@ export function useNotifications() {
     queryKey: queryKeys.notifications,
     queryFn: () => getNotifications(api),
     enabled: status === "signedIn",
+  });
+}
+
+// Both change what is pending: the list and the account's pending items are read again.
+function useRefreshPending() {
+  const queryClient = useQueryClient();
+  return () => {
+    void queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
+    void queryClient.invalidateQueries({ queryKey: queryKeys.account });
+  };
+}
+
+export function useAcceptTerms() {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  const refresh = useRefreshPending();
+  return useMutation({
+    mutationFn: (body: TermsAcceptance) => acceptTerms(api, body),
+    onSuccess: () => {
+      refresh();
+      void queryClient.invalidateQueries({ queryKey: queryKeys.terms });
+    },
+  });
+}
+
+export function useMarkNotificationRead() {
+  const api = useApi();
+  const refresh = useRefreshPending();
+  return useMutation({
+    mutationFn: (id: string) => markNotificationRead(api, id),
+    onSuccess: refresh,
   });
 }
 

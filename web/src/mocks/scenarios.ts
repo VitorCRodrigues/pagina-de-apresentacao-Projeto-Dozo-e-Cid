@@ -7,6 +7,9 @@ const networkScenarios = [
   "server_error",
   "empty",
   "in_flight_only",
+  "plan_paused",
+  "plan_reminder",
+  "terms_update",
   "maintenance",
 ] as const;
 

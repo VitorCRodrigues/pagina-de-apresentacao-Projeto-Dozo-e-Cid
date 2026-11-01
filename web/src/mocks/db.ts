@@ -26,6 +26,7 @@ import { applyBasisPoints, sumCents } from "@/lib/money";
 import {
   config,
   depositAction,
+  planReminder,
   documentRequests,
   etfs,
   lucia,
@@ -34,6 +35,7 @@ import {
   rafael,
   returnReasons,
   termsDocuments,
+  termsUpdate,
   windowNotice,
   type Localized,
 } from "./fixtures";
@@ -44,6 +46,8 @@ import type { ScenarioId } from "./scenarios";
 export interface MockPendingItem extends Omit<PendingItem, "title" | "description"> {
   title: Localized;
   description: Localized;
+  planId?: string;
+  termsId?: string;
 }
 
 // isFirstDeposit is not stored: depositPayload deduces it from the list.
@@ -72,6 +76,8 @@ export interface MockDb {
   onboarding: OnboardingDraft;
   prefs: NotificationPrefs;
   acceptedTerms: Record<string, string>;
+  // A document republished in a new version (terms_update); the rest are "2026-10".
+  termsVersions: Record<string, string>;
   latencyMs: number;
   failure: MockFailure | null;
   quoteTtlSeconds: number;
@@ -338,6 +344,7 @@ function base(status: AccountStatus, now: Date): MockDb {
     acceptedTerms: opened
       ? Object.fromEntries(termsDocuments.map((doc) => [doc.id, iso(daysFrom(now, -40))]))
       : {},
+    termsVersions: {},
     latencyMs: 0,
     failure: null,
     quoteTtlSeconds: 300,
@@ -429,6 +436,49 @@ export function buildMockDb(id: ScenarioId, now: Date = new Date()): MockDb {
         notices: [],
         portfolio: portfolio([], 0, 0, now),
       };
+    case "plan_paused": {
+      const db = base("open", now);
+      return { ...db, plans: db.plans.map((plan) => ({ ...plan, status: "paused" as const })) };
+    }
+    case "plan_reminder": {
+      const db = base("open", now);
+      return {
+        ...db,
+        notices: [
+          {
+            id: "notice-plan",
+            kind: "deposit_action",
+            ...planReminder,
+            planId: "plan-1",
+            createdAt: iso(now),
+          },
+          ...db.notices,
+        ],
+      };
+    }
+    case "terms_update": {
+      // The advisory agreement republished: the old acceptance no longer covers it.
+      const db = base("open", now);
+      const acceptedTerms = Object.fromEntries(
+        Object.entries(db.acceptedTerms).filter(([id]) => id !== "terms-advisory"),
+      );
+      return {
+        ...db,
+        acceptedTerms,
+        termsVersions: { "terms-advisory": "2026-11" },
+        notices: [
+          {
+            id: "notice-terms",
+            kind: "terms",
+            ...termsUpdate,
+            termsId: "terms-advisory",
+            dueAt: iso(daysFrom(now, 14)),
+            createdAt: iso(daysFrom(now, -1)),
+          },
+          ...db.notices,
+        ],
+      };
+    }
     case "in_flight_only": {
       // A new client's first deposit on its way: nothing invested or in cash yet.
       const first = deposit(
@@ -519,13 +569,15 @@ export function questionnairePayload(_db: MockDb, lang: Locale): Questionnaire {
   };
 }
 
+export const termsVersion = (db: MockDb, id: string) => db.termsVersions[id] ?? "2026-10";
+
 export function termsPayload(db: MockDb, lang: Locale): TermsDocument[] {
   return termsDocuments.map((doc) => {
     const acceptedAt = db.acceptedTerms[doc.id];
     return {
       id: doc.id,
       kind: doc.kind,
-      version: "2026-10",
+      version: termsVersion(db, doc.id),
       title: pick(doc.title, lang),
       // TODO(compliance): drafts; real documents pending legal review (PRD section 10).
       url: `#terms/${doc.kind}`,

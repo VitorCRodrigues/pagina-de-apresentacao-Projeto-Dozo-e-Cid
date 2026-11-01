@@ -228,6 +228,8 @@ export const questionnaireSchema = z.object({
 export const notificationSchema = pendingItemSchema.extend({
   createdAt: isoDate,
   readAt: isoDate.optional(),
+  planId: z.string().optional(),
+  termsId: z.string().optional(),
 });
 
 export const notificationPrefsSchema = z.object({ email: z.boolean(), push: z.boolean() });
@@ -268,6 +270,13 @@ export const quoteRequestSchema = z.object({ amountCents: cents, planId: z.strin
 export const createDepositRequestSchema = z.object({ quoteId: z.string(), rail: railSchema });
 
 // decisions.md, item 16: rail required, day 1–28.
+// POST /account/terms/{id}/accept (api-gaps.md, item 1), same shape as onboarding step 7.
+export const termsAcceptanceSchema = z.object({
+  id: z.string().min(1),
+  version: z.string().min(1),
+  acceptedAt: isoDate,
+});
+
 export const createPlanRequestSchema = z.object({
   amountCents: cents,
   dayOfMonth: z.number().int().min(1).max(28),

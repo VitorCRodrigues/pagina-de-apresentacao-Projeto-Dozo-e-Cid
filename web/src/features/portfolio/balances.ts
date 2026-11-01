@@ -20,11 +20,17 @@ export function bucketsTotalCents(b: Portfolio["buckets"]): number {
 
 const FULL = 10000;
 
-// Each bucket's share of the total in integer basis points, by largest remainder, so the
-// shares on screen always add up to exactly 100%. An empty portfolio is all zero.
+// Each bucket's share in integer basis points, by largest remainder, so the shares on screen
+// always add up to exactly 100%. A negative bucket (cash owed for a fee) has no share and does
+// not shrink the others: shares are of the positive buckets. An empty portfolio is all zero.
 export function bucketShares(b: Portfolio["buckets"]): Record<Bucket, number> {
-  const cents = centsOf(b);
-  const total = bucketsTotalCents(b);
+  const raw = centsOf(b);
+  const cents: Record<Bucket, number> = {
+    invested: Math.max(0, raw.invested),
+    ibkrCash: Math.max(0, raw.ibkrCash),
+    inFlight: Math.max(0, raw.inFlight),
+  };
+  const total = sumCents(buckets.map((bucket) => cents[bucket]));
   const shares: Record<Bucket, number> = { invested: 0, ibkrCash: 0, inFlight: 0 };
   if (total <= 0) return shares;
 

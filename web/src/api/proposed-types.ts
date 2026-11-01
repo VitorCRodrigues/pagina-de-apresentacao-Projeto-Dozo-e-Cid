@@ -73,17 +73,22 @@ export interface Questionnaire {
   }[];
 }
 
-// Draft body of PUT /onboarding/terms (api-gaps.md, item 2).
+// Draft body of PUT /onboarding/terms (api-gaps.md, item 2), and the body of
+// POST /account/terms/{id}/accept for new terms from T11 (api-gaps.md, item 1).
 export interface TermsAcceptance {
   id: string;
   version: string;
   acceptedAt: string;
 }
 
-// api-gaps.md, item 1 (GET /notifications).
+// api-gaps.md, item 1 (GET /notifications). planId: the monthly plan's reminder ("Hora de tu
+// aporte"), which opens T6 with the plan's amount. termsId: which document a "terms" item asks
+// the client to accept (its version comes from GET /account/terms).
 export interface Notification extends PendingItem {
   createdAt: string;
   readAt?: string;
+  planId?: string;
+  termsId?: string;
 }
 
 export interface NotificationPrefs {

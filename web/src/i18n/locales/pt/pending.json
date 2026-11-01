@@ -1,0 +1,32 @@
+{
+  "pending": {
+    "title": "Pendências",
+    "groups": {
+      "deposit_action": "Aportes",
+      "document": "Documentos",
+      "terms": "Termos para aceitar",
+      "notice": "Avisos"
+    },
+    "due": "Até {{date}}",
+    "overdue": "Venceu em {{date}}",
+    "actions": {
+      "instructions": "Ver instruções",
+      "deposit": "Fazer o aporte",
+      "document": "Enviar documento",
+      "terms": "Revisar e aceitar",
+      "notice": "Entendi"
+    },
+    "empty": {
+      "title": "Você está em dia",
+      "body": "Não há nada que precise da sua atenção. Se a Interactive Brokers ou nós pedirmos algo, aparece aqui."
+    },
+    "terms": {
+      "read": "Ler o documento (versão {{version}})",
+      "readFirst": "Abra o documento para poder aceitá-lo.",
+      "accept": "Li e aceito o documento «{{title}}»",
+      "confirm": "Aceitar",
+      "back": "Voltar",
+      "missing": "Não encontramos este documento. Tente de novo mais tarde."
+    }
+  }
+}

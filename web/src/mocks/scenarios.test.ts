@@ -30,9 +30,9 @@ import { scenarioGroups, scenarioIds } from "./scenarios";
 const now = new Date("2026-10-28T12:00:00Z");
 
 describe("mock scenarios", () => {
-  it("has 28 unique scenarios: the 26 of the plan plus maintenance and in_flight_only", () => {
-    expect(scenarioIds).toHaveLength(28);
-    expect(new Set(scenarioIds).size).toBe(28);
+  it("has 31 unique scenarios: the 26 of the plan plus maintenance, in_flight_only and three for T5/T11", () => {
+    expect(scenarioIds).toHaveLength(31);
+    expect(new Set(scenarioIds).size).toBe(31);
     expect(scenarioIds).toContain("maintenance");
   });
 

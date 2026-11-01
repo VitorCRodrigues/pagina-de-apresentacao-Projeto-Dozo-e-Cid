@@ -71,6 +71,23 @@ describe("portfolio (T9)", () => {
     expect(within(split).getByText(/59,6\d?\s?% del total/)).toBeInTheDocument();
   });
 
+  it("a negative bucket shows a negative amount, but never a negative share or bar", async () => {
+    servePortfolio({
+      ...portfolio,
+      totalCents: 119500,
+      buckets: { investedCents: 120000, ibkrCashCents: -500, inFlightCents: 0, feesPaidCents: 450 },
+    });
+    await open();
+    const split = await screen.findByRole("region", { name: "Cómo se divide" });
+    expect(within(split).getByText(/^-\s?US\$\s?5,00$/)).toBeInTheDocument();
+    expect(within(split).getByText(/^100,00\s?% del total$/)).toBeInTheDocument();
+    expect(within(split).getAllByText(/^0,00\s?% del total$/)).toHaveLength(2);
+    expect(split).not.toHaveTextContent(/-\d+,\d+\s?% del total/);
+    for (const segment of split.querySelectorAll<HTMLElement>("[style*='width']")) {
+      expect(segment.style.width).not.toMatch(/^-/);
+    }
+  });
+
   it("keeps fees paid out of the total, on a secondary line", async () => {
     servePortfolio();
     await open();
@@ -141,7 +158,7 @@ describe("portfolio (T9)", () => {
       ),
     ).toBeInTheDocument();
     const link = screen.getByRole("link", {
-      name: /Ver extractos oficiales en Interactive Brokers/,
+      name: /Ver extractos en Interactive Brokers/,
     });
     expect(link).toHaveAttribute("href", config.ibkrPortalUrl);
     expect(link).toHaveAttribute("target", "_blank");
@@ -207,17 +224,16 @@ describe("portfolio (T9)", () => {
   it("a failed refetch of GET /config keeps the statements link from the cache", async () => {
     servePortfolio();
     const { queryClient } = await open();
-    await screen.findByRole("link", { name: /Ver extractos oficiales/ });
+    await screen.findByRole("link", { name: /Ver extractos en Interactive Brokers/ });
     server.use(
       http.get("/api/v1/config", () =>
         HttpResponse.json({ error: { code: "internal", message: "x" } }, { status: 500 }),
       ),
     );
     await queryClient.refetchQueries({ queryKey: ["config"] });
-    expect(screen.getByRole("link", { name: /Ver extractos oficiales/ })).toHaveAttribute(
-      "href",
-      config.ibkrPortalUrl,
-    );
+    expect(
+      screen.getByRole("link", { name: /Ver extractos en Interactive Brokers/ }),
+    ).toHaveAttribute("href", config.ibkrPortalUrl);
     expect(screen.queryByRole("button", { name: "Reintentar" })).not.toBeInTheDocument();
   });
 

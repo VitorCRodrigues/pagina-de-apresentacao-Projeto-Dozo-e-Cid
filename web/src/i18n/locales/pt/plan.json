@@ -1,0 +1,57 @@
+{
+  "plan": {
+    "title": "Plano mensal",
+    "intro": "Você escolhe quanto e em que dia. O dinheiro é investido na janela mensal de investimento, e nesse dia avisamos: «Hora do seu aporte».",
+    "form": {
+      "amount": "Valor por mês",
+      "amountHelp": "O mínimo é {{min}} por mês. Abaixo disso, os custos fixos de envio pesam demais sobre o que você investe.",
+      "day": "Dia do mês",
+      "dayHelp": "De 1 a 28, para existir em todos os meses.",
+      "dayOption": "Dia {{day}}",
+      "rail": "Meio de envio",
+      "continue": "Continuar",
+      "errors": {
+        "invalidAmount": "Digite um valor em dólares, por exemplo 500 ou 1.250,50.",
+        "belowMinimum": "O mínimo mensal é {{min}}: com menos, os custos fixos de envio levam uma parte grande demais.",
+        "invalidDay": "Escolha um dia de 1 a 28.",
+        "invalidRail": "Escolha um meio de envio."
+      }
+    },
+    "review": {
+      "title": "Revise seu plano",
+      "costs": "Custos estimados por aporte",
+      "estimated": "Estimado: cada aporte usa a cotação do dia em que você o faz.",
+      "unavailable": "Não conseguimos calcular os custos deste meio de envio. Tente de novo.",
+      "save": "Salvar plano",
+      "saveChanges": "Salvar alterações",
+      "back": "Voltar"
+    },
+    "summary": {
+      "amount": "Valor por mês",
+      "day": "Dia",
+      "dayValue": "{{day}} de cada mês",
+      "rail": "Meio de envio",
+      "next": "Próximo aporte",
+      "status": "Status",
+      "statuses": {
+        "active": "Ativo",
+        "paused": "Pausado"
+      }
+    },
+    "actions": {
+      "pause": "Pausar plano",
+      "resume": "Retomar plano",
+      "edit": "Editar plano",
+      "cancel": "Cancelar plano"
+    },
+    "paused": "Seu plano está pausado. Não vamos avisar até você retomá-lo.",
+    "cancelled": "Seu plano anterior foi cancelado. Você pode criar um novo.",
+    "noRails": "Ainda não há meios de envio disponíveis para o seu país.",
+    "cancelDialog": {
+      "title": "Cancelar o plano mensal?",
+      "body": "Deixamos de avisar todo mês. Seus aportes e investimentos não mudam.",
+      "confirm": "Cancelar plano",
+      "back": "Voltar"
+    }
+  }
+}

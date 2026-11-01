@@ -15,3 +15,6 @@ blob-report
 playwright/.cache
 
 *.tsbuildinfo
+
+# Playwright MCP snapshots and screenshots
+.playwright-mcp/

@@ -8,6 +8,7 @@ import { isApiError } from "@/api/errors";
 import { useConfig } from "@/api/hooks/config";
 import { useAccount, useMe } from "@/api/hooks/account";
 import { useQuote, type TimedQuote } from "@/api/hooks/deposits";
+import { usePlans } from "@/api/hooks/plans";
 import type { Account, AppConfig, Locale, Me, Rail, RailOption } from "@/api/types";
 import { ActionBar } from "@/components/ActionBar";
 import { Banner } from "@/components/Banner";
@@ -23,7 +24,7 @@ import { RadioCard, RadioCardGroup } from "@/components/RadioCard";
 import { Stepper } from "@/components/Stepper";
 import { WaitlistForm } from "@/features/session/WaitlistForm";
 import { asLocale } from "@/lib/locale";
-import { centsToDecimalString, formatMoney, formatMoneyParts, formatPercent } from "@/lib/money";
+import { centsToInputText, currencySymbol, formatMoney, formatPercent } from "@/lib/money";
 import { SUPPORT_EMAIL } from "@/lib/support";
 import { paths } from "@/routes";
 import { blockMessageKeys } from "@/api/error-messages";
@@ -46,11 +47,37 @@ function readStep(state: unknown): Step {
   return steps.includes(step as Step) ? (step as Step) : "amount";
 }
 
+// The monthly plan's reminder opens T6 as ?plan=<id> (decision D9). Only the id travels in the
+// URL; the amount comes from GET /plans. Read once, then the query leaves the address bar.
+function usePlanFromQuery(): { plan: PlanStart | null; loading: boolean } {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [planId] = useState(() => new URLSearchParams(location.search).get("plan"));
+  const plans = usePlans({ enabled: planId !== null });
+  const hasQuery = location.search !== "";
+  const state: unknown = location.state;
+  useEffect(() => {
+    if (hasQuery) void navigate(location.pathname, { replace: true, state });
+  }, [hasQuery, navigate, location.pathname, state]);
+
+  if (!planId) return { plan: null, loading: false };
+  // A failed plans request is no reason to block a deposit: it starts empty.
+  if (plans.isPending) return { plan: null, loading: true };
+  const found = plans.data?.find((p) => p.id === planId && p.status !== "cancelled");
+  return { plan: found ? { id: found.id, amountCents: found.amountCents } : null, loading: false };
+}
+
+interface PlanStart {
+  id: string;
+  amountCents: number;
+}
+
 // T6. Loads what the flow needs, then either the block or the flow.
 export function NewDepositScreen() {
   const { data: me } = useMe();
   const config = useConfig();
   const account = useAccount();
+  const fromPlan = usePlanFromQuery();
 
   if (config.isError || account.isError) {
     return (
@@ -62,8 +89,8 @@ export function NewDepositScreen() {
       />
     );
   }
-  if (!me || !config.data || !account.data) return <LoadingState />;
-  return <DepositFlow me={me} config={config.data} account={account.data} />;
+  if (!me || !config.data || !account.data || fromPlan.loading) return <LoadingState />;
+  return <DepositFlow me={me} config={config.data} account={account.data} plan={fromPlan.plan} />;
 }
 
 function BlockNotice({ me, account }: { me: Me; account: Account }) {
@@ -91,14 +118,21 @@ function BlockNotice({ me, account }: { me: Me; account: Account }) {
   );
 }
 
-function DepositFlow({ me, config, account }: { me: Me; config: AppConfig; account: Account }) {
+interface DepositFlowProps {
+  me: Me;
+  config: AppConfig;
+  account: Account;
+  plan: PlanStart | null;
+}
+
+function DepositFlow({ me, config, account, plan }: DepositFlowProps) {
   const { t, i18n } = useTranslation("deposit");
   const locale = asLocale(i18n.language);
   const location = useLocation();
   const navigate = useNavigate();
   const quoteRequest = useQuote();
 
-  const [amountCents, setAmountCents] = useState<number | null>(null);
+  const [amountCents, setAmountCents] = useState<number | null>(plan?.amountCents ?? null);
   const [timed, setTimed] = useState<TimedQuote | null>(null);
   const [rail, setRail] = useState<Rail | null>(null);
   const [expiredQuoteId, setExpiredQuoteId] = useState<string | null>(null);
@@ -125,7 +159,10 @@ function DepositFlow({ me, config, account }: { me: Me; config: AppConfig; accou
 
   async function requestQuote(cents: number): Promise<boolean> {
     try {
-      const next = await quoteRequest.mutateAsync({ amountCents: cents });
+      const next = await quoteRequest.mutateAsync({
+        amountCents: cents,
+        ...(plan && { planId: plan.id }),
+      });
       const visible = visibleOptions(next.quote.options, config);
       setTimed(next);
       // Keep the chosen rail when the new quote still offers it. If it is gone, never swap it
@@ -224,10 +261,6 @@ function DepositFlow({ me, config, account }: { me: Me; config: AppConfig; accou
   );
 }
 
-// "US$" in es and pt, "$" in en: whatever the client's locale writes for dollars.
-const currencySymbol = (locale: Locale) =>
-  formatMoneyParts(0, locale).find((part) => part.type === "currency")?.value ?? "";
-
 interface AmountStepProps {
   config: AppConfig;
   locale: Locale;
@@ -254,10 +287,7 @@ function AmountStep({
     resolver: zodResolver(schema),
     defaultValues: {
       // The client's own digits, as they typed them (no currency symbol in the field).
-      amount:
-        defaultCents === null
-          ? ""
-          : centsToDecimalString(defaultCents).replace(".", locale === "en" ? "." : ","),
+      amount: defaultCents === null ? "" : centsToInputText(defaultCents, locale),
     },
   });
   const min = formatMoney(config.minDepositUsdCents, locale);

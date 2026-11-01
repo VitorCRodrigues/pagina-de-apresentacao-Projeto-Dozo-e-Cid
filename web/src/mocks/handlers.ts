@@ -7,6 +7,7 @@ import {
   depositStateSchema,
   notificationPrefsSchema,
   quoteRequestSchema,
+  termsAcceptanceSchema,
   updatePlanRequestSchema,
   waitlistRequestSchema,
 } from "@/api/schemas";
@@ -22,6 +23,7 @@ import {
   portfolioPayload,
   questionnairePayload,
   termsPayload,
+  termsVersion,
   type MockDb,
 } from "./db";
 import { getMockDb } from "./mock-store";
@@ -202,8 +204,24 @@ export function createHandlers(getDb: () => MockDb) {
       if (db instanceof Response) return db;
       const id = String(params.id);
       if (!termsPayload(db, "es").some((doc) => doc.id === id)) return notFound();
-      db.acceptedTerms[id] = new Date().toISOString();
+      // api-gaps.md, item 1: the same { id, version, acceptedAt } as onboarding step 7, for the
+      // version currently in force.
+      const parsed = termsAcceptanceSchema.safeParse(await request.json().catch(() => null));
+      if (!parsed.success) return invalid(parsed.error.issues);
+      if (parsed.data.id !== id) return invalid([{ path: ["id"] }]);
+      if (parsed.data.version !== termsVersion(db, id)) return invalid([{ path: ["version"] }]);
+      db.acceptedTerms[id] = parsed.data.acceptedAt;
+      db.notices = db.notices.filter((notice) => notice.termsId !== id);
       return new HttpResponse(null, { status: 204 });
+    }),
+
+    // api-gaps.md, item 1: a notice the client has read leaves the list.
+    http.post(api("/notifications/:id/read"), async ({ request, params }) => {
+      const db = await prepare(request, getDb);
+      if (db instanceof Response) return db;
+      const before = db.notices.length;
+      db.notices = db.notices.filter((notice) => notice.id !== params.id);
+      return db.notices.length < before ? new HttpResponse(null, { status: 204 }) : notFound();
     }),
 
     http.get(api("/notifications"), async ({ request }) => {

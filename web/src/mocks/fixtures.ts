@@ -147,6 +147,33 @@ export const windowNotice = {
   },
 } as const satisfies { title: Localized; description: Localized };
 
+// The monthly plan's reminder (T5): opens T6 with the plan's amount (api-gaps.md, item 1).
+export const planReminder = {
+  title: {
+    es: "Hora de tu aporte",
+    pt: "Hora do seu aporte",
+    en: "Time for your deposit",
+  },
+  description: {
+    es: "Tu plan mensual te recuerda el aporte de este mes.",
+    pt: "Seu plano mensal lembra o aporte deste mês.",
+    en: "Your monthly plan reminds you of this month's deposit.",
+  },
+} as const satisfies { title: Localized; description: Localized };
+
+export const termsUpdate = {
+  title: {
+    es: "Nueva versión del contrato de asesoría",
+    pt: "Nova versão do contrato de consultoria",
+    en: "New version of the advisory agreement",
+  },
+  description: {
+    es: "Leé los cambios y aceptalos para seguir usando tu cuenta.",
+    pt: "Leia as mudanças e aceite-as para continuar usando sua conta.",
+    en: "Read the changes and accept them to keep using your account.",
+  },
+} as const satisfies { title: Localized; description: Localized };
+
 export const returnReasons = {
   thirdParty: {
     es: "La transferencia salió de una cuenta que no está a tu nombre. El agente de cambio autorizado devuelve el dinero a la cuenta de origen.",

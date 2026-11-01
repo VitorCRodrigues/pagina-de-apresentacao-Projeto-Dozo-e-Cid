@@ -23,6 +23,7 @@ import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
 import { SUPPORT_EMAIL } from "@/lib/support";
 import { paths } from "@/routes";
+import { currentPlan } from "@/features/plans/plan-rules";
 import { formatWindowDate, resolveInvestmentWindow } from "./investment-window";
 
 const IN_PROGRESS_SHOWN = 3;
@@ -184,9 +185,8 @@ function SectionLoading() {
 function NextDepositSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation("portfolio");
   const plans = usePlans();
-  const plan =
-    plans.data?.find((p) => p.status === "active") ??
-    plans.data?.find((p) => p.status === "paused");
+  // The same plan the plan screen (T5) shows.
+  const plan = plans.data ? currentPlan(plans.data) : undefined;
 
   let body;
   if (plans.isError) body = <InlineError onRetry={() => void plans.refetch()} />;
@@ -204,12 +204,23 @@ function NextDepositSection({ locale }: { locale: Locale }) {
     );
   } else {
     body = (
-      <p className="flex items-baseline justify-between gap-4 border-y border-gray-200 py-4">
-        <span className="type-body text-graphite-900">
-          {plan.nextRunAt && t("home.nextDeposit.on", { date: formatDate(plan.nextRunAt, locale) })}
-        </span>
-        <Money cents={plan.amountCents} locale={locale} className="type-value text-graphite-900" />
-      </p>
+      // The only way to the plan (T5) once it is active: it has no tab of its own.
+      <div className={statementBlock}>
+        <p className="flex items-baseline justify-between gap-4">
+          <span className="type-body text-graphite-900">
+            {plan.nextRunAt &&
+              t("home.nextDeposit.on", { date: formatDate(plan.nextRunAt, locale) })}
+          </span>
+          <Money
+            cents={plan.amountCents}
+            locale={locale}
+            className="type-value text-graphite-900"
+          />
+        </p>
+        <Link to={paths.plan} className={sectionLink}>
+          {t("home.nextDeposit.manage")}
+        </Link>
+      </div>
     );
   }
   return <HomeSection title={t("home.nextDeposit.title")}>{body}</HomeSection>;

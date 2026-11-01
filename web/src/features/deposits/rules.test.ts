@@ -7,6 +7,24 @@ import { accountBlock, amountSchema, isQuoteExpired, visibleOptions } from "./ru
 const issues = (result: { success: boolean; error?: { issues: { message: string }[] } }) =>
   result.error?.issues.map((issue) => issue.message) ?? [];
 
+describe("monthly plan amount", () => {
+  // Mock config: minRecurringUsdCents 25000 (US$ 250), minDepositUsdCents 10000.
+  const schema = amountSchema(config, "es", "recurring");
+
+  it("uses the monthly minimum, not the one-off one", () => {
+    expect(issues(schema.safeParse({ amount: "249,99" }))).toEqual(["belowMinimum"]);
+    expect(issues(schema.safeParse({ amount: "100" }))).toEqual(["belowMinimum"]);
+    const result = schema.safeParse({ amount: "250" });
+    expect(result.success && result.data.amountCents).toBe(25000);
+  });
+
+  it("reads the amount in the client's locale and refuses another locale's format", () => {
+    const result = schema.safeParse({ amount: "1.000,5" });
+    expect(result.success && result.data.amountCents).toBe(100050);
+    expect(issues(schema.safeParse({ amount: "1,000.50" }))).toEqual(["invalidAmount"]);
+  });
+});
+
 describe("amount", () => {
   const schema = amountSchema(config, "es");
 

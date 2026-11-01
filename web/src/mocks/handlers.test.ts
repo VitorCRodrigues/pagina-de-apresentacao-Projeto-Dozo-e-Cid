@@ -3,6 +3,7 @@ import type {
   ApiErrorBody,
   DepositDetail,
   DepositsPage,
+  Notification,
   NotificationPrefs,
   OnboardingDraft,
   Questionnaire,
@@ -244,7 +245,15 @@ describe("mock API handlers", () => {
     expect(patched.json).toEqual({ email: true, push: true });
     const terms = await call<TermsDocument[]>("GET", "/account/terms", { lang: "en" });
     expect(terms.json.map((t) => t.title)).toContain("Advisory agreement");
-    expect((await call("POST", "/account/terms/terms-privacy/accept")).status).toBe(204);
+    const acceptance = {
+      id: "terms-privacy",
+      version: "2026-10",
+      acceptedAt: "2026-11-01T12:00:00Z",
+    };
+    expect((await call("POST", "/account/terms/terms-privacy/accept")).status).toBe(422);
+    expect(
+      (await call("POST", "/account/terms/terms-privacy/accept", { body: acceptance })).status,
+    ).toBe(204);
     expect((await call("POST", "/auth/logout", { token: false })).status).toBe(204);
   });
 
@@ -324,5 +333,63 @@ describe("mock API handlers", () => {
     expect(ok.status).toBe(204);
     const bad = await call("POST", "/waitlist", { body: { email: "a@b.co", country: "uru" } });
     expect(bad.status).toBe(422);
+  });
+  it("accepts new terms with { id, version, acceptedAt } and clears the pending item", async () => {
+    scenario("terms_update");
+    const before = await call<TermsDocument[]>("GET", "/account/terms");
+    const advisory = before.json.find((doc) => doc.id === "terms-advisory");
+    expect(advisory).toMatchObject({ version: "2026-11" });
+    expect(advisory?.acceptedAt).toBeUndefined();
+    const pending = await call<Notification[]>("GET", "/notifications");
+    expect(pending.json.find((n) => n.kind === "terms")).toMatchObject({
+      termsId: "terms-advisory",
+    });
+
+    const path = "/account/terms/terms-advisory/accept";
+    const acceptedAt = "2026-11-01T12:00:00Z";
+    expect((await call("POST", path, { body: { id: "terms-advisory", acceptedAt } })).status).toBe(
+      422,
+    );
+    expect(
+      (await call("POST", path, { body: { id: "terms-advisory", version: "2026-10", acceptedAt } }))
+        .status,
+    ).toBe(422);
+    expect(
+      (await call("POST", path, { body: { id: "terms-privacy", version: "2026-11", acceptedAt } }))
+        .status,
+    ).toBe(422);
+    const ok = await call("POST", path, {
+      body: { id: "terms-advisory", version: "2026-11", acceptedAt },
+    });
+    expect(ok.status).toBe(204);
+    const after = await call<Notification[]>("GET", "/notifications");
+    expect(after.json.some((n) => n.kind === "terms")).toBe(false);
+    const terms = await call<TermsDocument[]>("GET", "/account/terms");
+    expect(terms.json.find((doc) => doc.id === "terms-advisory")?.acceptedAt).toBe(acceptedAt);
+  });
+
+  it("marks a notice as read, and it leaves the list", async () => {
+    scenario("open");
+    const before = await call<Notification[]>("GET", "/notifications");
+    const notice = before.json.find((n) => n.kind === "notice");
+    expect(notice).toBeDefined();
+    const read = await call("POST", `/notifications/${notice?.id ?? ""}/read`);
+    expect(read.status).toBe(204);
+    const after = await call<Notification[]>("GET", "/notifications");
+    expect(after.json.some((n) => n.id === notice?.id)).toBe(false);
+    expect((await call("POST", "/notifications/nope/read")).status).toBe(404);
+  });
+
+  it("plan scenarios: a paused plan, and the monthly reminder that points at the plan", async () => {
+    scenario("plan_paused");
+    const plans = await call<Plan[]>("GET", "/plans");
+    expect(plans.json[0]?.status).toBe("paused");
+
+    scenario("plan_reminder");
+    const pending = await call<Notification[]>("GET", "/notifications");
+    expect(pending.json.find((n) => n.planId)).toMatchObject({
+      kind: "deposit_action",
+      planId: "plan-1",
+    });
   });
 });

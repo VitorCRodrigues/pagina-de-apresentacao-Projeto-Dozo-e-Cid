@@ -5,7 +5,7 @@ import { ScenarioSwitcher } from "./ScenarioSwitcher";
 import { scenarioUrl, setScenario } from "./scenario-state";
 
 describe("ScenarioSwitcher", () => {
-  it("shows the active scenario and lists all 27, grouped", async () => {
+  it("shows the active scenario and lists all 28, grouped", async () => {
     const user = userEvent.setup();
     setScenario("ibkr_pending");
     render(<ScenarioSwitcher onSelect={vi.fn()} />);
@@ -15,7 +15,7 @@ describe("ScenarioSwitcher", () => {
 
     const select = screen.getByRole("combobox", { name: "Escenario de prueba" });
     expect(select).toHaveValue("ibkr_pending");
-    expect(within(select).getAllByRole("option")).toHaveLength(27);
+    expect(within(select).getAllByRole("option")).toHaveLength(28);
     expect(select.querySelectorAll("optgroup")).toHaveLength(4);
   });
 

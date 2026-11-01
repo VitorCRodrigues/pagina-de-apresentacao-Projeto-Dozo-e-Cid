@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DepositDetail } from "@/api/proposed-types";
 import type { DepositState, Rail } from "@/api/types";
-import { depositTimeline } from "./deposit-timeline";
+import { depositTimeline, stateLabelKey } from "./deposit-timeline";
 
 const at = (minute: number) => `2026-10-31T12:${String(minute).padStart(2, "0")}:00Z`;
 
@@ -91,5 +91,17 @@ describe("deposit timeline (PRD section 6)", () => {
     expect(ids(first).slice(0, 2)).toEqual(["kyc_passed", "ibkr_open"]);
     expect(statuses(first).slice(0, 3)).toEqual(["done", "done", "current"]);
     expect(ids(deposit("ar_usdc", ["deposit_notified"]))[0]).toBe("deposit_notified");
+  });
+});
+
+describe("stateLabelKey", () => {
+  it("calls partner_collected 'USDC recibido' on ar_usdc only", () => {
+    expect(stateLabelKey({ rail: "ar_usdc", state: "partner_collected" })).toBe(
+      "deposit.state.partner_collected_usdc",
+    );
+    expect(stateLabelKey({ rail: "ar_swift", state: "partner_collected" })).toBe(
+      "deposit.state.partner_collected",
+    );
+    expect(stateLabelKey({ rail: "ar_usdc", state: "invested" })).toBe("deposit.state.invested");
   });
 });

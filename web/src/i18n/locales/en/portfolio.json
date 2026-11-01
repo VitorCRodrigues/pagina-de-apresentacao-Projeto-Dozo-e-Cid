@@ -1,0 +1,62 @@
+{
+  "home": {
+    "title": "Your account",
+    "updatedAt": "Updated {{date}}",
+    "splitLabel": "How it is split",
+    "pending_one": "You have {{count}} pending item.",
+    "pending_other": "You have {{count}} pending items.",
+    "pendingAction": "View pending items",
+    "nextDeposit": {
+      "title": "Next deposit",
+      "on": "On {{date}}",
+      "paused": "Your monthly plan is paused.",
+      "none": "You don't have a monthly plan yet.",
+      "create": "Create plan",
+      "manage": "View plan"
+    },
+    "inProgress": {
+      "title": "Deposits in progress",
+      "none": "You have no deposits in progress.",
+      "start": "Make a deposit",
+      "seeAll": "View all",
+      "more_one": "And {{count}} more",
+      "more_other": "And {{count}} more"
+    },
+    "window": {
+      "title": "Next investment window",
+      "body": "Money that arrives before this date is invested on that day. Until then, it stays in your Interactive Brokers account."
+    }
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "total": "Total",
+    "asOf": "Values are updated once a day from Interactive Brokers. Last update: {{date}}.",
+    "buckets": {
+      "invested": "Invested",
+      "ibkrCash": "Cash at Interactive Brokers",
+      "inFlight": "In transit"
+    },
+    "bucketsShort": {
+      "invested": "Invested",
+      "ibkrCash": "Cash",
+      "inFlight": "In transit"
+    },
+    "share": "{{share}} of total",
+    "fees": "Costs paid to date: {{amount}}. Not part of the total.",
+    "positions": {
+      "title": "Holdings",
+      "shares_one": "{{count}} share",
+      "shares_other": "{{count}} shares",
+      "weight": "{{current}} of portfolio · target {{target}}",
+      "about": "What this fund is"
+    },
+    "waiting": "You don't own any funds yet. Your money is invested in the next investment window, on {{date}}.",
+    "empty": {
+      "title": "You have no investments yet",
+      "body": "Once you make your first deposit, you'll see your funds here and how your money is split.",
+      "action": "Make a deposit"
+    },
+    "statements": "View official statements at Interactive Brokers",
+    "newTab": "(opens in a new tab)"
+  }
+}

@@ -1,0 +1,17 @@
+[  863374ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5199/@vite/client:1089
+[ 2891973ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/client-BGZMjJVb.js?v=504bd899:15802
+[ 2893440ms] [LOG] %cDocumentation: %chttps://mswjs.io/docs font-weight:bold font-weight:normal @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2471
+[ 2893440ms] [LOG] Found an issue? https://github.com/mswjs/msw/issues @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2472
+[ 2893440ms] [LOG] Worker script URL: http://localhost:5199/mockServiceWorker.js @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2473
+[ 2893440ms] [LOG] Worker scope: http://localhost:5199/ @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2474
+[ 2893441ms] [LOG] Client ID: %s (%s) 374f850a-2d0a-4c3b-b5d8-c22454bbf2fd top-level @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2475
+[ 2894266ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:5199/src/styles/fonts/inter-latin-400.woff2:0
+[ 2894267ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5199/@vite/client:1089
+[ 2894273ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:5199/src/styles/fonts/inter-latin-600.woff2:0
+[ 2918690ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/client-BGZMjJVb.js?v=504bd899:15802
+[ 2919409ms] [LOG] %cDocumentation: %chttps://mswjs.io/docs font-weight:bold font-weight:normal @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2471
+[ 2919409ms] [LOG] Found an issue? https://github.com/mswjs/msw/issues @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2472
+[ 2919409ms] [LOG] Worker script URL: http://localhost:5199/mockServiceWorker.js @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2473
+[ 2919410ms] [LOG] Worker scope: http://localhost:5199/ @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2474
+[ 2919410ms] [LOG] Client ID: %s (%s) 4edeab83-6267-4a34-80ba-f82415fde29d top-level @ http://localhost:5199/node_modules/.vite/deps/msw_browser.js?v=504bd899:2475
+[ 2920534ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5199/@vite/client:1089

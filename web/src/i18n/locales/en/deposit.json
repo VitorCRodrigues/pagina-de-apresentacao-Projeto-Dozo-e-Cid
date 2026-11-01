@@ -4,9 +4,7 @@
     "home": {
       "new": "New deposit",
       "inProgress": "In progress",
-      "none": "You have no deposits in progress.",
-      "historyLater": "The full deposit history is coming soon.",
-      "row": "{{amount}} · {{rail}}"
+      "none": "You have no deposits in progress."
     },
     "steps": {
       "amount": "Amount",
@@ -64,7 +62,6 @@
       "returned": "Deposit returned"
     },
     "detail": {
-      "title": "Deposit of {{amount}}",
       "timeline": "Deposit status",
       "values": "Amounts",
       "sent": "Sent",
@@ -113,6 +110,26 @@
         "help": "Lets our team know. The status changes when the money arrives.",
         "done": "We told the team. We'll write when we receive it."
       }
+    },
+    "history": {
+      "title": "History",
+      "filterLabel": "Filter history",
+      "filters": {
+        "all": "All",
+        "invested": "Invested",
+        "returned": "Returned"
+      },
+      "more": "Load more",
+      "empty": {
+        "title": "You have no finished deposits yet",
+        "body": "Once a deposit is invested or returned, it shows up here.",
+        "action": "Make a deposit"
+      },
+      "emptyFiltered": {
+        "invested": "You have no invested deposits.",
+        "returned": "You have no returned deposits."
+      },
+      "showAll": "View all"
     }
   }
 }

@@ -13,7 +13,7 @@ export function SentNotice({ depositId }: { depositId: string }) {
   const sent = useRef(false);
 
   if (notice.isSuccess) {
-    return <Banner tone="info" title={t("deposit.instructions.sent.done")} />;
+    return <Banner tone="info" quiet title={t("deposit.instructions.sent.done")} />;
   }
 
   return (

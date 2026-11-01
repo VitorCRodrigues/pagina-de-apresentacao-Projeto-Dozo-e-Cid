@@ -274,10 +274,12 @@ function AmountStep({
       <h1 className="type-title text-navy-900">{t("deposit.amount.title")}</h1>
       <Field
         label={t("deposit.amount.label")}
-        help={t("deposit.amount.help", { min })}
+        // The error already states the minimum: the help steps aside.
+        {...(!code && { help: t("deposit.amount.help", { min }) })}
         error={code ? t(`deposit.amount.${code}`, { min }) : undefined}
       >
         <Input
+          variant="amount"
           leading={currencySymbol(locale)}
           inputMode="decimal"
           autoComplete="off"

@@ -4,9 +4,7 @@
     "home": {
       "new": "Nuevo aporte",
       "inProgress": "En curso",
-      "none": "No tenés aportes en curso.",
-      "historyLater": "El historial completo de aportes llega pronto.",
-      "row": "{{amount}} · {{rail}}"
+      "none": "No tenés aportes en curso."
     },
     "steps": {
       "amount": "Valor",
@@ -64,7 +62,6 @@
       "returned": "Depósito devuelto"
     },
     "detail": {
-      "title": "Aporte de {{amount}}",
       "timeline": "Estado del aporte",
       "values": "Valores",
       "sent": "Enviado",
@@ -113,6 +110,26 @@
         "help": "Avisa a nuestro equipo. El estado cambia cuando el dinero llega.",
         "done": "Avisamos al equipo. Te escribimos cuando lo recibamos."
       }
+    },
+    "history": {
+      "title": "Historial",
+      "filterLabel": "Filtrar historial",
+      "filters": {
+        "all": "Todos",
+        "invested": "Invertidos",
+        "returned": "Devueltos"
+      },
+      "more": "Ver más",
+      "empty": {
+        "title": "Todavía no tenés aportes finalizados",
+        "body": "Cuando un aporte se invierta o se devuelva, va a aparecer acá.",
+        "action": "Hacer un aporte"
+      },
+      "emptyFiltered": {
+        "invested": "No tenés aportes invertidos.",
+        "returned": "No tenés aportes devueltos."
+      },
+      "showAll": "Ver todos"
     }
   }
 }

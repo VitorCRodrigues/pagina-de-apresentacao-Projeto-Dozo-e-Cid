@@ -96,11 +96,13 @@ export function createDeposit(api: ApiClient, body: CreateDepositRequest, idempo
 }
 
 export interface DepositsFilter {
-  state?: DepositState;
+  // Any of these states (api-gaps.md, item 2: `state` takes a comma-separated list).
+  states?: readonly DepositState[];
   cursor?: string;
 }
 
-export function getDeposits(api: ApiClient, { state, cursor }: DepositsFilter = {}) {
+export function getDeposits(api: ApiClient, { states, cursor }: DepositsFilter = {}) {
+  const state = states && states.length > 0 ? states.join(",") : undefined;
   return api.request("GET", "/deposits", { query: { state, cursor }, response: "depositsPage" });
 }
 

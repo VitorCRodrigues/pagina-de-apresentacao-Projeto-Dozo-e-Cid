@@ -72,7 +72,7 @@ export function ResidenceStep() {
           )}
         />
       </Field>
-      {live && <Banner tone="info" title={t("custody.note")} />}
+      {live && <Banner tone="info" quiet title={t("custody.note")} />}
     </StepPage>
   );
 }

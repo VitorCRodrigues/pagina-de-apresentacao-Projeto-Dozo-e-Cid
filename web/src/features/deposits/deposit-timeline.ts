@@ -25,6 +25,16 @@ const order = [...accountSteps, ...depositSteps];
 const hiddenFor = (deposit: DepositDetail): ReadonlySet<DepositState> =>
   new Set(deposit.rail === "ar_usdc" ? ["fx_executed", "wire_sent"] : []);
 
+// The friendly name of a state. USDC has no exchange: partner_collected reads "USDC recibido".
+export function stateLabelKey({
+  rail,
+  state,
+}: Pick<DepositDetail, "rail" | "state">): DepositTimelineStep["labelKey"] {
+  return rail === "ar_usdc" && state === "partner_collected"
+    ? "deposit.state.partner_collected_usdc"
+    : `deposit.state.${state}`;
+}
+
 // T8. Friendly steps for a deposit, by rail. Never depends on the hidden states existing.
 export function depositTimeline(deposit: DepositDetail): DepositTimelineStep[] {
   const hidden = hiddenFor(deposit);
@@ -33,10 +43,7 @@ export function depositTimeline(deposit: DepositDetail): DepositTimelineStep[] {
   );
   const timeOf = (state: DepositState) =>
     deposit.history.findLast((event) => event.state === state)?.at;
-  const label = (state: DepositState): DepositTimelineStep["labelKey"] =>
-    deposit.rail === "ar_usdc" && state === "partner_collected"
-      ? "deposit.state.partner_collected_usdc"
-      : `deposit.state.${state}`;
+  const label = (state: DepositState) => stateLabelKey({ rail: deposit.rail, state });
 
   // The furthest state reached on the path; returned keeps the one it came from.
   const returned = deposit.state === "returned";

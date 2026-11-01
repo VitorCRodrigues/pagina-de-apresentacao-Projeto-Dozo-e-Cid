@@ -204,6 +204,17 @@ describe("mock API handlers", () => {
     const returned = await call<DepositsPage>("GET", "/deposits?state=returned");
     expect(returned.json.items.map((d) => d.state)).toEqual(["returned"]);
 
+    // api-gaps.md, item 2: a comma-separated list of states (T10 and "En curso").
+    const finished = await call<DepositsPage>("GET", "/deposits?state=invested,returned");
+    expect(finished.json.items.length).toBeGreaterThan(1);
+    expect(new Set(finished.json.items.map((d) => d.state))).toEqual(
+      new Set(["invested", "returned"]),
+    );
+    const invalid = await call("GET", "/deposits?state=invested,nope");
+    expect(invalid.status).toBe(422);
+    const unfiltered = await call<DepositsPage>("GET", "/deposits?state=");
+    expect(unfiltered.status).toBe(200);
+
     const first = await call<DepositsPage>("GET", "/deposits?limit=2");
     expect(first.json.items).toHaveLength(2);
     expect(first.json.nextCursor).toBeTruthy();

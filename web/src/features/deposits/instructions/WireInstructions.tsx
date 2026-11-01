@@ -44,7 +44,7 @@ export function WireInstructions({ deposit, instructions }: WireInstructionsProp
       <CopyField label={t("deposit.instructions.wire.swift")} value={instructions.swiftBic} />
 
       <Banner tone="warning" title={t("deposit.instructions.wire.ownAccount")} />
-      <Banner tone="info" title={t("deposit.instructions.wire.bankFees")} />
+      <Banner tone="info" quiet title={t("deposit.instructions.wire.bankFees")} />
     </div>
   );
 }

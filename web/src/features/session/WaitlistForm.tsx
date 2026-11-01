@@ -32,7 +32,7 @@ export function WaitlistForm({ defaultEmail, country }: WaitlistFormProps) {
   });
 
   if (join.isSuccess) {
-    return <Banner tone="info" title={t("waitlist.done", { email: join.variables.email })} />;
+    return <Banner tone="info" quiet title={t("waitlist.done", { email: join.variables.email })} />;
   }
 
   return (

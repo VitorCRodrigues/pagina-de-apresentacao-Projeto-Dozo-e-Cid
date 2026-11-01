@@ -32,6 +32,38 @@ export const TabEmpty = meta.story({
   render: () => <StoryApp path="/aportar" scenario="empty" />,
 });
 
+// T10 lives under "En curso": finished deposits only, filtered by state.
+export const TabHistory = meta.story({
+  render: () => <StoryApp path="/aportar" scenario="returned" />,
+});
+
+export const TabHistoryFiltered = meta.story({
+  render: () => <StoryApp path="/aportar" scenario="returned" />,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole("radio", { name: "Devueltos" }));
+  },
+});
+
+export const TabHistoryEmptyFilter = meta.story({
+  render: () => <StoryApp path="/aportar" scenario="open" />,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole("radio", { name: "Devueltos" }));
+  },
+});
+
+export const TabHistoryError = meta.story({
+  beforeEach: ({ msw }) => {
+    msw.use(
+      http.get("/api/v1/deposits", ({ request }) =>
+        new URL(request.url).searchParams.get("state") === "invested,returned"
+          ? HttpResponse.json({ error: { code: "internal", message: "x" } }, { status: 500 })
+          : HttpResponse.json({ items: [] }),
+      ),
+    );
+  },
+  render: () => <StoryApp path="/aportar" />,
+});
+
 // --- T6 ---
 
 export const Amount = meta.story({ render: () => <StoryApp path="/aportar/nuevo" /> });

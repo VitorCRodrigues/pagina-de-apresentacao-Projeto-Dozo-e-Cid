@@ -358,12 +358,19 @@ export function createHandlers(getDb: () => MockDb) {
       const db = await prepare(request, getDb);
       if (db instanceof Response) return db;
       const url = new URL(request.url);
-      const state = depositStateSchema.safeParse(url.searchParams.get("state"));
+      // api-gaps.md, item 2: `state` takes one state or a comma-separated list.
+      // An empty `state=` means no filter, as before the list was allowed.
+      const raw = url.searchParams.get("state") || null;
+      const parsed = raw?.split(",").map((value) => depositStateSchema.safeParse(value));
+      if (parsed?.some((result) => !result.success)) {
+        return errorResponse(422, "validation_failed", "Unknown state", {
+          fields: { state: "invalid" },
+        });
+      }
+      const states = parsed?.flatMap((result) => (result.success ? [result.data] : []));
       const limit = Number(url.searchParams.get("limit") ?? "20");
       const offset = Number(url.searchParams.get("cursor") ?? "0");
-      const matching = state.success
-        ? db.deposits.filter((d) => d.state === state.data)
-        : db.deposits;
+      const matching = states ? db.deposits.filter((d) => states.includes(d.state)) : db.deposits;
       const page = matching.slice(offset, offset + limit);
       const next = offset + limit < matching.length ? String(offset + limit) : undefined;
       return HttpResponse.json({

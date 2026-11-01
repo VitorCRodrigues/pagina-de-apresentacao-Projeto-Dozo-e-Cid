@@ -8,7 +8,7 @@ export type SupportedLocale = (typeof supportedLocales)[number];
 export const defaultLocale: SupportedLocale = "es";
 
 // "translation" holds what every screen needs; each area loads its own texts with its route.
-export const namespaces = ["translation", "onboarding", "account", "deposit"] as const;
+export const namespaces = ["translation", "onboarding", "account", "deposit", "portfolio"] as const;
 export type Namespace = (typeof namespaces)[number];
 
 // Only Spanish common texts ship in the first bundle (the pilot's default). Every other

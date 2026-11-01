@@ -63,6 +63,11 @@ export const appConfigSchema = z.object({
   ibkrPortalUrl: z.url(),
 });
 
+// api-gaps.md, item 8: the next investment window, from the server.
+export const proposedConfigSchema = appConfigSchema.extend({
+  nextInvestmentWindow: isoDate.optional(),
+});
+
 export const meSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -276,7 +281,7 @@ export const updatePlanRequestSchema = createPlanRequestSchema
 // --- Named responses, loaded by the client only when it validates ---
 
 export const responseSchemas = {
-  config: appConfigSchema,
+  config: proposedConfigSchema,
   me: meSchema,
   account: accountSchema,
   onboarding: onboardingDraftSchema,

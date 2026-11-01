@@ -30,9 +30,9 @@ import { scenarioGroups, scenarioIds } from "./scenarios";
 const now = new Date("2026-10-28T12:00:00Z");
 
 describe("mock scenarios", () => {
-  it("has 27 unique scenarios: the 26 of the plan plus maintenance", () => {
-    expect(scenarioIds).toHaveLength(27);
-    expect(new Set(scenarioIds).size).toBe(27);
+  it("has 28 unique scenarios: the 26 of the plan plus maintenance and in_flight_only", () => {
+    expect(scenarioIds).toHaveLength(28);
+    expect(new Set(scenarioIds).size).toBe(28);
     expect(scenarioIds).toContain("maintenance");
   });
 
@@ -142,6 +142,19 @@ describe("mock scenarios", () => {
     expect(empty.plans).toEqual([]);
     expect(empty.portfolio.positions).toEqual([]);
     expect(notificationsPayload(empty, "es")).toEqual([]);
+  });
+
+  it("in_flight_only: a first deposit on its way, nothing invested yet", () => {
+    const db = buildMockDb("in_flight_only", now);
+    expect(db.portfolio.positions).toEqual([]);
+    expect(db.portfolio.buckets).toMatchObject({
+      investedCents: 0,
+      ibkrCashCents: 0,
+      inFlightCents: 50000,
+      feesPaidCents: 0,
+    });
+    expect(db.deposits.map((d) => d.state)).toEqual(["partner_collected"]);
+    expect(db.plans).toEqual([]);
   });
 
   it("portfolio total is invested + cash + in flight, without fees (decisions.md, item 15)", () => {

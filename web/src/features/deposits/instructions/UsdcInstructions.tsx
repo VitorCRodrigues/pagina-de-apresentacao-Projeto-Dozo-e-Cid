@@ -44,9 +44,9 @@ export function UsdcInstructions({ deposit, instructions }: UsdcInstructionsProp
         </div>
       )}
 
-      <Banner tone="info" title={t("deposit.instructions.usdc.usdt")} />
+      <Banner tone="info" quiet title={t("deposit.instructions.usdc.usdt")} />
       {deposit.isFirstDeposit && (
-        <Banner tone="info" title={t("deposit.instructions.usdc.testSend")} />
+        <Banner tone="info" quiet title={t("deposit.instructions.usdc.testSend")} />
       )}
     </div>
   );

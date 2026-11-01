@@ -19,7 +19,7 @@ const placeholder = (name: keyof typeof import("@/features/placeholders")) => as
 // Area screens: their texts (i18n namespace) and their chunk load in parallel, not one after
 // the other, so the first visit costs a single round trip.
 function area<M extends Record<string, unknown>>(
-  namespace: Namespace,
+  namespace: Namespace | readonly Namespace[],
   load: () => Promise<M>,
   name: keyof M,
 ) {
@@ -101,7 +101,15 @@ export const routes: RouteObject[] = [
           {
             element: <RequireOpenAccount />,
             children: [
-              { path: "inicio", lazy: placeholder("HomeScreen") },
+              {
+                path: "inicio",
+                // Deposit states are named in the deposit texts.
+                lazy: area(
+                  ["portfolio", "deposit"],
+                  () => import("@/features/home/HomeScreen"),
+                  "HomeScreen",
+                ),
+              },
               {
                 path: "aportar",
                 lazy: area(
@@ -126,7 +134,14 @@ export const routes: RouteObject[] = [
                   "DepositDetailScreen",
                 ),
               },
-              { path: "cartera", lazy: placeholder("PortfolioScreen") },
+              {
+                path: "cartera",
+                lazy: area(
+                  "portfolio",
+                  () => import("@/features/portfolio/PortfolioScreen"),
+                  "PortfolioScreen",
+                ),
+              },
               { path: "pendientes", lazy: placeholder("PendingScreen") },
               { path: "perfil", lazy: placeholder("ProfileScreen") },
               { path: "plan", lazy: placeholder("PlanScreen") },

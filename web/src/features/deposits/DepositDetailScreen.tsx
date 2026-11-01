@@ -61,16 +61,26 @@ function DepositDetailView({ deposit, checkedAt }: { deposit: DepositDetail; che
   const accountOpen = me?.accountStatus === "open";
   const waitingForClient = deposit.state === "deposit_notified";
   const finished = deposit.state === "invested" || deposit.state === "returned";
+  const timeline = depositTimeline(deposit);
+  // The step the client is at; once invested or returned, the last one.
+  const current =
+    timeline.find((step) => step.status === "current") ?? timeline[timeline.length - 1];
   const overdue =
     !finished && deposit.expectedBy !== undefined && Date.parse(deposit.expectedBy) < checkedAt;
 
   return (
     <article className="flex flex-col gap-8 py-2">
-      <header className="flex flex-col gap-1">
-        <h1 className="type-title text-navy-900">
-          {t("deposit.detail.title", { amount: formatMoney(deposit.amountCents, locale) })}
-        </h1>
-        <p className="type-body text-gray-600">{t(`deposit.rail.names.${deposit.rail}`)}</p>
+      {/* One focus: where the money is now. The amount sits under it in tabular Inter. */}
+      <header className="flex flex-col gap-2">
+        <h1 className="type-title text-navy-900">{current && t(current.labelKey)}</h1>
+        <p className="flex flex-col">
+          <span className="type-value-lg text-graphite-900">
+            {formatMoney(deposit.amountCents, locale)}
+          </span>
+          <span className="type-caption text-gray-600">
+            {t(`deposit.rail.names.${deposit.rail}`)}
+          </span>
+        </p>
       </header>
 
       {deposit.blockReason === "pix_med_hold" && (
@@ -100,6 +110,7 @@ function DepositDetailView({ deposit, checkedAt }: { deposit: DepositDetail; che
       {deposit.state === "broker_credited" && deposit.nextInvestmentWindow && (
         <Banner
           tone="info"
+          quiet
           title={t("deposit.detail.window", {
             date: formatDate(deposit.nextInvestmentWindow, locale),
           })}
@@ -125,7 +136,7 @@ function DepositDetailView({ deposit, checkedAt }: { deposit: DepositDetail; che
       <Timeline
         label={t("deposit.detail.timeline")}
         locale={locale}
-        steps={depositTimeline(deposit).map((step) => ({
+        steps={timeline.map((step) => ({
           id: step.state,
           label: t(step.labelKey),
           status: step.status,

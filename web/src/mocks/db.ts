@@ -420,6 +420,24 @@ export function buildMockDb(id: ScenarioId, now: Date = new Date()): MockDb {
         notices: [],
         portfolio: portfolio([], 0, 0, now),
       };
+    case "in_flight_only": {
+      // A new client's first deposit on its way: nothing invested or in cash yet.
+      const first = deposit(
+        "dep-first",
+        "partner_collected",
+        "ar_usdc",
+        50000,
+        daysFrom(now, -1),
+        now,
+      );
+      return {
+        ...base("open", now),
+        deposits: [first],
+        plans: [],
+        notices: [],
+        portfolio: portfolio([], 0, first.amountCents, now),
+      };
+    }
   }
 }
 

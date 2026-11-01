@@ -58,6 +58,19 @@ export function ErrorState({ onRetry }: { onRetry: () => void }) {
   );
 }
 
+// For one part of a screen (a card, a link) that failed while the rest stays useful.
+export function InlineError({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <p className="type-body text-graphite-900">{t("states.error.title")}</p>
+      <Button variant="ghost" onClick={onRetry}>
+        {t("common.retry")}
+      </Button>
+    </div>
+  );
+}
+
 export function NotFoundState({ onHome }: { onHome: () => void }) {
   const { t } = useTranslation();
   return (

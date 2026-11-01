@@ -15,16 +15,6 @@ function Placeholder({ title, children }: { title: string; children?: ReactNode 
   );
 }
 
-export function HomeScreen() {
-  const { t } = useTranslation();
-  return <Placeholder title={t("nav.home")} />;
-}
-
-export function PortfolioScreen() {
-  const { t } = useTranslation();
-  return <Placeholder title={t("nav.portfolio")} />;
-}
-
 export function PendingScreen() {
   const { t } = useTranslation();
   return <Placeholder title={t("nav.pending")} />;

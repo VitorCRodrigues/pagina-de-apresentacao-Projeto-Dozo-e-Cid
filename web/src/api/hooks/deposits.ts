@@ -61,14 +61,14 @@ export function useCreateDeposit() {
   });
 }
 
-// Most recent first, filtered by state, paged by cursor (T10).
-export function useDeposits({ state }: { state?: DepositState } = {}) {
+// Most recent first, filtered by any of `states`, paged by cursor (T10).
+export function useDeposits({ states }: { states?: readonly DepositState[] } = {}) {
   const api = useApi();
   const { status } = useAuth();
   return useInfiniteQuery({
-    queryKey: queryKeys.deposits(state),
+    queryKey: queryKeys.deposits(states),
     queryFn: ({ pageParam }) =>
-      getDeposits(api, { ...(state && { state }), ...(pageParam && { cursor: pageParam }) }),
+      getDeposits(api, { ...(states && { states }), ...(pageParam && { cursor: pageParam }) }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled: status === "signedIn",

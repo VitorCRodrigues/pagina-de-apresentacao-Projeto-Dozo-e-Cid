@@ -42,7 +42,7 @@ export function Money({ cents, locale, size = "inline", className }: MoneyProps)
           {currency}
         </span>
         <span className="type-value-display">{units}</span>
-        <span className="mt-1.5 font-serif text-2xl leading-none font-medium">{decimals}</span>
+        <span className="type-heading mt-1.5 leading-none">{decimals}</span>
       </span>
     </span>
   );

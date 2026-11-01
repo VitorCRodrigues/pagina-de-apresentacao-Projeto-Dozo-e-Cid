@@ -16,16 +16,27 @@ interface BannerProps {
   title: ReactNode;
   children?: ReactNode;
   action?: ReactNode;
+  // A plain note: the title reads as body text. Warnings and errors keep the bold title.
+  quiet?: boolean;
   className?: string;
 }
 
-export function Banner({ tone = "info", title, children, action, className }: BannerProps) {
+export function Banner({
+  tone = "info",
+  title,
+  children,
+  action,
+  quiet = false,
+  className,
+}: BannerProps) {
   return (
     <div
       role={tone === "error" ? "alert" : "status"}
       className={cx("flex flex-col gap-1 border-l-2 py-1 pl-4", tones[tone].rule, className)}
     >
-      <p className={cx("type-label", tones[tone].title)}>{title}</p>
+      <p className={quiet ? "type-body text-graphite-900" : cx("type-label", tones[tone].title)}>
+        {title}
+      </p>
       {children && <div className="type-caption text-graphite-900">{children}</div>}
       {action && <div className="mt-1">{action}</div>}
     </div>

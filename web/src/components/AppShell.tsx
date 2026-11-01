@@ -25,7 +25,12 @@ export function AppShell({ nav = false, children }: AppShellProps) {
         {t("shell.skipToContent")}
       </a>
       <header className="border-b border-gray-200 pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto flex h-14 max-w-[480px] items-center px-5">
+        <div
+          className={cx(
+            "mx-auto flex h-14 max-w-[480px] items-center px-5",
+            nav && "lg:max-w-[880px]",
+          )}
+        >
           <Wordmark />
         </div>
       </header>
@@ -35,7 +40,7 @@ export function AppShell({ nav = false, children }: AppShellProps) {
         className={cx(
           "mx-auto w-full max-w-[480px] flex-1 px-5 pt-6 outline-none",
           nav
-            ? "pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
+            ? "pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
             : "pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
         )}
       >

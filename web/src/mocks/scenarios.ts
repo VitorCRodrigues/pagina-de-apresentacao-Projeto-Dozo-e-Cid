@@ -2,7 +2,13 @@ import { accountStatuses, blockReasons, depositStates } from "@/api/schemas";
 
 // Selectable with ?scenario=<id>: one per AccountStatus, DepositState and BlockReason, plus
 // network conditions. Codes never collide, so the id is the code itself (?scenario=returned).
-const networkScenarios = ["slow", "server_error", "empty", "maintenance"] as const;
+const networkScenarios = [
+  "slow",
+  "server_error",
+  "empty",
+  "in_flight_only",
+  "maintenance",
+] as const;
 
 export const scenarioIds = [
   ...accountStatuses,

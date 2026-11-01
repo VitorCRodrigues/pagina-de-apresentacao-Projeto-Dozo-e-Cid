@@ -3,6 +3,7 @@ import type demo from "./demo/es.json";
 import type account from "./locales/es/account.json";
 import type deposit from "./locales/es/deposit.json";
 import type onboarding from "./locales/es/onboarding.json";
+import type portfolio from "./locales/es/portfolio.json";
 import type translation from "./locales/es/translation.json";
 
 declare module "i18next" {
@@ -15,6 +16,7 @@ declare module "i18next" {
       onboarding: typeof onboarding;
       account: typeof account;
       deposit: typeof deposit;
+      portfolio: typeof portfolio;
       demo: typeof demo;
     };
   }

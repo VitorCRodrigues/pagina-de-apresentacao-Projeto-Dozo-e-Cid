@@ -117,7 +117,7 @@ describe("query hooks", () => {
     });
   });
 
-  it("useDeposits sends the state filter and follows the cursor", async () => {
+  it("useDeposits sends the state list and follows the cursor", async () => {
     const seen: string[] = [];
     server.use(
       http.get("/api/v1/deposits", ({ request }) => {
@@ -131,7 +131,9 @@ describe("query hooks", () => {
         );
       }),
     );
-    const { result } = renderHook(() => useDeposits({ state: "invested" }), { wrapper });
+    const { result } = renderHook(() => useDeposits({ states: ["invested", "returned"] }), {
+      wrapper,
+    });
     await waitFor(() => {
       expect(result.current.data?.pages).toHaveLength(1);
     });
@@ -144,7 +146,7 @@ describe("query hooks", () => {
         "dep-2",
       ]);
     });
-    expect(seen).toEqual(["?state=invested", "?state=invested&cursor=c-2"]);
+    expect(seen).toEqual(["?state=invested%2Creturned", "?state=invested%2Creturned&cursor=c-2"]);
     expect(result.current.hasNextPage).toBe(false);
   });
 

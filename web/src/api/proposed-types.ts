@@ -1,5 +1,6 @@
 // Proposed in docs/api-gaps.md, pending confirmation with Dozo. Section 8 types stay in types.ts.
 import type {
+  AppConfig,
   BlockReason,
   Deposit,
   DepositInstructionsUsdc,
@@ -110,6 +111,11 @@ export interface ScopedWireInstructions extends DepositInstructionsWire {
 }
 
 export type ScopedInstructions = ScopedUsdcInstructions | ScopedWireInstructions;
+
+// api-gaps.md, item 8: the next investment window for the home screen (T4), from the server.
+export interface ProposedConfig extends AppConfig {
+  nextInvestmentWindow?: string;
+}
 
 // api-gaps.md, items 5, 6 and 8.
 export interface DepositDetail extends Omit<Deposit, "instructions"> {

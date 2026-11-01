@@ -5,6 +5,7 @@ import type {
   CreateDepositRequest,
   CreatePlanRequest,
   DepositDetail,
+  ProposedConfig,
   DepositsPage,
   Notification,
   NotificationPrefs,
@@ -24,6 +25,7 @@ import {
   createDepositRequestSchema,
   createPlanRequestSchema,
   depositDetailSchema,
+  proposedConfigSchema,
   depositSchema,
   depositsPageSchema,
   meSchema,
@@ -94,6 +96,7 @@ describe("schemas", () => {
 
   it("infer exactly the api-gaps.md types", () => {
     expectTypeOf<z.infer<typeof apiErrorBodySchema>>().toEqualTypeOf<ApiErrorBody>();
+    expectTypeOf<z.infer<typeof proposedConfigSchema>>().toEqualTypeOf<ProposedConfig>();
     expectTypeOf<z.infer<typeof depositDetailSchema>>().toEqualTypeOf<DepositDetail>();
     expectTypeOf<z.infer<typeof depositsPageSchema>>().toEqualTypeOf<DepositsPage>();
     expectTypeOf<z.infer<typeof notificationSchema>>().toEqualTypeOf<Notification>();

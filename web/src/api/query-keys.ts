@@ -9,7 +9,7 @@ export const queryKeys = {
   questionnaire: ["session", "questionnaire"],
   portfolio: ["session", "portfolio"],
   plans: ["session", "plans"],
-  deposits: (state?: DepositState) => ["session", "deposits", { state }] as const,
+  deposits: (states?: readonly DepositState[]) => ["session", "deposits", { states }] as const,
   depositsAll: ["session", "deposits"],
   deposit: (id: string) => ["session", "deposit", id] as const,
   notifications: ["session", "notifications"],

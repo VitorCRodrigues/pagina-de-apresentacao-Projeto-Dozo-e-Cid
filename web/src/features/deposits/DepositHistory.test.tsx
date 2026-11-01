@@ -153,12 +153,13 @@ describe("deposit history (T10), inside Aportar", () => {
     });
   });
 
-  it("empty: a useful empty state with a way to make a deposit", async () => {
+  it("empty: says what will show up, and leaves the action to the screen's one primary button", async () => {
     const { history } = await open("empty");
     expect(
       await within(history).findByText("Todavía no tenés aportes finalizados"),
     ).toBeInTheDocument();
-    expect(within(history).getByRole("link", { name: "Hacer un aporte" })).toHaveAttribute(
+    expect(within(history).queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Nuevo aporte" })).toHaveAttribute(
       "href",
       "/aportar/nuevo",
     );

@@ -122,8 +122,7 @@
       "more": "Load more",
       "empty": {
         "title": "You have no finished deposits yet",
-        "body": "Once a deposit is invested or returned, it shows up here.",
-        "action": "Make a deposit"
+        "body": "Once a deposit is invested or returned, it shows up here."
       },
       "emptyFiltered": {
         "invested": "You have no invested deposits.",

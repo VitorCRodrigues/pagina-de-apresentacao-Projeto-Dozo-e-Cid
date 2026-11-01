@@ -9,7 +9,6 @@ import { usePlans } from "@/api/hooks/plans";
 import { usePortfolio } from "@/api/hooks/portfolio";
 import type { Account, Locale, Portfolio } from "@/api/types";
 import { Banner } from "@/components/Banner";
-import { Card } from "@/components/Card";
 import { buttonClass } from "@/components/component-styles";
 import { Money } from "@/components/Money";
 import { ErrorState, InlineError } from "@/components/PageState";
@@ -18,7 +17,7 @@ import { DepositRow } from "@/features/deposits/DepositRow";
 import { inProgressStates, newestFirst } from "@/features/deposits/history";
 import { accountBlock } from "@/features/deposits/rules";
 import { BalanceCard } from "@/features/portfolio/BalanceCard";
-import { buckets, centsOf } from "@/features/portfolio/balances";
+import { buckets, bucketsTotalCents, centsOf } from "@/features/portfolio/balances";
 import { formatDate, formatDateTime } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
@@ -27,24 +26,33 @@ import { paths } from "@/routes";
 import { formatWindowDate, resolveInvestmentWindow } from "./investment-window";
 
 const IN_PROGRESS_SHOWN = 3;
-// A text link at the start of a card's column, not stretched across it.
-const cardLink = cx(buttonClass("ghost", "never"), "self-start");
+// A text link at the start of a section's column, not stretched across it.
+const sectionLink = cx(buttonClass("ghost", "never"), "-ml-1 self-start");
 
-// T4. One focus, the total; then what comes next. No returns chart in the pilot.
+// T4. One focus, the total on navy; everything after it is a quiet statement on the page, in
+// the same sections and hairlines as Aportar and Cartera. No returns chart in the pilot.
 export function HomeScreen() {
   const { t, i18n } = useTranslation("portfolio");
   const locale = asLocale(i18n.language);
+  const portfolio = usePortfolio();
+  // A new client: nothing anywhere yet, so the screen's one action is the first deposit.
+  const isNew = portfolio.data !== undefined && bucketsTotalCents(portfolio.data.buckets) === 0;
 
   return (
-    <section className="flex flex-col gap-8 py-2">
-      <h1 className="type-title text-navy-900">{t("home.title")}</h1>
-      <AccountNotes />
-      <Total locale={locale} />
-      <div className="flex flex-col gap-4">
-        <NextDepositCard locale={locale} />
-        <InProgressCard locale={locale} />
-        <WindowCard locale={locale} />
+    <section className="flex flex-col gap-10 py-2">
+      <div className="flex flex-col gap-8">
+        <h1 className="type-title text-navy-900">{t("home.title")}</h1>
+        <AccountNotes />
+        <Total locale={locale} />
+        {isNew && (
+          <Link to={paths.newDeposit} className={buttonClass("primary")}>
+            {t("portfolio.empty.action")}
+          </Link>
+        )}
       </div>
+      <NextDepositSection locale={locale} />
+      <InProgressSection locale={locale} offerStart={!isNew} />
+      <WindowSection locale={locale} />
     </section>
   );
 }
@@ -145,21 +153,24 @@ function SplitLine({ portfolio, locale }: { portfolio: Portfolio; locale: Locale
   );
 }
 
-// --- Cards ---
+// --- What comes next ---
 
-function HomeCard({ title, children }: { title: string; children: ReactNode }) {
+// A titled block of the statement: heading, then its lines between hairlines.
+function HomeSection({ title, children }: { title: string; children: ReactNode }) {
   const id = useId();
   return (
-    <Card aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="type-label text-gray-600">
+    <section aria-labelledby={id} className="flex flex-col gap-3">
+      <h2 id={id} className="type-heading text-navy-900">
         {title}
       </h2>
       {children}
-    </Card>
+    </section>
   );
 }
 
-function CardLoading() {
+const statementBlock = "flex flex-col gap-2 border-y border-gray-200 py-4";
+
+function SectionLoading() {
   const { t } = useTranslation("portfolio");
   return (
     <div role="status" className="flex flex-col gap-2">
@@ -170,7 +181,7 @@ function CardLoading() {
   );
 }
 
-function NextDepositCard({ locale }: { locale: Locale }) {
+function NextDepositSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation("portfolio");
   const plans = usePlans();
   const plan =
@@ -179,28 +190,21 @@ function NextDepositCard({ locale }: { locale: Locale }) {
 
   let body;
   if (plans.isError) body = <InlineError onRetry={() => void plans.refetch()} />;
-  else if (!plans.data) body = <CardLoading />;
-  else if (!plan) {
+  else if (!plans.data) body = <SectionLoading />;
+  else if (!plan || plan.status === "paused") {
     body = (
-      <>
-        <p className="type-body text-graphite-900">{t("home.nextDeposit.none")}</p>
-        <Link to={paths.plan} className={cardLink}>
-          {t("home.nextDeposit.create")}
+      <div className={statementBlock}>
+        <p className="type-body text-gray-600">
+          {plan ? t("home.nextDeposit.paused") : t("home.nextDeposit.none")}
+        </p>
+        <Link to={paths.plan} className={sectionLink}>
+          {plan ? t("home.nextDeposit.manage") : t("home.nextDeposit.create")}
         </Link>
-      </>
-    );
-  } else if (plan.status === "paused") {
-    body = (
-      <>
-        <p className="type-body text-graphite-900">{t("home.nextDeposit.paused")}</p>
-        <Link to={paths.plan} className={cardLink}>
-          {t("home.nextDeposit.manage")}
-        </Link>
-      </>
+      </div>
     );
   } else {
     body = (
-      <p className="flex items-baseline justify-between gap-4">
+      <p className="flex items-baseline justify-between gap-4 border-y border-gray-200 py-4">
         <span className="type-body text-graphite-900">
           {plan.nextRunAt && t("home.nextDeposit.on", { date: formatDate(plan.nextRunAt, locale) })}
         </span>
@@ -208,10 +212,12 @@ function NextDepositCard({ locale }: { locale: Locale }) {
       </p>
     );
   }
-  return <HomeCard title={t("home.nextDeposit.title")}>{body}</HomeCard>;
+  return <HomeSection title={t("home.nextDeposit.title")}>{body}</HomeSection>;
 }
 
-function InProgressCard({ locale }: { locale: Locale }) {
+// `offerStart`: a link to start one when none is moving; off for a new client, whose primary
+// button under the total already says it.
+function InProgressSection({ locale, offerStart }: { locale: Locale; offerStart: boolean }) {
   const { t } = useTranslation("portfolio");
   const deposits = useDeposits({ states: inProgressStates });
   const items = newestFirst(deposits.data?.pages.flatMap((page) => page.items) ?? []);
@@ -219,25 +225,27 @@ function InProgressCard({ locale }: { locale: Locale }) {
 
   let body;
   if (deposits.isError) body = <InlineError onRetry={() => void deposits.refetch()} />;
-  else if (!deposits.data) body = <CardLoading />;
+  else if (!deposits.data) body = <SectionLoading />;
   else if (items.length === 0) {
     body = (
-      <>
-        <p className="type-body text-graphite-900">{t("home.inProgress.none")}</p>
-        <Link to={paths.newDeposit} className={cardLink}>
-          {t("home.inProgress.start")}
-        </Link>
-      </>
+      <div className={statementBlock}>
+        <p className="type-body text-gray-600">{t("home.inProgress.none")}</p>
+        {offerStart && (
+          <Link to={paths.newDeposit} className={sectionLink}>
+            {t("home.inProgress.start")}
+          </Link>
+        )}
+      </div>
     );
   } else {
     body = (
       <>
-        <ul className="-my-1">
+        <ul className="border-y border-gray-200">
           {items.slice(0, IN_PROGRESS_SHOWN).map((deposit) => (
             <DepositRow key={deposit.id} deposit={deposit} locale={locale} detail="rail" />
           ))}
         </ul>
-        <div className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2">
+        <div className="flex items-center justify-between gap-4">
           <span className="type-caption text-gray-600">
             {/* A count only when it is the real one: with more pages, "Ver todos" says enough. */}
             {hidden > 0 && !deposits.hasNextPage && t("home.inProgress.more", { count: hidden })}
@@ -249,17 +257,17 @@ function InProgressCard({ locale }: { locale: Locale }) {
       </>
     );
   }
-  return <HomeCard title={t("home.inProgress.title")}>{body}</HomeCard>;
+  return <HomeSection title={t("home.inProgress.title")}>{body}</HomeSection>;
 }
 
-function WindowCard({ locale }: { locale: Locale }) {
+function WindowSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation("portfolio");
   const config = useConfig();
   const deposits = useDeposits({ states: inProgressStates });
 
   let body;
   if (config.isError) body = <InlineError onRetry={() => void config.refetch()} />;
-  else if (!config.data || deposits.isPending) body = <CardLoading />;
+  else if (!config.data || deposits.isPending) body = <SectionLoading />;
   else {
     const window = resolveInvestmentWindow({
       config: config.data,
@@ -267,11 +275,11 @@ function WindowCard({ locale }: { locale: Locale }) {
       now: new Date(),
     });
     body = (
-      <>
+      <div className={statementBlock}>
         <p className="type-value text-graphite-900">{formatWindowDate(window, locale)}</p>
-        <p className="type-caption text-gray-600">{t("home.window.body")}</p>
-      </>
+        <p className="type-caption max-w-prose text-gray-600">{t("home.window.body")}</p>
+      </div>
     );
   }
-  return <HomeCard title={t("home.window.title")}>{body}</HomeCard>;
+  return <HomeSection title={t("home.window.title")}>{body}</HomeSection>;
 }

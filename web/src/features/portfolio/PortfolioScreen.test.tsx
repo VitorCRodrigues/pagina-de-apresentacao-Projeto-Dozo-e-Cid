@@ -101,7 +101,7 @@ describe("portfolio (T9)", () => {
     expect(within(first).getByText(/2 acciones/)).toBeInTheDocument();
     expect(within(first).getByText("US$ 700,00")).toBeInTheDocument();
     expect(
-      within(first).getByText(/58,33\s?% de la cartera · objetivo 60,0\s?%/),
+      within(first).getByText(/58,3\s?% de la cartera · objetivo 60,0\s?%/),
     ).toBeInTheDocument();
     expect(within(items[1] as HTMLElement).getByText(/1 acción/)).toBeInTheDocument();
   });
@@ -133,9 +133,11 @@ describe("portfolio (T9)", () => {
   it("explains asOf, links to the official IBKR statements and shows the risk note", async () => {
     servePortfolio();
     await open();
+    // The card says when; the footer, next to the official statements, says where from.
+    expect(await screen.findByText(/^Actualizado el .*2026.*\d{2}:\d{2}$/)).toBeInTheDocument();
     expect(
-      await screen.findByText(
-        /Los valores se actualizan una vez por día a partir de Interactive Brokers\. Última actualización: .*2026/,
+      screen.getByText(
+        "Los valores se actualizan una vez por día a partir de Interactive Brokers.",
       ),
     ).toBeInTheDocument();
     const link = screen.getByRole("link", {

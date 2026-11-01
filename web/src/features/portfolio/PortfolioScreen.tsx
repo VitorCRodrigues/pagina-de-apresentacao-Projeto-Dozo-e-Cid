@@ -67,12 +67,13 @@ export function PortfolioScreen() {
 function PortfolioView({ portfolio, locale }: { portfolio: Portfolio; locale: Locale }) {
   const { t } = useTranslation("portfolio");
   const config = useConfig();
-  // TODO(compliance): wording of the reconciliation note pending legal review.
-  const asOf = t("portfolio.asOf", { date: formatDateTime(portfolio.asOf, locale) });
+  // The card keeps one short line, as on the home screen; where the numbers come from is said
+  // next to the official statements, which is where a client would check them.
+  const updatedAt = t("home.updatedAt", { date: formatDateTime(portfolio.asOf, locale) });
 
   return (
     <>
-      <BalanceCard portfolio={portfolio} locale={locale} note={asOf} />
+      <BalanceCard portfolio={portfolio} locale={locale} note={updatedAt} />
       <BalanceSplit portfolio={portfolio} locale={locale} />
 
       <section aria-labelledby="positions" className="flex flex-col gap-4">
@@ -86,7 +87,9 @@ function PortfolioView({ portfolio, locale }: { portfolio: Portfolio; locale: Lo
         )}
       </section>
 
-      <footer className="flex flex-col gap-5">
+      <footer className="flex flex-col gap-4">
+        {/* TODO(compliance): wording of the reconciliation note pending legal review. */}
+        <p className="type-caption max-w-prose text-gray-600">{t("portfolio.asOf")}</p>
         {config.data ? (
           <a
             href={config.data.ibkrPortalUrl}

@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
 import { useDeposits } from "@/api/hooks/deposits";
 import { Button } from "@/components/Button";
-import { buttonClass } from "@/components/component-styles";
-import { EmptyState, ErrorState } from "@/components/PageState";
+import { ErrorState } from "@/components/PageState";
 import { Skeleton } from "@/components/Skeleton";
 import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
-import { paths } from "@/routes";
 import { DepositRow } from "./DepositRow";
 import { type HistoryFilter, historyFilters, newestFirst, statesFor } from "./history";
 
@@ -32,16 +29,12 @@ export function DepositHistory() {
       </div>
     );
   } else if (items.length === 0 && filter === "all") {
+    // A quiet line, not a second headline or button: "Nuevo aporte" right above is the action.
     body = (
-      <EmptyState
-        title={t("deposit.history.empty.title")}
-        body={t("deposit.history.empty.body")}
-        action={
-          <Link to={paths.newDeposit} className={buttonClass("secondary")}>
-            {t("deposit.history.empty.action")}
-          </Link>
-        }
-      />
+      <div className="flex flex-col gap-1 border-y border-gray-200 py-4">
+        <p className="type-label text-graphite-900">{t("deposit.history.empty.title")}</p>
+        <p className="type-caption max-w-prose text-gray-600">{t("deposit.history.empty.body")}</p>
+      </div>
     );
   } else if (items.length === 0 && filter !== "all") {
     body = (

@@ -37,7 +37,8 @@ test("home, portfolio and history at 375 px", async ({ page }) => {
 
   await goTo(page, "Cartera");
   await expect(page.getByRole("list", { name: "Posiciones" })).toBeVisible();
-  await expect(page.getByText(/Última actualización:/)).toBeVisible();
+  await expect(page.getByText(/^Actualizado el /)).toBeVisible();
+  await expect(page.getByText(/se actualizan una vez por día/)).toBeVisible();
   await expect(
     page.getByRole("link", { name: /Ver extractos oficiales en Interactive Brokers/ }),
   ).toBeVisible();

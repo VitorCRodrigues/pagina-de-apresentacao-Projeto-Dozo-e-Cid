@@ -28,7 +28,7 @@ export function PositionList({
 function PositionItem({ position, locale }: { position: Position; locale: Locale }) {
   const { t } = useTranslation("portfolio");
   const weight = weightComparison(position.weight, position.targetWeight);
-  const percent = (bp: number) => formatPercent(bp / 10000, locale);
+  const percent = (bp: number) => formatPercent(bp / 10000, locale, 1);
 
   return (
     <li className="flex flex-col gap-3 border-t border-gray-200 py-5 first:border-t-0">

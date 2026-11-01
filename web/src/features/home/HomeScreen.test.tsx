@@ -226,4 +226,13 @@ describe("home (T4)", () => {
     expect(split).toHaveTextContent(/En tránsito\s*US\$ 500,00/);
     expect(split).toHaveTextContent(/Invertido\s*US\$ 0,00/);
   });
+
+  it("new client: one primary action, the first deposit, and no second link for it", async () => {
+    await open("empty");
+    const start = await screen.findByRole("link", { name: "Hacer un aporte" });
+    expect(start).toHaveAttribute("href", "/aportar/nuevo");
+    const inProgress = await card("Aportes en curso");
+    expect(await within(inProgress).findByText("No tenés aportes en curso.")).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Hacer un aporte" })).toHaveLength(1);
+  });
 });

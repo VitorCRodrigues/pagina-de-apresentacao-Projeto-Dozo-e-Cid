@@ -30,7 +30,7 @@
   "portfolio": {
     "title": "Carteira",
     "total": "Total",
-    "asOf": "Os valores são atualizados uma vez por dia a partir da Interactive Brokers. Última atualização: {{date}}.",
+    "asOf": "Os valores são atualizados uma vez por dia a partir da Interactive Brokers.",
     "buckets": {
       "invested": "Investido",
       "ibkrCash": "Em caixa na Interactive Brokers",

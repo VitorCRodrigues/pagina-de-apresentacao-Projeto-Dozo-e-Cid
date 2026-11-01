@@ -71,4 +71,11 @@ describe("money", () => {
     expect(formatPercent(0.011, "es")).toBe("1,1%");
     expect(formatPercent(0.003, "en")).toBe("0.3%");
   });
+
+  it("can fix the number of decimals, so a column of shares lines up", () => {
+    expect(formatPercent(0.9809, "es", 2)).toBe("98,09%");
+    expect(formatPercent(0, "es", 2)).toBe("0,00%");
+    expect(formatPercent(0.561, "es", 1)).toBe("56,1%");
+    expect(formatPercent(0.6, "es", 1)).toBe("60,0%");
+  });
 });

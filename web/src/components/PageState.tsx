@@ -9,14 +9,22 @@ interface StateLayoutProps {
   title: ReactNode;
   body?: ReactNode;
   action?: ReactNode;
+  // "heading" when the state sits under the screen's own h1, so the two never compete.
+  titleSize?: "title" | "heading";
 }
 
 // Typographic, like a statement section: a graphite rule, the title, one sentence, one action.
 // No icon. No side padding: they sit inside AppShell, which owns the page margins.
-function StateLayout({ title, body, action }: StateLayoutProps) {
+function StateLayout({ title, body, action, titleSize = "title" }: StateLayoutProps) {
   return (
     <section className="mt-6 flex flex-col items-start gap-3 border-t border-graphite-900 pt-5">
-      <h2 className="type-title text-navy-900">{title}</h2>
+      <h2
+        className={
+          titleSize === "title" ? "type-title text-navy-900" : "type-heading text-navy-900"
+        }
+      >
+        {title}
+      </h2>
       {body && <p className="type-body max-w-prose text-gray-600">{body}</p>}
       {action && <div className="mt-3 w-full sm:w-auto">{action}</div>}
     </section>
@@ -44,7 +52,8 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ title, body, action }: EmptyStateProps) {
-  return <StateLayout title={title} body={body} action={action} />;
+  // Always inside a screen that has its own h1.
+  return <StateLayout title={title} body={body} action={action} titleSize="heading" />;
 }
 
 export function ErrorState({ onRetry }: { onRetry: () => void }) {

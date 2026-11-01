@@ -122,8 +122,7 @@
       "more": "Ver más",
       "empty": {
         "title": "Todavía no tenés aportes finalizados",
-        "body": "Cuando un aporte se invierta o se devuelva, va a aparecer acá.",
-        "action": "Hacer un aporte"
+        "body": "Cuando un aporte se invierta o se devuelva, va a aparecer acá."
       },
       "emptyFiltered": {
         "invested": "No tenés aportes invertidos.",

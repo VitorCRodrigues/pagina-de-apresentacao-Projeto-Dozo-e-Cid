@@ -57,7 +57,9 @@ export function BalanceSplit({ portfolio, locale }: { portfolio: Portfolio; loca
               <Money cents={amounts[bucket]} locale={locale} />
               {hasMoney && (
                 <span className="type-caption whitespace-nowrap text-gray-600 tabular-nums">
-                  {t("portfolio.share", { share: formatPercent(shares[bucket] / 10000, locale) })}
+                  {t("portfolio.share", {
+                    share: formatPercent(shares[bucket] / 10000, locale, 2),
+                  })}
                 </span>
               )}
             </dd>

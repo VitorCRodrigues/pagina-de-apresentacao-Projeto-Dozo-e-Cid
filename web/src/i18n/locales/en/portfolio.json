@@ -30,7 +30,7 @@
   "portfolio": {
     "title": "Portfolio",
     "total": "Total",
-    "asOf": "Values are updated once a day from Interactive Brokers. Last update: {{date}}.",
+    "asOf": "Values are updated once a day from Interactive Brokers.",
     "buckets": {
       "invested": "Invested",
       "ibkrCash": "Cash at Interactive Brokers",

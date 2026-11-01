@@ -87,8 +87,17 @@ export interface MockDb {
 
 const iso = (date: Date) => date.toISOString().replace(/\.\d{3}Z$/, "Z");
 const daysFrom = (now: Date, days: number) => new Date(now.getTime() + days * 86_400_000);
+// This month's window while its day has not passed, else next month's: the plan date and the
+// window date on the home screen then agree.
 const nextWindow = (now: Date) =>
-  new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, config.investmentWindowDay, 14));
+  new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth() + (now.getUTCDate() <= config.investmentWindowDay ? 0 : 1),
+      config.investmentWindowDay,
+      14,
+    ),
+  );
 
 // The order a deposit walks through (funding.ts advance()); returned can follow any later step.
 const statePath: readonly DepositState[] = [

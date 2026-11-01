@@ -75,10 +75,11 @@ export function parseAmountToCents(input: string, locale: Locale): number | null
 }
 
 // Ratios such as CostLine.percent (0.011 = 1.1%) are display-only values from the API.
-export function formatPercent(ratio: number, locale: Locale): string {
+// `digits` fixes the decimals, for values that stand in a column and must line up.
+export function formatPercent(ratio: number, locale: Locale, digits?: number): string {
   return new Intl.NumberFormat(toIntlLocale(locale), {
     style: "percent",
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: digits ?? 1,
+    maximumFractionDigits: digits ?? 2,
   }).format(ratio);
 }

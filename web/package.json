@@ -19,6 +19,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "size": "size-limit",
+    "copy:review": "node scripts/copy-review.mjs",
     "ci": "npm run typecheck && npm run lint && npm test && npm run build && npm run size && npm run e2e"
   },
   "dependencies": {

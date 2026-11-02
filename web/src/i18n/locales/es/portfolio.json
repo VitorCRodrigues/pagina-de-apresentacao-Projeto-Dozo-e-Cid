@@ -24,7 +24,7 @@
     },
     "window": {
       "title": "Próxima ventana de inversión",
-      "body": "El dinero que llega antes de esa fecha se invierte ese día. Mientras tanto, queda en tu cuenta en Interactive Brokers."
+      "body": "El dinero que ya llegó a tu cuenta se invierte en esta ventana. Hasta entonces, puede quedar en caja en Interactive Brokers."
     }
   },
   "portfolio": {
@@ -50,7 +50,7 @@
       "weight": "{{current}} de la cartera · objetivo {{target}}",
       "about": "Qué es este fondo"
     },
-    "waiting": "Todavía no tenés fondos comprados. Tu dinero se invierte en la próxima ventana de inversión, el {{date}}.",
+    "waiting": "Todavía no tenés fondos comprados. La próxima ventana de inversión está prevista para el {{date}}.",
     "empty": {
       "title": "Todavía no tenés inversiones",
       "body": "Cuando hagas tu primer aporte, acá vas a ver tus fondos y cómo se divide tu dinero.",

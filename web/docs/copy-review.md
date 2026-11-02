@@ -1,0 +1,568 @@
+# Revisão jurídica dos textos
+
+Gerado por `npm run copy:review` a partir de `src/i18n/locales` e dos textos editoriais do mock (`src/mocks/fixtures.ts`). Não edite à mão: comente em `copy-review.csv`, que tem o mesmo conteúdo, e os ajustes voltam para os arquivos de idioma.
+
+Total: 542 textos. Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
+
+## 1. Depende da confirmação do registro RIA antes do piloto
+
+Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o status de assessora de investimentos e dependem dessa confirmação.
+
+| Chave | Tela | ES | PT | EN | Status jurídico | Observação |
+| --- | --- | --- | --- | --- | --- | --- |
+| `onboarding.suitability.lead` | T2 Onboarding | Con tus respuestas armamos una recomendación adecuada para vos. No hay respuestas correctas. | Com suas respostas montamos uma recomendação adequada para você. Não há respostas certas. | Your answers shape a recommendation that suits you. There are no right answers. | pendente: depende da confirmação do registro RIA antes do piloto | Promete uma recomendação adequada ao cliente. |
+| `profile.suitability.intro` | T12 Perfil de investidor | Actualizá tus respuestas si cambió tu situación. Tu asesor revisa las respuestas. | Atualize suas respostas se sua situação mudou. Seu consultor revisa as respostas. | Update your answers if your situation changed. Your adviser reviews the answers. | pendente: depende da confirmação do registro RIA antes do piloto | Fala em "tu asesor" revisando as respostas. |
+| `help.questions.custody.a` | T13 Ajuda | Interactive Brokers, en una cuenta a tu nombre. Interactive Brokers es la corredora y custodia; OpenDollars es tu asesora de inversiones. | A Interactive Brokers, em uma conta no seu nome. A Interactive Brokers é a corretora e custodiante; a OpenDollars é sua consultora de investimentos. | Interactive Brokers, in an account in your name. Interactive Brokers is the broker and custodian; OpenDollars is your investment adviser. | pendente: depende da confirmação do registro RIA antes do piloto | Afirma que a OpenDollars é a assessora de investimentos do cliente. |
+| `costs.kind.advisory_fee` | T5, T6, T8 Tabela de custos | Honorarios de asesoría | Taxa de consultoria | Advisory fee | pendente: depende da confirmação do registro RIA antes do piloto | Nomeia honorários de assessoria. |
+| `custody.note` | T2, T3 Custódia | Tu cuenta se abre en Interactive Brokers, a tu nombre. OpenDollars es tu asesora de inversiones. | Sua conta é aberta na Interactive Brokers, no seu nome. A OpenDollars é sua consultora de investimentos. | Your account is opened at Interactive Brokers, in your name. OpenDollars is your investment adviser. | pendente: depende da confirmação do registro RIA antes do piloto | Afirma que a OpenDollars é a assessora de investimentos do cliente. |
+| `mock:termsUpdate.title` | T11 Pendências (vem da API) | Nueva versión del contrato de asesoría | Nova versão do contrato de consultoria | New version of the advisory agreement | pendente: depende da confirmação do registro RIA antes do piloto | Título da nova versão do contrato de assessoria (vem da API). |
+| `mock:terms.terms-advisory` | T2, T11, T12 Termos (vem da API) | Contrato de asesoría | Contrato de consultoria | Advisory agreement | pendente: depende da confirmação do registro RIA antes do piloto | Título do contrato de assessoria (vem da API). |
+
+## 2. Marcados com TODO(compliance) no código
+
+117 textos.
+
+| Chave | Tela | ES | PT | EN | Status jurídico | Observação |
+| --- | --- | --- | --- | --- | --- | --- |
+| `deposit.detail.returned` | T8 Detalhe do aporte | Devolvimos este depósito | Devolvemos este depósito | We returned this deposit | pendente | A política de devolução depende do contrato com o parceiro. |
+| `deposit.detail.refund` | T8 Detalhe do aporte | El dinero vuelve a la cuenta de origen. El plazo y los costos de la devolución dependen del medio de envío. | O dinheiro volta para a conta de origem. O prazo e os custos da devolução dependem do meio de envio. | The money goes back to the source account. Timing and costs of the return depend on the transfer method. | pendente | A política de devolução depende do contrato com o parceiro. |
+| `deposit.instructions.exactAmountNote` | T7 Instruções de depósito | Enviá exactamente este valor. Un valor distinto puede demorar tu aporte. | Envie exatamente este valor. Um valor diferente pode atrasar seu aporte. | Send exactly this amount. A different amount may delay your deposit. | pendente | Consequências de enviar um valor diferente. |
+| `deposit.instructions.usdc.warning` | T7 Instruções de depósito | Enviá solamente USDC en esta red. Otra moneda u otra red pueden hacer que pierdas el dinero. | Envie somente USDC nesta rede. Outra moeda ou outra rede podem resultar na perda do dinheiro. | Send only USDC on this network. Another token or network may result in losing the money. | pendente | Risco de perda por rede errada (PRD, seção 5). |
+| `onboarding.funds.title` | T2 Onboarding | Origen de los fondos | Origem dos recursos | Source of funds | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.lead` | T2 Onboarding | Dos preguntas necesarias para abrir una cuenta de inversión. | Duas perguntas necessárias para abrir uma conta de investimento. | Two questions needed to open an investment account. | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupation` | T2 Onboarding | Ocupación | Ocupação | Occupation | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupations.employee` | T2 Onboarding | Empleado en relación de dependencia | Assalariado | Employee | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupations.self_employed` | T2 Onboarding | Independiente o monotributista | Autônomo | Self-employed | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupations.business_owner` | T2 Onboarding | Dueño o socio de una empresa | Dono ou sócio de empresa | Business owner | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupations.retired` | T2 Onboarding | Jubilado | Aposentado | Retired | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupations.student` | T2 Onboarding | Estudiante | Estudante | Student | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.occupations.other` | T2 Onboarding | Otra | Outra | Other | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.source` | T2 Onboarding | ¿De dónde viene el dinero que vas a invertir? | De onde vem o dinheiro que você vai investir? | Where does the money you will invest come from? | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sourceWhy` | T2 Onboarding | Lo preguntamos por las normas de prevención de lavado de dinero, que piden conocer el origen de lo que se invierte. | Perguntamos por causa das normas de prevenção à lavagem de dinheiro, que pedem conhecer a origem do que é investido. | We ask because of anti-money-laundering rules, which call for knowing where invested money comes from. | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.salary` | T2 Onboarding | Sueldo | Salário | Salary | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.business` | T2 Onboarding | Ingresos de mi actividad o empresa | Renda da minha atividade ou empresa | Income from my work or business | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.savings` | T2 Onboarding | Ahorros | Poupança | Savings | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.investments` | T2 Onboarding | Inversiones | Investimentos | Investments | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.inheritance` | T2 Onboarding | Herencia o donación | Herança ou doação | Inheritance or gift | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.property_sale` | T2 Onboarding | Venta de una propiedad | Venda de um imóvel | Sale of a property | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.sources.other` | T2 Onboarding | Otro | Outro | Other | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.pep` | T2 Onboarding | ¿Sos una persona expuesta políticamente? | Você é uma pessoa politicamente exposta? | Are you a politically exposed person? | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.pepWhy` | T2 Onboarding | Es quien ocupa u ocupó un cargo público relevante, o un familiar cercano. Lo preguntamos por las normas de prevención de lavado de dinero. | É quem ocupa ou ocupou um cargo público relevante, ou um familiar próximo. Perguntamos pelas normas de prevenção à lavagem de dinheiro. | Someone who holds or held a prominent public office, or a close relative. We ask because of anti-money-laundering rules. | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.yes` | T2 Onboarding | Sí | Sim | Yes | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.no` | T2 Onboarding | No | Não | No | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.funds.pepRole` | T2 Onboarding | ¿Qué cargo ocupás u ocupaste? | Qual cargo você ocupa ou ocupou? | Which office do you or did you hold? | pendente | Origem dos recursos e pessoa exposta: redação e listas. |
+| `onboarding.terms.title` | T2 Onboarding | Términos y consentimientos | Termos e consentimentos | Terms and consents | pendente | Textos dos termos ainda em rascunho. |
+| `onboarding.terms.lead` | T2 Onboarding | Leé cada documento y marcá la casilla para aceptarlo. | Leia cada documento e marque a caixa para aceitá-lo. | Read each document and tick the box to accept it. | pendente | Textos dos termos ainda em rascunho. |
+| `onboarding.terms.accept` | T2 Onboarding | Acepto: {{title}} | Aceito: {{title}} | I accept: {{title}} | pendente | Textos dos termos ainda em rascunho. |
+| `onboarding.terms.read` | T2 Onboarding | Leer el documento | Ler o documento | Read the document | pendente | Textos dos termos ainda em rascunho. |
+| `onboarding.terms.ibkrConsent` | T2 Onboarding | Interactive Brokers está en Estados Unidos. Para abrir tu cuenta a tu nombre, le enviamos tus datos personales y de identidad. Lo hacemos solo con tu consentimiento, según la Ley 25.326 de protección de datos personales. | A Interactive Brokers fica nos Estados Unidos. Para abrir sua conta no seu nome, enviamos seus dados pessoais e de identidade. Fazemos isso só com o seu consentimento, conforme a Lei 25.326 de proteção de dados pessoais. | Interactive Brokers is in the United States. To open your account in your name, we send it your personal and identity data. We do so only with your consent, under Law 25,326 on personal data protection. | pendente | Cita a Lei 25.326 e o envio de dados aos Estados Unidos. |
+| `pending.terms.read` | T11 Pendências | Leer el documento (versión {{version}}) | Ler o documento (versão {{version}}) | Read the document (version {{version}}) | pendente | Aceite de novos termos: textos ainda em rascunho. |
+| `pending.terms.readFirst` | T11 Pendências | Abrí el documento para poder aceptarlo. | Abra o documento para poder aceitá-lo. | Open the document to be able to accept it. | pendente | Aceite de novos termos: textos ainda em rascunho. |
+| `pending.terms.accept` | T11 Pendências | Leí y acepto el documento «{{title}}» | Li e aceito o documento «{{title}}» | I have read and accept “{{title}}” | pendente | Aceite de novos termos: textos ainda em rascunho. |
+| `pending.terms.confirm` | T11 Pendências | Aceptar | Aceitar | Accept | pendente | Aceite de novos termos: textos ainda em rascunho. |
+| `pending.terms.back` | T11 Pendências | Volver | Voltar | Back | pendente | Aceite de novos termos: textos ainda em rascunho. |
+| `pending.terms.missing` | T11 Pendências | No encontramos este documento. Probá de nuevo más tarde. | Não encontramos este documento. Tente de novo mais tarde. | We could not find this document. Try again later. | pendente | Aceite de novos termos: textos ainda em rascunho. |
+| `portfolio.asOf` | T4, T9 Carteira | Los valores se actualizan una vez por día a partir de Interactive Brokers. | Os valores são atualizados uma vez por dia a partir da Interactive Brokers. | Values are updated once a day from Interactive Brokers. | pendente | Explicação da atualização diária. |
+| `help.questions.custody.q` | T13 Ajuda | ¿Quién guarda mi dinero? | Quem guarda meu dinheiro? | Who holds my money? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.cost.q` | T13 Ajuda | ¿Cuánto cuesta? | Quanto custa? | How much does it cost? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.cost.a` | T13 Ajuda | Antes de confirmar cada aporte ves todos los costos, línea por línea, y cuánto llega para invertir. Los detalles están en los términos. | Antes de confirmar cada aporte você vê todos os custos, linha por linha, e quanto chega para investir. Os detalhes estão nos termos. | Before you confirm each deposit you see every cost, line by line, and how much is left to invest. The details are in the terms. | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.minimum.q` | T13 Ajuda | ¿Por qué hay un mínimo mensual? | Por que há um mínimo mensal? | Why is there a monthly minimum? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.minimum.a` | T13 Ajuda | El mínimo del plan mensual es {{min}}. Con menos, los costos fijos de envío se llevan una parte demasiado grande de lo que invertís. | O mínimo do plano mensal é {{min}}. Com menos, os custos fixos de envio levam uma parte grande demais do que você investe. | The monthly plan minimum is {{min}}. With less, fixed transfer costs take too large a share of what you invest. | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.window.q` | T13 Ajuda | ¿Por qué se invierte una vez por mes? | Por que o investimento acontece uma vez por mês? | Why does investing happen once a month? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.window.a` | T13 Ajuda | La cartera se invierte en una ventana mensual, alrededor del día {{day}}. El dinero que ya llegó puede quedar en caja en tu cuenta de Interactive Brokers hasta entonces. | A carteira é investida em uma janela mensal, por volta do dia {{day}}. O dinheiro que já chegou pode ficar em caixa na sua conta da Interactive Brokers até lá. | The portfolio is invested in a monthly window, around day {{day}}. Money that has already arrived may sit as cash in your Interactive Brokers account until then. | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.opening.q` | T13 Ajuda | ¿Cuánto tarda en abrirse la cuenta? | Quanto demora a abertura da conta? | How long does opening the account take? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.opening.a` | T13 Ajuda | Algunos días hábiles. Interactive Brokers revisa tu información y, si necesita algo más, te lo pedimos en Pendientes. | Alguns dias úteis. A Interactive Brokers analisa suas informações e, se precisar de algo mais, pedimos em Pendências. | A few business days. Interactive Brokers reviews your information and, if it needs anything else, we ask you under Pending. | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.wrongNetwork.q` | T13 Ajuda | ¿Qué hago si envié por la red equivocada? | O que faço se enviei pela rede errada? | What do I do if I sent on the wrong network? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.wrongNetwork.a` | T13 Ajuda | Escribinos enseguida a soporte con los datos del envío. Una red equivocada puede significar la pérdida de los fondos: no podemos asegurarte que se recuperen, pero vamos a revisar tu caso. | Fale com o suporte imediatamente, com os dados do envio. Rede errada pode significar perda dos fundos: não podemos garantir a recuperação, mas vamos analisar seu caso. | Contact support right away with the transfer details. A wrong network can mean losing the funds: we cannot assure you they will be recovered, but we will review your case. | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.withdraw.q` | T13 Ajuda | ¿Cómo saco mi dinero? | Como saco meu dinheiro? | How do I take my money out? | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `help.questions.withdraw.a` | T13 Ajuda | Desde tu cuenta en Interactive Brokers, con el acceso que está en Perfil. Un retiro solo puede ir a una cuenta bancaria a tu nombre. | Pela sua conta na Interactive Brokers, com o acesso que está no Perfil. Um saque só pode ir para uma conta bancária no seu nome. | From your Interactive Brokers account, through the link in Profile. A withdrawal can only go to a bank account in your name. | pendente | FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal. |
+| `risk.default` | T5, T9 Aviso de risco | Invertir implica riesgos. Los resultados pasados no garantizan resultados futuros. | Investimentos têm risco. Resultados passados não garantem resultados futuros. | Investing involves risk. Past performance does not guarantee future results. | pendente | Aviso de risco obrigatório em Carteira e Plano (PRD, seção 10). |
+| `entry.headline` | T1 Entrada | Tu cuenta de inversión en dólares, con aportes mensuales. | Sua conta de investimento em dólar, com aportes mensais. | Your US dollar investment account, with monthly deposits. | pendente | Título e piloto fechado na tela de entrada. |
+| `entry.custody` | T1 Entrada | Tu cuenta y tus inversiones quedan en Interactive Brokers, a tu nombre. | Sua conta e seus investimentos ficam na Interactive Brokers, no seu nome. | Your account and your investments stay at Interactive Brokers, in your name. | pendente | Título e piloto fechado na tela de entrada. |
+| `entry.pilot` | T1 Entrada | Estamos en un piloto cerrado. | Estamos em fase de piloto fechado. | We are in a closed pilot. | pendente | Título e piloto fechado na tela de entrada. |
+| `entry.terms` | T1 Entrada | Ver términos | Ver termos | Read the terms | pendente | Título e piloto fechado na tela de entrada. |
+| `entry.signIn` | T1 Entrada | Entrar | Entrar | Sign in | pendente | Título e piloto fechado na tela de entrada. |
+| `entry.signInError` | T1 Entrada | No pudimos iniciar sesión. Probá de nuevo. | Não conseguimos entrar. Tente de novo. | We could not sign you in. Try again. | pendente | Título e piloto fechado na tela de entrada. |
+| `errors.validation_failed` | Mensagens de erro, todas as telas | Revisá los datos e intentá de nuevo. | Revise os dados e tente de novo. | Check the details and try again. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.quote_expired` | Mensagens de erro, todas as telas | La cotización venció. Pedí una nueva. | A cotação expirou. Peça uma nova. | The quote expired. Request a new one. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.below_minimum` | Mensagens de erro, todas as telas | El monto está por debajo del mínimo. | O valor está abaixo do mínimo. | The amount is below the minimum. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.account_not_open` | Mensagens de erro, todas as telas | Tu cuenta todavía no está abierta. | Sua conta ainda não está aberta. | Your account is not open yet. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.account_restricted` | Mensagens de erro, todas as telas | Tu cuenta necesita atención. Hablá con soporte. | Sua conta precisa de atenção. Fale com o suporte. | Your account needs attention. Contact support. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.compliance_hold` | Mensagens de erro, todas as telas | No es posible hacer esta operación en este momento. Hablá con soporte. | Não é possível fazer esta operação no momento. Fale com o suporte. | This operation is not possible right now. Contact support. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.market_not_live` | Mensagens de erro, todas as telas | Todavía no está disponible en tu país. | Ainda não está disponível no seu país. | This is not available in your country yet. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.idempotency_conflict` | Mensagens de erro, todas as telas | Esta operación ya se envió. Revisá tus aportes antes de repetirla. | Esta operação já foi enviada. Confira seus aportes antes de repetir. | This operation was already sent. Check your deposits before repeating it. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.not_found` | Mensagens de erro, todas as telas | No encontramos lo que buscabas. | Não encontramos o que você procurava. | We could not find what you were looking for. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.session_expired` | Mensagens de erro, todas as telas | Tu sesión se cerró. Iniciá sesión de nuevo. | Sua sessão foi encerrada. Entre de novo. | Your session ended. Sign in again. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.maintenance` | Mensagens de erro, todas as telas | Estamos haciendo mantenimiento. Probá en unos minutos. | Estamos em manutenção. Tente em alguns minutos. | We are down for maintenance. Try again in a few minutes. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.rate_limited` | Mensagens de erro, todas as telas | Hiciste muchos intentos seguidos. Esperá un momento y probá de nuevo. | Foram muitas tentativas seguidas. Espere um momento e tente de novo. | Too many attempts in a row. Wait a moment and try again. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.internal` | Mensagens de erro, todas as telas | Algo salió mal de nuestro lado. Probá de nuevo. | Algo deu errado do nosso lado. Tente de novo. | Something went wrong on our side. Try again. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.network` | Mensagens de erro, todas as telas | No hay conexión. Revisá tu internet y probá de nuevo. | Sem conexão. Verifique sua internet e tente de novo. | No connection. Check your internet and try again. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `errors.invalid_response` | Mensagens de erro, todas as telas | Recibimos una respuesta inesperada. Probá de nuevo. | Recebemos uma resposta inesperada. Tente de novo. | We received an unexpected response. Try again. | pendente | Mensagens de erro: src/api/error-messages.ts. |
+| `blockReason.ibkr_not_open.message` | T6 e T4, bloqueios de aporte | Tu cuenta está en análisis en Interactive Brokers. | Sua conta está em análise na Interactive Brokers. | Your account is under review at Interactive Brokers. | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.ibkr_not_open.action` | T6 e T4, bloqueios de aporte | Ver pendientes | Ver pendências | See what is pending | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.ibkr_restricted.message` | T6 e T4, bloqueios de aporte | Tu cuenta necesita atención. | Sua conta precisa de atenção. | Your account needs attention. | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.ibkr_restricted.action` | T6 e T4, bloqueios de aporte | Hablar con soporte | Falar com o suporte | Contact support | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.compliance_hold.message` | T6 e T4, bloqueios de aporte | No es posible hacer aportes en este momento. | Não é possível fazer aportes no momento. | Deposits are not possible right now. | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.compliance_hold.action` | T6 e T4, bloqueios de aporte | Hablar con soporte | Falar com o suporte | Contact support | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.quote_expired.message` | T6 e T4, bloqueios de aporte | La cotización venció. | A cotação expirou. | The quote expired. | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.quote_expired.action` | T6 e T4, bloqueios de aporte | Pedir una cotización nueva | Pedir uma nova cotação | Request a new quote | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.pix_med_hold.message` | T6 e T4, bloqueios de aporte | Tu aporte está en un período de seguridad. | Seu aporte está em período de segurança. | Your deposit is in a security hold. | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.pix_med_hold.action` | T6 e T4, bloqueios de aporte | Ver la fecha prevista | Ver a data prevista | See the expected date | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.market_not_live.message` | T6 e T4, bloqueios de aporte | Todavía no está disponible en tu país. | Ainda não está disponível no seu país. | This is not available in your country yet. | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `blockReason.market_not_live.action` | T6 e T4, bloqueios de aporte | Anotarme en la lista de espera | Entrar na lista de espera | Join the waitlist | pendente | Bloqueios: não revelar o motivo de compliance (PRD, seção 5). |
+| `mock:returnReasons.thirdParty` | T8 Detalhe do aporte (vem da API) | La transferencia salió de una cuenta que no está a tu nombre. El socio de cambio licenciado devuelve el dinero a la cuenta de origen. | A transferência saiu de uma conta que não está no seu nome. O parceiro de câmbio licenciado devolve o dinheiro à conta de origem. | The transfer came from an account that is not in your name. The licensed exchange partner returns the money to the source account. | pendente | Motivo de devolução: vem da API; parceiro em termo genérico. |
+| `mock:questionnaire.goal` | T2, T12 Perfil de investidor (vem da API) | ¿Para qué vas a usar este dinero? | Para que você vai usar este dinheiro? | What is this money for? | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.goal.retirement` | T2, T12 Perfil de investidor (vem da API) | Jubilación | Aposentadoria | Retirement | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.goal.savings` | T2, T12 Perfil de investidor (vem da API) | Ahorro de largo plazo | Poupança de longo prazo | Long-term savings | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.goal.education` | T2, T12 Perfil de investidor (vem da API) | Educación de mis hijos | Educação dos filhos | Children's education | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.horizon` | T2, T12 Perfil de investidor (vem da API) | ¿En cuánto tiempo pensás usarlo? | Em quanto tempo pretende usar? | When do you plan to use it? | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.horizon.lt5` | T2, T12 Perfil de investidor (vem da API) | En menos de 5 años | Em menos de 5 anos | In less than 5 years | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.horizon.5to10` | T2, T12 Perfil de investidor (vem da API) | Entre 5 y 10 años | Entre 5 e 10 anos | In 5 to 10 years | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.horizon.gt10` | T2, T12 Perfil de investidor (vem da API) | En más de 10 años | Em mais de 10 anos | In more than 10 years | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.income` | T2, T12 Perfil de investidor (vem da API) | ¿Cuánto ganás por mes, aproximadamente? | Quanto você ganha por mês, aproximadamente? | Roughly how much do you earn a month? | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.income.lt1k` | T2, T12 Perfil de investidor (vem da API) | Menos de US$ 1.000 | Menos de US$ 1.000 | Under US$1,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.income.1k3k` | T2, T12 Perfil de investidor (vem da API) | De US$ 1.000 a 3.000 | De US$ 1.000 a 3.000 | US$1,000 to 3,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.income.3k10k` | T2, T12 Perfil de investidor (vem da API) | De US$ 3.000 a 10.000 | De US$ 3.000 a 10.000 | US$3,000 to 10,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.income.gt10k` | T2, T12 Perfil de investidor (vem da API) | Más de US$ 10.000 | Mais de US$ 10.000 | Over US$10,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.netWorth` | T2, T12 Perfil de investidor (vem da API) | ¿Cuál es tu patrimonio aproximado? | Qual é o seu patrimônio aproximado? | What is your approximate net worth? | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.netWorth.lt25k` | T2, T12 Perfil de investidor (vem da API) | Menos de US$ 25.000 | Menos de US$ 25.000 | Under US$25,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.netWorth.25k100k` | T2, T12 Perfil de investidor (vem da API) | De US$ 25.000 a 100.000 | De US$ 25.000 a 100.000 | US$25,000 to 100,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.netWorth.100k500k` | T2, T12 Perfil de investidor (vem da API) | De US$ 100.000 a 500.000 | De US$ 100.000 a 500.000 | US$100,000 to 500,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.netWorth.gt500k` | T2, T12 Perfil de investidor (vem da API) | Más de US$ 500.000 | Mais de US$ 500.000 | Over US$500,000 | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.experience` | T2, T12 Perfil de investidor (vem da API) | ¿En qué invertiste antes? | Em que você já investiu? | What have you invested in before? | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.experience.deposits` | T2, T12 Perfil de investidor (vem da API) | Plazo fijo | Renda fixa | Fixed deposits | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.experience.funds` | T2, T12 Perfil de investidor (vem da API) | Fondos comunes | Fundos de investimento | Mutual funds | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.experience.stocks` | T2, T12 Perfil de investidor (vem da API) | Acciones | Ações | Stocks | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.experience.none` | T2, T12 Perfil de investidor (vem da API) | Nunca invertí | Nunca investi | I have never invested | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.risk` | T2, T12 Perfil de investidor (vem da API) | Si tu inversión baja 20% en un año, ¿qué hacés? | Se seu investimento cair 20% em um ano, o que você faz? | If your investment falls 20% in a year, what do you do? | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.risk.sell` | T2, T12 Perfil de investidor (vem da API) | Vendo todo | Vendo tudo | Sell everything | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.risk.hold` | T2, T12 Perfil de investidor (vem da API) | Espero | Espero | Wait | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:questionnaire.risk.add` | T2, T12 Perfil de investidor (vem da API) | Sigo aportando | Continuo aportando | Keep depositing | pendente | Questionário de perfil: redação de responsabilidade do jurídico. |
+| `mock:terms.terms-costs` | T2, T11, T12 Termos (vem da API) | Detalle de costos | Detalhamento de custos | Cost disclosure | pendente | Títulos dos documentos: vêm da API. |
+| `mock:terms.terms-privacy` | T2, T11, T12 Termos (vem da API) | Política de privacidad | Política de privacidade | Privacy policy | pendente | Títulos dos documentos: vêm da API. |
+| `mock:terms.terms-ibkr-consent` | T2, T11, T12 Termos (vem da API) | Consentimiento para enviar tus datos a Interactive Brokers | Consentimento para enviar seus dados à Interactive Brokers | Consent to send your data to Interactive Brokers | pendente | Títulos dos documentos: vêm da API. |
+
+## 3. Demais textos
+
+418 textos.
+
+| Chave | Tela | ES | PT | EN | Status jurídico | Observação |
+| --- | --- | --- | --- | --- | --- | --- |
+| `account.timeline.label` | T3 Status da conta | Apertura de tu cuenta | Abertura da sua conta | Opening your account | pendente |  |
+| `account.timeline.submitted` | T3 Status da conta | Recibimos tu solicitud | Recebemos sua solicitação | We received your application | pendente |  |
+| `account.timeline.kyc_review` | T3 Status da conta | Verificamos tu identidad | Verificamos sua identidade | We verify your identity | pendente |  |
+| `account.timeline.ibkr_pending` | T3 Status da conta | Interactive Brokers abre tu cuenta a tu nombre | A Interactive Brokers abre sua conta no seu nome | Interactive Brokers opens your account in your name | pendente |  |
+| `account.timeline.open` | T3 Status da conta | Cuenta abierta | Conta aberta | Account open | pendente |  |
+| `account.timeline.actionNote` | T3 Status da conta | Faltan documentos. Mirá la lista de abajo. | Faltam documentos. Veja a lista abaixo. | Documents are missing. See the list below. | pendente |  |
+| `account.title.draft` | T3 Status da conta | Tu solicitud está sin terminar | Sua solicitação não foi concluída | Your application is not finished | pendente |  |
+| `account.title.submitted` | T3 Status da conta | Recibimos tu solicitud | Recebemos sua solicitação | We received your application | pendente |  |
+| `account.title.kyc_review` | T3 Status da conta | Estamos verificando tu identidad | Estamos verificando sua identidade | We are verifying your identity | pendente |  |
+| `account.title.ibkr_pending` | T3 Status da conta | Interactive Brokers está analizando tu cuenta | A Interactive Brokers está analisando sua conta | Interactive Brokers is reviewing your account | pendente |  |
+| `account.title.action_required` | T3 Status da conta | Interactive Brokers necesita documentos | A Interactive Brokers precisa de documentos | Interactive Brokers needs documents | pendente |  |
+| `account.title.open` | T3 Status da conta | Tu cuenta está abierta | Sua conta está aberta | Your account is open | pendente |  |
+| `account.title.rejected` | T3 Status da conta | No pudimos abrir tu cuenta | Não conseguimos abrir sua conta | We could not open your account | pendente |  |
+| `account.title.restricted` | T3 Status da conta | Tu cuenta necesita atención | Sua conta precisa de atenção | Your account needs attention | pendente |  |
+| `account.body.draft` | T3 Status da conta | Retomá desde donde la dejaste: guardamos cada paso. | Continue de onde parou: salvamos cada etapa. | Pick up where you left off: we saved every step. | pendente |  |
+| `account.body.waiting` | T3 Status da conta | Suele tardar algunos días hábiles. Te avisamos por e-mail cuando haya novedades. | Costuma levar alguns dias úteis. Avisamos por e-mail quando houver novidades. | It usually takes a few business days. We will email you when there is news. | pendente |  |
+| `account.body.action_required` | T3 Status da conta | Para seguir con la apertura, enviá estos documentos. Los pide Interactive Brokers. | Para continuar a abertura, envie estes documentos. Eles são pedidos pela Interactive Brokers. | To continue opening your account, send these documents. Interactive Brokers asks for them. | pendente |  |
+| `account.body.open` | T3 Status da conta | Tu cuenta en Interactive Brokers ya está a tu nombre. El próximo paso es crear tu plan mensual. | Sua conta na Interactive Brokers já está no seu nome. O próximo passo é criar seu plano mensal. | Your Interactive Brokers account is now in your name. The next step is to create your monthly plan. | pendente |  |
+| `account.body.rejected` | T3 Status da conta | Revisamos tu solicitud y no podemos abrir la cuenta en este momento. Si tenés preguntas, escribinos. | Revisamos sua solicitação e não podemos abrir a conta neste momento. Se tiver dúvidas, fale com o suporte. | We reviewed your application and cannot open the account at this time. If you have questions, contact support. | pendente |  |
+| `account.body.restricted` | T3 Status da conta | Por ahora no podés hacer aportes. Tus inversiones siguen en Interactive Brokers, a tu nombre. Escribinos para resolverlo. | Por enquanto você não pode fazer aportes. Seus investimentos continuam na Interactive Brokers, no seu nome. Fale com o suporte para resolver. | For now you cannot make deposits. Your investments remain at Interactive Brokers, in your name. Contact support to resolve this. | pendente |  |
+| `account.actions.continue` | T3 Status da conta | Continuar la solicitud | Continuar a solicitação | Continue the application | pendente |  |
+| `account.actions.createPlan` | T3 Status da conta | Crear plan mensual | Criar plano mensal | Create monthly plan | pendente |  |
+| `account.actions.contact` | T3 Status da conta | Escribir a soporte | Falar com o suporte | Contact support | pendente |  |
+| `account.accountNumber` | T3 Status da conta | Número de cuenta | Número da conta | Account number | pendente |  |
+| `account.upload.choose` | T3 Status da conta | Elegir archivo | Escolher arquivo | Choose file | pendente |  |
+| `account.upload.change` | T3 Status da conta | Elegir otro archivo | Escolher outro arquivo | Choose another file | pendente |  |
+| `account.upload.accepted` | T3 Status da conta | JPG, PNG o PDF, hasta 10 MB. | JPG, PNG ou PDF, até 10 MB. | JPG, PNG or PDF, up to 10 MB. | pendente |  |
+| `account.upload.send` | T3 Status da conta | Enviar documento | Enviar documento | Send document | pendente |  |
+| `account.upload.progress` | T3 Status da conta | Enviando el documento | Enviando o documento | Sending the document | pendente |  |
+| `account.upload.preview` | T3 Status da conta | Vista previa de {{name}} | Pré-visualização de {{name}} | Preview of {{name}} | pendente |  |
+| `account.upload.tooBig` | T3 Status da conta | El archivo pesa más de 10 MB. | O arquivo tem mais de 10 MB. | The file is larger than 10 MB. | pendente |  |
+| `account.upload.wrongType` | T3 Status da conta | Usá un archivo JPG, PNG o PDF. | Use um arquivo JPG, PNG ou PDF. | Use a JPG, PNG or PDF file. | pendente |  |
+| `account.upload.empty` | T3 Status da conta | El archivo está vacío. | O arquivo está vazio. | The file is empty. | pendente |  |
+| `account.allSent` | T3 Status da conta | Recibimos todos los documentos. Interactive Brokers los revisa y te avisamos por e-mail. | Recebemos todos os documentos. A Interactive Brokers vai analisá-los e avisaremos por e-mail. | We received every document. Interactive Brokers reviews them and we will email you. | pendente |  |
+| `account.documents` | T3 Status da conta | Documentos pedidos | Documentos solicitados | Requested documents | pendente |  |
+| `deposit.title` | T6 Aportar | Aportar | Aportar | Deposit | pendente |  |
+| `deposit.home.new` | T6 Aportar | Nuevo aporte | Novo aporte | New deposit | pendente |  |
+| `deposit.home.inProgress` | T6 Aportar | En curso | Em andamento | In progress | pendente |  |
+| `deposit.home.none` | T6 Aportar | No tenés aportes en curso. | Você não tem aportes em andamento. | You have no deposits in progress. | pendente |  |
+| `deposit.steps.amount` | T6 Novo aporte | Valor | Valor | Amount | pendente |  |
+| `deposit.steps.rail` | T6 Novo aporte | Medio de envío | Meio de envio | Transfer method | pendente |  |
+| `deposit.steps.preview` | T6 Novo aporte | Revisión | Revisão | Review | pendente |  |
+| `deposit.amount.title` | T6 Novo aporte | ¿Cuánto querés aportar? | Quanto você quer aportar? | How much do you want to deposit? | pendente |  |
+| `deposit.amount.label` | T6 Novo aporte | Valor en dólares | Valor em dólares | Amount in dollars | pendente |  |
+| `deposit.amount.help` | T6 Novo aporte | El mínimo es {{min}}. Debajo de ese monto, los costos fijos de envío pesan demasiado sobre lo que invertís. | O mínimo é {{min}}. Abaixo desse valor, os custos fixos de envio pesam demais sobre o que você investe. | The minimum is {{min}}. Below it, fixed transfer costs take too large a share of what you invest. | pendente |  |
+| `deposit.amount.invalidAmount` | T6 Novo aporte | Escribí un valor en dólares, por ejemplo 500 o 1.250,50. | Digite um valor em dólares, por exemplo 500 ou 1.250,50. | Enter an amount in dollars, for example 500 or 1,250.50. | pendente |  |
+| `deposit.amount.belowMinimum` | T6 Novo aporte | El mínimo es {{min}}: con menos, los costos fijos se llevan una parte demasiado grande. | O mínimo é {{min}}: com menos, os custos fixos levam uma parte grande demais. | The minimum is {{min}}: with less, fixed costs take too large a share. | pendente |  |
+| `deposit.rail.title` | T6 Novo aporte | ¿Cómo vas a enviar el dinero? | Como você vai enviar o dinheiro? | How will you send the money? | pendente |  |
+| `deposit.rail.label` | T6 Novo aporte | Medio de envío | Meio de envio | Transfer method | pendente |  |
+| `deposit.rail.names.ar_usdc` | T6 Novo aporte | USDC desde una exchange | USDC de uma exchange | USDC from an exchange | pendente |  |
+| `deposit.rail.names.ar_swift` | T6 Novo aporte | Transferencia bancaria SWIFT | Transferência bancária SWIFT | SWIFT bank transfer | pendente |  |
+| `deposit.rail.names.br_efx` | T6 Novo aporte | Pix con un socio de cambio | Pix com parceiro de câmbio | Pix via an exchange partner | pendente |  |
+| `deposit.rail.names.br_fxbank` | T6 Novo aporte | Banco de cambio | Banco de câmbio | Exchange bank | pendente |  |
+| `deposit.rail.summary` | T6 Novo aporte | Costo total {{cost}} ({{percent}}). Llega en {{days}}. | Custo total {{cost}} ({{percent}}). Chega em {{days}}. | Total cost {{cost}} ({{percent}}). Arrives in {{days}}. | pendente |  |
+| `deposit.rail.days_one` | T6 Novo aporte | {{min}} a {{count}} día hábil | {{min}} a {{count}} dia útil | {{min}} to {{count}} business day | pendente |  |
+| `deposit.rail.days_other` | T6 Novo aporte | {{min}} a {{count}} días hábiles | {{min}} a {{count}} dias úteis | {{min}} to {{count}} business days | pendente |  |
+| `deposit.rail.recommended` | T6 Novo aporte | Recomendado: el costo más bajo para este monto. | Recomendado: o menor custo para este valor. | Recommended: the lowest cost for this amount. | pendente |  |
+| `deposit.preview.title` | T6 Novo aporte | Revisá tu aporte | Revise seu aporte | Review your deposit | pendente |  |
+| `deposit.preview.lead` | T6 Novo aporte | Esto es lo que cuesta enviar {{amount}} y lo que llega para invertir. | Isto é o que custa enviar {{amount}} e o que chega para investir. | This is what sending {{amount}} costs and how much is left to invest. | pendente |  |
+| `deposit.preview.net` | T6 Novo aporte | Llega para invertir | Chega para investir | Amount to invest | pendente |  |
+| `deposit.preview.countdown` | T6 Novo aporte | La cotización vence en | A cotação vence em | The quote expires in | pendente |  |
+| `deposit.preview.expired` | T6 Novo aporte | La cotización venció | A cotação venceu | The quote expired | pendente |  |
+| `deposit.preview.expiredBody` | T6 Novo aporte | Los costos pueden haber cambiado. Generá una cotización nueva para seguir. | Os custos podem ter mudado. Gere uma nova cotação para continuar. | Costs may have changed. Get a new quote to continue. | pendente |  |
+| `deposit.preview.newQuote` | T6 Novo aporte | Generar nueva cotización | Gerar nova cotação | Get a new quote | pendente |  |
+| `deposit.preview.confirm` | T6 Novo aporte | Confirmar aporte | Confirmar aporte | Confirm deposit | pendente |  |
+| `deposit.preview.next` | T6 Novo aporte | Después de confirmar te mostramos cómo enviar el dinero. | Depois de confirmar mostramos como enviar o dinheiro. | After you confirm we show you how to send the money. | pendente |  |
+| `deposit.actions.continue` | T6 a T8 Aporte | Continuar | Continuar | Continue | pendente |  |
+| `deposit.actions.back` | T6 a T8 Aporte | Volver | Voltar | Back | pendente |  |
+| `deposit.actions.support` | T6 a T8 Aporte | Escribir a soporte | Falar com o suporte | Contact support | pendente |  |
+| `deposit.actions.followUp` | T6 a T8 Aporte | Ver el estado de tu cuenta | Ver o status da sua conta | See your account status | pendente |  |
+| `deposit.state.kyc_passed` | T4, T8, T10 Estados do aporte | Identidad verificada | Identidade verificada | Identity verified | pendente |  |
+| `deposit.state.ibkr_open` | T4, T8, T10 Estados do aporte | Cuenta en EE. UU. abierta | Conta nos EUA aberta | US account open | pendente |  |
+| `deposit.state.deposit_notified` | T4, T8, T10 Estados do aporte | Esperando tu depósito | Aguardando seu depósito | Waiting for your deposit | pendente |  |
+| `deposit.state.partner_collected` | T4, T8, T10 Estados do aporte | Recibimos tu dinero | Recebemos seu dinheiro | We received your money | pendente |  |
+| `deposit.state.partner_collected_usdc` | T4, T8, T10 Estados do aporte | USDC recibido | USDC recebido | USDC received | pendente |  |
+| `deposit.state.fx_executed` | T4, T8, T10 Estados do aporte | Cambio realizado | Câmbio realizado | Exchange completed | pendente |  |
+| `deposit.state.wire_sent` | T4, T8, T10 Estados do aporte | Transferencia enviada | Transferência enviada | Transfer sent | pendente |  |
+| `deposit.state.broker_credited` | T4, T8, T10 Estados do aporte | Dinero en tu cuenta | Dinheiro na sua conta | Money in your account | pendente |  |
+| `deposit.state.invested` | T4, T8, T10 Estados do aporte | Invertido | Investido | Invested | pendente |  |
+| `deposit.state.returned` | T4, T8, T10 Estados do aporte | Depósito devuelto | Depósito devolvido | Deposit returned | pendente |  |
+| `deposit.detail.timeline` | T8 Detalhe do aporte | Estado del aporte | Status do aporte | Deposit status | pendente |  |
+| `deposit.detail.values` | T8 Detalhe do aporte | Valores | Valores | Amounts | pendente |  |
+| `deposit.detail.sent` | T8 Detalhe do aporte | Enviado | Enviado | Sent | pendente |  |
+| `deposit.detail.costs` | T8 Detalhe do aporte | Costos | Custos | Costs | pendente |  |
+| `deposit.detail.credited` | T8 Detalhe do aporte | Acreditado en tu cuenta | Creditado na sua conta | Credited to your account | pendente |  |
+| `deposit.detail.invested` | T8 Detalhe do aporte | Invertido | Investido | Invested | pendente |  |
+| `deposit.detail.quote` | T8 Detalhe do aporte | Cotización usada | Cotação usada | Quote used | pendente |  |
+| `deposit.detail.window` | T8 Detalhe do aporte | Tu dinero espera en tu cuenta de Interactive Brokers hasta la próxima ventana de inversión, prevista para el {{date}}. Invertimos una vez por mes. | Seu dinheiro aguarda na sua conta da Interactive Brokers até a próxima janela de investimento, prevista para {{date}}. Investimos uma vez por mês. | Your money waits in your Interactive Brokers account until the next investment window, expected on {{date}}. We invest once a month. | pendente |  |
+| `deposit.detail.overdue` | T8 Detalhe do aporte | Este paso está tardando más de lo habitual. | Esta etapa está demorando mais que o normal. | This step is taking longer than usual. | pendente |  |
+| `deposit.detail.overdueBody` | T8 Detalhe do aporte | No hace falta que hagas nada. Si querés, escribinos y lo revisamos. | Você não precisa fazer nada. Se quiser, fale com o suporte e verificamos. | You do not need to do anything. If you like, contact support and we will check. | pendente |  |
+| `deposit.detail.hold` | T8 Detalhe do aporte | Tu aporte está en un período de seguridad | Seu aporte está em período de segurança | Your deposit is in a security period | pendente |  |
+| `deposit.detail.holdBody` | T8 Detalhe do aporte | Sigue su curso cuando termine, alrededor del {{date}}. | O aporte continua quando o período terminar, por volta de {{date}}. | It resumes when the period ends, around {{date}}. | pendente |  |
+| `deposit.detail.blocked` | T8 Detalhe do aporte | Las instrucciones de depósito no están disponibles mientras tu cuenta necesita atención. | As instruções de depósito não estão disponíveis enquanto sua conta precisa de atenção. | Deposit instructions are not available while your account needs attention. | pendente |  |
+| `deposit.detail.notFound` | T8 Detalhe do aporte | No encontramos este aporte | Não encontramos este aporte | We could not find this deposit | pendente |  |
+| `deposit.instructions.title` | T7 Instruções de depósito | Cómo enviar el dinero | Como enviar o dinheiro | How to send the money | pendente |  |
+| `deposit.instructions.exactAmount` | T7 Instruções de depósito | Valor exacto a enviar | Valor exato a enviar | Exact amount to send | pendente |  |
+| `deposit.instructions.usdc.locked` | T7 Instruções de depósito | USDC · red {{network}} | USDC · rede {{network}} | USDC · {{network}} network | pendente |  |
+| `deposit.instructions.usdc.lockedLabel` | T7 Instruções de depósito | Moneda y red de este depósito | Moeda e rede deste depósito | Token and network for this deposit | pendente |  |
+| `deposit.instructions.usdc.address` | T7 Instruções de depósito | Dirección de depósito | Endereço de depósito | Deposit address | pendente |  |
+| `deposit.instructions.usdc.memo` | T7 Instruções de depósito | Memo | Memo | Memo | pendente |  |
+| `deposit.instructions.usdc.memoNote` | T7 Instruções de depósito | Si tu exchange pide memo o etiqueta, copialo de acá. | Se sua exchange pedir memo ou tag, copie daqui. | If your exchange asks for a memo or tag, copy it from here. | pendente |  |
+| `deposit.instructions.usdc.qr` | T7 Instruções de depósito | Código QR de la dirección de depósito | QR code do endereço de depósito | QR code of the deposit address | pendente |  |
+| `deposit.instructions.usdc.usdt` | T7 Instruções de depósito | ¿Tenés USDT? Convertilo a USDC en tu exchange antes de enviar. | Tem USDT? Converta para USDC na sua exchange antes de enviar. | Do you have USDT? Convert it to USDC on your exchange before sending. | pendente |  |
+| `deposit.instructions.usdc.testSend` | T7 Instruções de depósito | Es tu primer depósito: te recomendamos enviar primero un monto chico de prueba y, cuando lo veas acreditado, el resto. | É seu primeiro depósito: recomendamos enviar antes um valor pequeno de teste e, quando ele for creditado, o restante. | This is your first deposit: we suggest sending a small test amount first and, once it is credited, the rest. | pendente |  |
+| `deposit.instructions.wire.beneficiary` | T7 Instruções de depósito | Beneficiario | Beneficiário | Beneficiary | pendente |  |
+| `deposit.instructions.wire.account` | T7 Instruções de depósito | Número de cuenta | Número da conta | Account number | pendente |  |
+| `deposit.instructions.wire.bank` | T7 Instruções de depósito | Banco | Banco | Bank | pendente |  |
+| `deposit.instructions.wire.swift` | T7 Instruções de depósito | SWIFT/BIC | SWIFT/BIC | SWIFT/BIC | pendente |  |
+| `deposit.instructions.wire.reference` | T7 Instruções de depósito | Referencia | Referência | Reference | pendente |  |
+| `deposit.instructions.wire.referenceNote` | T7 Instruções de depósito | Obligatoria. Escribila tal cual en el concepto de la transferencia: sin ella no podemos identificar tu dinero. | Obrigatória. Escreva exatamente assim no campo de descrição da transferência: sem ela não conseguimos identificar seu dinheiro. | Required. Enter it exactly in the transfer's reference field: without it we cannot identify your money. | pendente |  |
+| `deposit.instructions.wire.ownAccount` | T7 Instruções de depósito | La transferencia tiene que salir de una cuenta a tu nombre. Si sale de la cuenta de otra persona, se devuelve. | A transferência precisa sair de uma conta no seu nome. Se sair da conta de outra pessoa, é devolvida. | The transfer must come from an account in your name. If it comes from someone else's account, it is returned. | pendente |  |
+| `deposit.instructions.wire.bankFees` | T7 Instruções de depósito | Tu banco puede cobrar sus propias comisiones por transferencias al exterior. | Seu banco pode cobrar tarifas próprias por transferências ao exterior. | Your bank may charge its own fees for international transfers. | pendente |  |
+| `deposit.instructions.sent.action` | T7 Instruções de depósito | Ya envié | Já enviei | I have sent it | pendente |  |
+| `deposit.instructions.sent.help` | T7 Instruções de depósito | Avisa a nuestro equipo. El estado cambia cuando el dinero llega. | Isso avisa nossa equipe. O status muda quando o dinheiro chegar. | This lets our team know. The status changes when the money arrives. | pendente |  |
+| `deposit.instructions.sent.done` | T7 Instruções de depósito | Avisamos al equipo. Te escribimos cuando lo recibamos. | Avisamos a equipe. Entraremos em contato quando recebermos. | We let the team know. We will write when we receive it. | pendente |  |
+| `deposit.history.title` | T10 Histórico | Historial | Histórico | History | pendente |  |
+| `deposit.history.filterLabel` | T10 Histórico | Filtrar historial | Filtrar histórico | Filter history | pendente |  |
+| `deposit.history.filters.all` | T10 Histórico | Todos | Todos | All | pendente |  |
+| `deposit.history.filters.invested` | T10 Histórico | Invertidos | Investidos | Invested | pendente |  |
+| `deposit.history.filters.returned` | T10 Histórico | Devueltos | Devolvidos | Returned | pendente |  |
+| `deposit.history.more` | T10 Histórico | Ver más | Ver mais | Load more | pendente |  |
+| `deposit.history.empty.title` | T10 Histórico | Todavía no tenés aportes finalizados | Você ainda não tem aportes finalizados | You have no finished deposits yet | pendente |  |
+| `deposit.history.empty.body` | T10 Histórico | Cuando un aporte se invierta o se devuelva, va a aparecer acá. | Quando um aporte for investido ou devolvido, ele aparece aqui. | Once a deposit is invested or returned, it shows up here. | pendente |  |
+| `deposit.history.emptyFiltered.invested` | T10 Histórico | No tenés aportes invertidos. | Você não tem aportes investidos. | You have no invested deposits. | pendente |  |
+| `deposit.history.emptyFiltered.returned` | T10 Histórico | No tenés aportes devueltos. | Você não tem aportes devolvidos. | You have no returned deposits. | pendente |  |
+| `deposit.history.showAll` | T10 Histórico | Ver todos | Ver todos | View all | pendente |  |
+| `onboarding.steps.residence` | T2 Onboarding | País | País | Country | pendente |  |
+| `onboarding.steps.personal` | T2 Onboarding | Datos personales | Dados pessoais | Personal details | pendente |  |
+| `onboarding.steps.address` | T2 Onboarding | Domicilio | Endereço | Address | pendente |  |
+| `onboarding.steps.suitability` | T2 Onboarding | Perfil de inversor | Perfil de investidor | Investor profile | pendente |  |
+| `onboarding.steps.funds` | T2 Onboarding | Origen de los fondos | Origem dos recursos | Source of funds | pendente |  |
+| `onboarding.steps.identity` | T2 Onboarding | Identidad | Identidade | Identity | pendente |  |
+| `onboarding.steps.terms` | T2 Onboarding | Términos | Termos | Terms | pendente |  |
+| `onboarding.steps.review` | T2 Onboarding | Revisión | Revisão | Review | pendente |  |
+| `onboarding.actions.continue` | T2 Onboarding | Continuar | Continuar | Continue | pendente |  |
+| `onboarding.actions.back` | T2 Onboarding | Volver | Voltar | Back | pendente |  |
+| `onboarding.actions.edit` | T2 Onboarding | Editar | Editar | Edit | pendente |  |
+| `onboarding.actions.submit` | T2 Onboarding | Enviar solicitud | Enviar solicitação | Submit application | pendente |  |
+| `onboarding.actions.joinWaitlist` | T2 Onboarding | Anotarme en la lista | Entrar na lista | Join the list | pendente |  |
+| `onboarding.errors.required` | T2 Onboarding | Completá este dato. | Preencha este campo. | Fill in this field. | pendente |  |
+| `onboarding.errors.invalidName` | T2 Onboarding | Usá solo letras, espacios, apóstrofos o guiones, como en tu DNI. | Use só letras, espaços, apóstrofos ou hífens, como no seu documento. | Use letters, spaces, apostrophes or hyphens only, as on your ID. | pendente |  |
+| `onboarding.errors.nameTwoWords` | T2 Onboarding | Escribí tu nombre y tu apellido, como en tu DNI. | Digite seu nome e sobrenome, como no seu documento. | Write your first and last name, as on your ID. | pendente |  |
+| `onboarding.errors.invalidDate` | T2 Onboarding | Revisá la fecha. | Confira a data. | Check the date. | pendente |  |
+| `onboarding.errors.underage` | T2 Onboarding | Para abrir una cuenta tenés que tener 18 años o más. | Para abrir uma conta você precisa ter 18 anos ou mais. | You must be 18 or older to open an account. | pendente |  |
+| `onboarding.errors.invalidDni` | T2 Onboarding | El DNI tiene 7 u 8 números. | O DNI tem 7 ou 8 números. | The DNI has 7 or 8 digits. | pendente |  |
+| `onboarding.errors.invalidCuit` | T2 Onboarding | El CUIL tiene 11 números. | O CUIL tem 11 números. | The CUIL has 11 digits. | pendente |  |
+| `onboarding.errors.cuitCheckDigit` | T2 Onboarding | Este CUIL no es válido. Revisá los números. | Este CUIL não é válido. Confira os números. | This CUIL is not valid. Check the digits. | pendente |  |
+| `onboarding.errors.cuitDniMismatch` | T2 Onboarding | Este CUIL no corresponde al DNI que escribiste. | Este CUIL não corresponde ao DNI informado. | This CUIL does not match the DNI you entered. | pendente |  |
+| `onboarding.errors.invalidEmail` | T2 Onboarding | Escribí un e-mail válido, por ejemplo nombre@dominio.com. | Digite um e-mail válido, por exemplo nome@dominio.com. | Enter a valid email, for example name@domain.com. | pendente |  |
+| `onboarding.errors.invalidPhone` | T2 Onboarding | Escribí el celular con código de país y de área, por ejemplo +54 9 11 5555-0142. | Digite o celular com código do país e de área, por exemplo +54 9 11 5555-0142. | Enter your mobile with country and area code, for example +54 9 11 5555-0142. | pendente |  |
+| `onboarding.errors.invalidPostalCode` | T2 Onboarding | Usá el código postal de 8 caracteres (C1043AAZ) o el de 4 números. | Use o código postal de 8 caracteres (C1043AAZ) ou o de 4 números. | Use the 8-character postal code (C1043AAZ) or the 4-digit one. | pendente |  |
+| `onboarding.errors.termsRequired` | T2 Onboarding | Para seguir, tenés que aceptar este documento. | Para continuar, você precisa aceitar este documento. | To continue, you need to accept this document. | pendente |  |
+| `onboarding.errors.identityRequired` | T2 Onboarding | Completá la verificación para seguir. | Conclua a verificação para continuar. | Complete the verification to continue. | pendente |  |
+| `onboarding.residence.title` | T2 Onboarding | ¿Dónde vivís? | Onde você mora? | Where do you live? | pendente |  |
+| `onboarding.residence.lead` | T2 Onboarding | Por ahora abrimos cuentas para personas que viven en la Argentina. | Por enquanto abrimos contas para quem mora na Argentina. | For now we open accounts for people who live in Argentina. | pendente |  |
+| `onboarding.residence.country` | T2 Onboarding | País de residencia | País de residência | Country of residence | pendente |  |
+| `onboarding.residence.nationality` | T2 Onboarding | Nacionalidad | Nacionalidade | Nationality | pendente |  |
+| `onboarding.residence.waitlistTitle` | T2 Onboarding | Todavía no abrimos cuentas en {{country}} | Ainda não abrimos contas em {{country}} | We do not open accounts in {{country}} yet | pendente |  |
+| `onboarding.residence.waitlistBody` | T2 Onboarding | Estamos en un piloto cerrado en la Argentina. Dejanos tu e-mail y te avisamos cuando abramos en tu país. | Estamos em um piloto fechado na Argentina. Deixe seu e-mail e avisamos quando abrirmos no seu país. | We are in a closed pilot in Argentina. Leave your email and we will let you know when we open in your country. | pendente |  |
+| `onboarding.residence.changeCountry` | T2 Onboarding | Cambiar el país | Alterar o país | Change the country | pendente |  |
+| `onboarding.personal.title` | T2 Onboarding | Tus datos | Seus dados | Your details | pendente |  |
+| `onboarding.personal.lead` | T2 Onboarding | Los usamos para abrir tu cuenta en Interactive Brokers. Escribilos como figuran en tu DNI. | Usamos esses dados para abrir sua conta na Interactive Brokers. Digite como constam no seu documento. | We use them to open your account at Interactive Brokers. Write them as they appear on your ID. | pendente |  |
+| `onboarding.personal.fullName` | T2 Onboarding | Nombre completo | Nome completo | Full name | pendente |  |
+| `onboarding.personal.fullNameHelp` | T2 Onboarding | Como figura en tu DNI. | Como consta no seu documento. | As it appears on your ID. | pendente |  |
+| `onboarding.personal.birthDate` | T2 Onboarding | Fecha de nacimiento | Data de nascimento | Date of birth | pendente |  |
+| `onboarding.personal.dni` | T2 Onboarding | DNI | DNI | DNI | pendente |  |
+| `onboarding.personal.dniHelp` | T2 Onboarding | Solo números. | Só números. | Digits only. | pendente |  |
+| `onboarding.personal.cuil` | T2 Onboarding | CUIL o CUIT | CUIL ou CUIT | CUIL or CUIT | pendente |  |
+| `onboarding.personal.cuilHelp` | T2 Onboarding | 11 números. Figura en tu recibo de sueldo o en la constancia de ANSES. | 11 números. Está no seu contracheque ou na constância da ANSES. | 11 digits. It is on your payslip or your ANSES certificate. | pendente |  |
+| `onboarding.personal.email` | T2 Onboarding | E-mail | E-mail | Email | pendente |  |
+| `onboarding.personal.phone` | T2 Onboarding | Celular | Celular | Mobile phone | pendente |  |
+| `onboarding.personal.phoneHelp` | T2 Onboarding | Con código de país y de área. | Com código do país e de área. | With country and area code. | pendente |  |
+| `onboarding.address.title` | T2 Onboarding | Tu domicilio | Seu endereço | Your address | pendente |  |
+| `onboarding.address.lead` | T2 Onboarding | El domicilio donde vivís hoy. Interactive Brokers puede pedirte un comprobante. | O endereço onde você mora hoje. A Interactive Brokers pode pedir um comprovante. | Where you live today. Interactive Brokers may ask for proof of address. | pendente |  |
+| `onboarding.address.street` | T2 Onboarding | Calle y número | Rua e número | Street and number | pendente |  |
+| `onboarding.address.unit` | T2 Onboarding | Piso y departamento | Andar e apartamento | Floor and apartment | pendente |  |
+| `onboarding.address.city` | T2 Onboarding | Localidad | Cidade | City | pendente |  |
+| `onboarding.address.province` | T2 Onboarding | Provincia | Província | Province | pendente |  |
+| `onboarding.address.postalCode` | T2 Onboarding | Código postal | Código postal | Postal code | pendente |  |
+| `onboarding.address.postalCodeHelp` | T2 Onboarding | Por ejemplo C1043AAZ. | Por exemplo C1043AAZ. | For example C1043AAZ. | pendente |  |
+| `onboarding.suitability.title` | T2 Onboarding | Tu perfil de inversor | Seu perfil de investidor | Your investor profile | pendente |  |
+| `onboarding.suitability.multiHint` | T2 Onboarding | Podés elegir más de una. | Você pode escolher mais de uma. | You can choose more than one. | pendente |  |
+| `onboarding.identity.title` | T2 Onboarding | Verificá tu identidad | Verifique sua identidade | Verify your identity | pendente |  |
+| `onboarding.identity.lead` | T2 Onboarding | Vas a sacar una foto de tu DNI, de frente y de dorso, y una selfie. Lo hace un proveedor especializado. | Você vai tirar uma foto do documento, frente e verso, e uma selfie. Um fornecedor especializado faz a verificação. | You will take a photo of both sides of your ID and a selfie. A specialized provider handles the verification. | pendente |  |
+| `onboarding.identity.need` | T2 Onboarding | Tené a mano tu DNI y buscá un lugar con buena luz. | Tenha o documento em mãos e procure um lugar bem iluminado. | Have your ID at hand and find a well-lit place. | pendente |  |
+| `onboarding.identity.start` | T2 Onboarding | Empezar la verificación | Começar a verificação | Start verification | pendente |  |
+| `onboarding.identity.running` | T2 Onboarding | Estamos verificando tu identidad. | Estamos verificando sua identidade. | We are verifying your identity. | pendente |  |
+| `onboarding.identity.approved` | T2 Onboarding | Tu identidad está verificada. | Sua identidade está verificada. | Your identity is verified. | pendente |  |
+| `onboarding.identity.failed` | T2 Onboarding | No pudimos completar la verificación. Probá de nuevo. | Não conseguimos concluir a verificação. Tente de novo. | We could not complete the verification. Try again. | pendente |  |
+| `onboarding.review.title` | T2 Onboarding | Revisá tu solicitud | Revise sua solicitação | Review your application | pendente |  |
+| `onboarding.review.lead` | T2 Onboarding | Si algo no está bien, editalo antes de enviar. | Se algo não estiver certo, edite antes de enviar. | If something is not right, edit it before you submit. | pendente |  |
+| `onboarding.review.editSection` | T2 Onboarding | Editar {{section}} | Editar {{section}} | Edit {{section}} | pendente |  |
+| `onboarding.review.verified` | T2 Onboarding | Verificada | Verificada | Verified | pendente |  |
+| `onboarding.review.after` | T2 Onboarding | Cuando la envíes, la revisamos y pedimos la apertura de tu cuenta en Interactive Brokers. Suele tardar algunos días hábiles. | Depois do envio, revisamos e pedimos a abertura da sua conta na Interactive Brokers. Costuma levar alguns dias úteis. | Once you submit, we review it and request your account at Interactive Brokers. It usually takes a few business days. | pendente |  |
+| `onboarding.review.termsAccepted_one` | T2 Onboarding | {{count}} documento aceptado | {{count}} documento aceito | {{count}} document accepted | pendente |  |
+| `onboarding.review.termsAccepted_other` | T2 Onboarding | {{count}} documentos aceptados | {{count}} documentos aceitos | {{count}} documents accepted | pendente |  |
+| `pending.title` | T11 Pendências | Pendientes | Pendências | Pending | pendente |  |
+| `pending.groups.deposit_action` | T11 Pendências | Aportes | Aportes | Deposits | pendente |  |
+| `pending.groups.document` | T11 Pendências | Documentos | Documentos | Documents | pendente |  |
+| `pending.groups.terms` | T11 Pendências | Términos para aceptar | Termos para aceitar | Terms to accept | pendente |  |
+| `pending.groups.notice` | T11 Pendências | Avisos | Avisos | Notices | pendente |  |
+| `pending.due` | T11 Pendências | Hasta el {{date}} | Até {{date}} | By {{date}} | pendente |  |
+| `pending.overdue` | T11 Pendências | Venció el {{date}} | Venceu em {{date}} | Was due {{date}} | pendente |  |
+| `pending.actions.instructions` | T11 Pendências | Ver instrucciones | Ver instruções | View instructions | pendente |  |
+| `pending.actions.deposit` | T11 Pendências | Hacer el aporte | Fazer o aporte | Make the deposit | pendente |  |
+| `pending.actions.document` | T11 Pendências | Enviar documento | Enviar documento | Send document | pendente |  |
+| `pending.actions.terms` | T11 Pendências | Revisar y aceptar | Revisar e aceitar | Review and accept | pendente |  |
+| `pending.actions.notice` | T11 Pendências | Marcar como leído | Marcar como lido | Mark as read | pendente |  |
+| `pending.empty.title` | T11 Pendências | Estás al día | Você está em dia | You are all caught up | pendente |  |
+| `pending.empty.body` | T11 Pendências | No hay nada que necesite tu atención. Si Interactive Brokers o nosotros te pedimos algo, aparece acá. | Não há nada que precise da sua atenção. Se a Interactive Brokers ou nós pedirmos algo, aparece aqui. | Nothing needs your attention. If Interactive Brokers or we ask you for something, it shows up here. | pendente |  |
+| `plan.title` | T5 Plano mensal | Plan mensual | Plano mensal | Monthly plan | pendente |  |
+| `plan.intro` | T5 Plano mensal | Elegís cuánto y qué día. | Você escolhe quanto e em que dia. | You choose how much and which day. | pendente |  |
+| `plan.form.amount` | T5 Plano mensal | Valor por mes | Valor por mês | Amount per month | pendente |  |
+| `plan.form.amountHelp` | T5 Plano mensal | El mínimo es {{min}} por mes. Debajo de ese monto, los costos fijos de envío pesan demasiado sobre lo que invertís. | O mínimo é {{min}} por mês. Abaixo disso, os custos fixos de envio pesam demais sobre o que você investe. | The minimum is {{min}} a month. Below that, fixed transfer costs take too large a share of what you invest. | pendente |  |
+| `plan.form.day` | T5 Plano mensal | Día del mes | Dia do mês | Day of the month | pendente |  |
+| `plan.form.dayHelp` | T5 Plano mensal | Del 1 al 28, para que exista en todos los meses. | De 1 a 28, para existir em todos os meses. | From 1 to 28, so it exists in every month. | pendente |  |
+| `plan.form.dayOption` | T5 Plano mensal | Día {{day}} | Dia {{day}} | Day {{day}} | pendente |  |
+| `plan.form.rail` | T5 Plano mensal | Medio de envío | Meio de envio | Transfer method | pendente |  |
+| `plan.form.continue` | T5 Plano mensal | Continuar | Continuar | Continue | pendente |  |
+| `plan.form.errors.invalidAmount` | T5 Plano mensal | Escribí un valor en dólares, por ejemplo 500 o 1.250,50. | Digite um valor em dólares, por exemplo 500 ou 1.250,50. | Enter an amount in dollars, for example 500 or 1,250.50. | pendente |  |
+| `plan.form.errors.belowMinimum` | T5 Plano mensal | El mínimo mensual es {{min}}: con menos, los costos fijos de envío se llevan una parte demasiado grande. | O mínimo mensal é {{min}}: com menos, os custos fixos de envio levam uma parte grande demais. | The monthly minimum is {{min}}: with less, fixed transfer costs take too large a share. | pendente |  |
+| `plan.form.errors.invalidDay` | T5 Plano mensal | Elegí un día del 1 al 28. | Escolha um dia de 1 a 28. | Choose a day from 1 to 28. | pendente |  |
+| `plan.form.errors.invalidRail` | T5 Plano mensal | Elegí un medio de envío. | Escolha um meio de envio. | Choose a transfer method. | pendente |  |
+| `plan.review.title` | T5 Plano mensal | Revisá tu plan | Revise seu plano | Review your plan | pendente |  |
+| `plan.review.costs` | T5 Plano mensal | Costos estimados por aporte | Custos estimados por aporte | Estimated costs per deposit | pendente |  |
+| `plan.review.estimated` | T5 Plano mensal | Estimado: cada aporte usa la cotización del día en que lo hacés. | Estimado: cada aporte usa a cotação do dia em que você o faz. | Estimate: each deposit uses the rate of the day you make it. | pendente |  |
+| `plan.review.unavailable` | T5 Plano mensal | No pudimos calcular los costos de este medio de envío. Probá de nuevo. | Não conseguimos calcular os custos deste meio de envio. Tente de novo. | We could not work out the costs for this transfer method. Try again. | pendente |  |
+| `plan.review.save` | T5 Plano mensal | Guardar plan | Salvar plano | Save plan | pendente |  |
+| `plan.review.saveChanges` | T5 Plano mensal | Guardar cambios | Salvar alterações | Save changes | pendente |  |
+| `plan.review.back` | T5 Plano mensal | Volver | Voltar | Back | pendente |  |
+| `plan.summary.amount` | T5 Plano mensal | Valor por mes | Valor por mês | Amount per month | pendente |  |
+| `plan.summary.day` | T5 Plano mensal | Día | Dia | Day | pendente |  |
+| `plan.summary.dayValue` | T5 Plano mensal | {{day}} de cada mes | {{day}} de cada mês | Day {{day}} of each month | pendente |  |
+| `plan.summary.rail` | T5 Plano mensal | Medio de envío | Meio de envio | Transfer method | pendente |  |
+| `plan.summary.next` | T5 Plano mensal | Próximo aporte | Próximo aporte | Next deposit | pendente |  |
+| `plan.summary.statuses.active` | T5 Plano mensal | Activo | Ativo | Active | pendente |  |
+| `plan.summary.statuses.paused` | T5 Plano mensal | Pausado | Pausado | Paused | pendente |  |
+| `plan.actions.pause` | T5 Plano mensal | Pausar plan | Pausar plano | Pause plan | pendente |  |
+| `plan.actions.resume` | T5 Plano mensal | Retomar plan | Retomar plano | Resume plan | pendente |  |
+| `plan.actions.edit` | T5 Plano mensal | Editar plan | Editar plano | Edit plan | pendente |  |
+| `plan.actions.cancel` | T5 Plano mensal | Cancelar plan | Cancelar plano | Cancel plan | pendente |  |
+| `plan.paused` | T5 Plano mensal | Tu plan está pausado. No te vamos a avisar hasta que lo retomes. | Seu plano está pausado. Não enviaremos avisos até você retomá-lo. | Your plan is paused. We will not remind you until you resume it. | pendente |  |
+| `plan.cancelled` | T5 Plano mensal | Tu plan anterior fue cancelado. Podés crear uno nuevo. | Seu plano anterior foi cancelado. Você pode criar um novo. | Your previous plan was canceled. You can create a new one. | pendente |  |
+| `plan.noRails` | T5 Plano mensal | Todavía no hay medios de envío disponibles para tu país. | Ainda não há meios de envio disponíveis para o seu país. | There are no transfer methods for your country yet. | pendente |  |
+| `plan.cancelDialog.title` | T5 Plano mensal | ¿Cancelar el plan mensual? | Cancelar o plano mensal? | Cancel the monthly plan? | pendente |  |
+| `plan.cancelDialog.body` | T5 Plano mensal | Dejamos de avisarte cada mes. Tus aportes e inversiones no cambian. | Deixamos de enviar o aviso mensal. Seus aportes e investimentos não mudam. | We stop reminding you each month. Your deposits and investments do not change. | pendente |  |
+| `plan.cancelDialog.confirm` | T5 Plano mensal | Cancelar plan | Cancelar plano | Cancel plan | pendente |  |
+| `plan.cancelDialog.back` | T5 Plano mensal | Volver | Voltar | Back | pendente |  |
+| `plan.window` | T5 Plano mensal | Cada mes, el día que elegiste, te avisamos: «Hora de tu aporte». El dinero se invierte en la ventana mensual de inversión. | Todo mês, no dia que você escolheu, avisamos: «Hora do seu aporte». O dinheiro é investido na janela mensal de investimento. | Each month, on the day you chose, we remind you: “Time for your deposit”. The money is invested in the monthly investment window. | pendente |  |
+| `home.title` | T4 Início | Tu cuenta | Sua conta | Your account | pendente |  |
+| `home.updatedAt` | T4 Início | Actualizado el {{date}} | Atualizado em {{date}} | Updated {{date}} | pendente |  |
+| `home.splitLabel` | T4 Início | Cómo se divide | Como se divide | How it is split | pendente |  |
+| `home.pending_one` | T4 Início | Tenés {{count}} pendiente. | Você tem {{count}} pendência. | You have {{count}} pending item. | pendente |  |
+| `home.pending_other` | T4 Início | Tenés {{count}} pendientes. | Você tem {{count}} pendências. | You have {{count}} pending items. | pendente |  |
+| `home.pendingAction` | T4 Início | Ver pendientes | Ver pendências | View pending items | pendente |  |
+| `home.nextDeposit.title` | T4 Início | Próximo aporte | Próximo aporte | Next deposit | pendente |  |
+| `home.nextDeposit.on` | T4 Início | El {{date}} | Em {{date}} | On {{date}} | pendente |  |
+| `home.nextDeposit.paused` | T4 Início | Tu plan mensual está pausado. | Seu plano mensal está pausado. | Your monthly plan is paused. | pendente |  |
+| `home.nextDeposit.none` | T4 Início | Todavía no tenés un plan mensual. | Você ainda não tem um plano mensal. | You do not have a monthly plan yet. | pendente |  |
+| `home.nextDeposit.create` | T4 Início | Crear plan | Criar plano | Create plan | pendente |  |
+| `home.nextDeposit.manage` | T4 Início | Ver plan | Ver plano | View plan | pendente |  |
+| `home.inProgress.title` | T4 Início | Aportes en curso | Aportes em andamento | Deposits in progress | pendente |  |
+| `home.inProgress.none` | T4 Início | No tenés aportes en curso. | Você não tem aportes em andamento. | You have no deposits in progress. | pendente |  |
+| `home.inProgress.start` | T4 Início | Hacer un aporte | Fazer um aporte | Make a deposit | pendente |  |
+| `home.inProgress.seeAll` | T4 Início | Ver todos | Ver todos | View all | pendente |  |
+| `home.inProgress.more_one` | T4 Início | Y {{count}} más | E mais {{count}} | And {{count}} more | pendente |  |
+| `home.inProgress.more_other` | T4 Início | Y {{count}} más | E mais {{count}} | And {{count}} more | pendente |  |
+| `home.window.title` | T4 Início | Próxima ventana de inversión | Próxima janela de investimento | Next investment window | pendente |  |
+| `home.window.body` | T4 Início | El dinero que ya llegó a tu cuenta se invierte en esta ventana. Hasta entonces, puede quedar en caja en Interactive Brokers. | O dinheiro que já chegou à sua conta é investido nesta janela. Até lá, ele pode ficar em caixa na Interactive Brokers. | Money that has already reached your account is invested in this window. Until then, it may sit as cash at Interactive Brokers. | pendente |  |
+| `portfolio.title` | T4, T9 Carteira | Cartera | Carteira | Portfolio | pendente |  |
+| `portfolio.total` | T4, T9 Carteira | Total | Total | Total | pendente |  |
+| `portfolio.buckets.invested` | T4, T9 Carteira | Invertido | Investido | Invested | pendente |  |
+| `portfolio.buckets.ibkrCash` | T4, T9 Carteira | En caja en Interactive Brokers | Em caixa na Interactive Brokers | Cash at Interactive Brokers | pendente |  |
+| `portfolio.buckets.inFlight` | T4, T9 Carteira | En tránsito | Em trânsito | In transit | pendente |  |
+| `portfolio.bucketsShort.invested` | T4, T9 Carteira | Invertido | Investido | Invested | pendente |  |
+| `portfolio.bucketsShort.ibkrCash` | T4, T9 Carteira | En caja | Em caixa | Cash | pendente |  |
+| `portfolio.bucketsShort.inFlight` | T4, T9 Carteira | En tránsito | Em trânsito | In transit | pendente |  |
+| `portfolio.share` | T4, T9 Carteira | {{share}} del total | {{share}} do total | {{share}} of total | pendente |  |
+| `portfolio.fees` | T4, T9 Carteira | Costos pagados hasta hoy: {{amount}}. No forman parte del total. | Custos pagos até hoje: {{amount}}. Não fazem parte do total. | Costs paid to date: {{amount}}. Not part of the total. | pendente |  |
+| `portfolio.positions.title` | T4, T9 Carteira | Posiciones | Posições | Holdings | pendente |  |
+| `portfolio.positions.shares_one` | T4, T9 Carteira | {{count}} acción | {{count}} ação | {{count}} share | pendente |  |
+| `portfolio.positions.shares_other` | T4, T9 Carteira | {{count}} acciones | {{count}} ações | {{count}} shares | pendente |  |
+| `portfolio.positions.weight` | T4, T9 Carteira | {{current}} de la cartera · objetivo {{target}} | {{current}} da carteira · alvo {{target}} | {{current}} of portfolio · target {{target}} | pendente |  |
+| `portfolio.positions.about` | T4, T9 Carteira | Qué es este fondo | O que é este fundo | About this fund | pendente |  |
+| `portfolio.waiting` | T4, T9 Carteira | Todavía no tenés fondos comprados. La próxima ventana de inversión está prevista para el {{date}}. | Você ainda não tem fundos comprados. A próxima janela de investimento está prevista para {{date}}. | You do not own any funds yet. The next investment window is expected on {{date}}. | pendente |  |
+| `portfolio.empty.title` | T4, T9 Carteira | Todavía no tenés inversiones | Você ainda não tem investimentos | You have no investments yet | pendente |  |
+| `portfolio.empty.body` | T4, T9 Carteira | Cuando hagas tu primer aporte, acá vas a ver tus fondos y cómo se divide tu dinero. | Quando fizer seu primeiro aporte, aqui você vai ver seus fundos e como seu dinheiro se divide. | Once you make your first deposit, you will see your funds here and how your money is split. | pendente |  |
+| `portfolio.empty.action` | T4, T9 Carteira | Hacer un aporte | Fazer um aporte | Make a deposit | pendente |  |
+| `portfolio.statements` | T4, T9 Carteira | Ver extractos en Interactive Brokers | Ver extratos na Interactive Brokers | View statements at Interactive Brokers | pendente |  |
+| `portfolio.newTab` | T4, T9 Carteira | (se abre en una pestaña nueva) | (abre em uma nova aba) | (opens in a new tab) | pendente |  |
+| `profile.title` | T12 Perfil | Perfil | Perfil | Profile | pendente |  |
+| `profile.data.title` | T12 Perfil | Tus datos | Seus dados | Your details | pendente |  |
+| `profile.data.name` | T12 Perfil | Nombre | Nome | Name | pendente |  |
+| `profile.data.email` | T12 Perfil | E-mail | E-mail | Email | pendente |  |
+| `profile.data.country` | T12 Perfil | País | País | Country | pendente |  |
+| `profile.data.account` | T12 Perfil | Cuenta en Interactive Brokers | Conta na Interactive Brokers | Interactive Brokers account | pendente |  |
+| `profile.data.note` | T12 Perfil | Para cambiar estos datos, escribinos a soporte. | Para alterar estes dados, fale com o suporte. | To change these details, contact support. | pendente |  |
+| `profile.data.support` | T12 Perfil | Escribir a soporte | Falar com o suporte | Contact support | pendente |  |
+| `profile.language.title` | T12 Perfil | Idioma | Idioma | Language | pendente |  |
+| `profile.language.failed` | T12 Perfil | No pudimos guardar el idioma. Probá de nuevo. | Não conseguimos salvar o idioma. Tente de novo. | We could not save the language. Try again. | pendente |  |
+| `profile.notifications.title` | T12 Perfil | Notificaciones | Notificações | Notifications | pendente |  |
+| `profile.notifications.email` | T12 Perfil | Avisos por e-mail | Avisos por e-mail | Email notices | pendente |  |
+| `profile.notifications.push` | T12 Perfil | Avisos en este dispositivo | Avisos neste dispositivo | Notices on this device | pendente |  |
+| `profile.notifications.pushNote` | T12 Perfil | Te avisamos en cuanto esté disponible en tu dispositivo. | Avisamos assim que estiver disponível no seu dispositivo. | We will tell you as soon as it is available on your device. | pendente |  |
+| `profile.notifications.failed` | T12 Perfil | No pudimos guardar el cambio. Probá de nuevo. | Não conseguimos salvar a alteração. Tente de novo. | We could not save the change. Try again. | pendente |  |
+| `profile.investing.title` | T12 Perfil | Tu inversión | Seu investimento | Your investment | pendente |  |
+| `profile.investing.plan` | T12 Perfil | Plan mensual | Plano mensal | Monthly plan | pendente |  |
+| `profile.investing.suitability` | T12 Perfil | Perfil de inversor | Perfil de investidor | Investor profile | pendente |  |
+| `profile.investing.suitabilityDate` | T12 Perfil | Última actualización: {{date}} | Última atualização: {{date}} | Last updated: {{date}} | pendente |  |
+| `profile.terms.title` | T12 Perfil | Documentos y términos | Documentos e termos | Documents and terms | pendente |  |
+| `profile.terms.version` | T12 Perfil | Versión {{version}} | Versão {{version}} | Version {{version}} | pendente |  |
+| `profile.terms.acceptedOn` | T12 Perfil | Aceptado el {{date}} | Aceito em {{date}} | Accepted {{date}} | pendente |  |
+| `profile.terms.pending` | T12 Perfil | {{title}}: versión {{version}} para aceptar | {{title}}: versão {{version}} para aceitar | {{title}}: version {{version}} to accept | pendente |  |
+| `profile.terms.pendingAction` | T12 Perfil | Ver pendientes | Ver pendências | View pending items | pendente |  |
+| `profile.terms.none` | T12 Perfil | Todavía no aceptaste ningún documento. | Você ainda não aceitou nenhum documento. | You have not accepted any document yet. | pendente |  |
+| `profile.withdrawals.title` | T12 Perfil | Retiros y extractos | Saques e extratos | Withdrawals and statements | pendente |  |
+| `profile.withdrawals.body` | T12 Perfil | Los retiros y los extractos oficiales se hacen en Interactive Brokers. Un retiro solo puede ir a una cuenta bancaria a tu nombre. | Os saques e os extratos oficiais são feitos na Interactive Brokers. Um saque só pode ir para uma conta bancária no seu nome. | Withdrawals and official statements are handled at Interactive Brokers. A withdrawal can only go to a bank account in your name. | pendente |  |
+| `profile.withdrawals.action` | T12 Perfil | Ir a Interactive Brokers | Ir para a Interactive Brokers | Go to Interactive Brokers | pendente |  |
+| `profile.withdrawals.newTab` | T12 Perfil | (se abre en una pestaña nueva) | (abre em uma nova aba) | (opens in a new tab) | pendente |  |
+| `profile.soon.title` | T12 Perfil | Otros servicios | Outros serviços | Other services | pendente |  |
+| `profile.soon.reports` | T12 Perfil | Reportes fiscales | Relatórios fiscais | Tax reports | pendente |  |
+| `profile.soon.card` | T12 Perfil | Tarjeta de débito | Cartão de débito | Debit card | pendente |  |
+| `profile.soon.label` | T12 Perfil | Próximamente | Em breve | Coming soon | pendente |  |
+| `profile.help` | T12 Perfil | Ayuda | Ajuda | Help | pendente |  |
+| `profile.logout.action` | T12 Perfil | Cerrar sesión | Sair | Sign out | pendente |  |
+| `profile.logout.title` | T12 Perfil | ¿Cerrar sesión? | Sair da conta? | Sign out? | pendente |  |
+| `profile.logout.confirm` | T12 Perfil | Cerrar sesión | Sair | Sign out | pendente |  |
+| `profile.logout.back` | T12 Perfil | Volver | Voltar | Back | pendente |  |
+| `profile.suitability.title` | T12 Perfil de investidor | Perfil de inversor | Perfil de investidor | Investor profile | pendente |  |
+| `profile.suitability.save` | T12 Perfil de investidor | Guardar respuestas | Salvar respostas | Save answers | pendente |  |
+| `profile.suitability.back` | T12 Perfil de investidor | Volver | Voltar | Back | pendente |  |
+| `profile.suitability.saved` | T12 Perfil de investidor | Guardamos tus respuestas | Salvamos suas respostas | We saved your answers | pendente |  |
+| `profile.suitability.changed` | T12 Perfil de investidor | Las preguntas cambiaron desde tu última respuesta. Respondelas de nuevo. | As perguntas mudaram desde sua última resposta. Responda de novo. | The questions changed since your last answers. Please answer them again. | pendente |  |
+| `profile.suitability.missing_one` | T12 Perfil de investidor | Falta {{count}} respuesta. | Falta {{count}} resposta. | {{count}} answer missing. | pendente |  |
+| `profile.suitability.missing_other` | T12 Perfil de investidor | Faltan {{count}} respuestas. | Faltam {{count}} respostas. | {{count}} answers missing. | pendente |  |
+| `profile.preferences` | T12 Perfil | Preferencias | Preferências | Preferences | pendente |  |
+| `help.title` | T13 Ajuda | Ayuda | Ajuda | Help | pendente |  |
+| `help.faqTitle` | T13 Ajuda | Preguntas frecuentes | Perguntas frequentes | Frequently asked questions | pendente |  |
+| `help.supportTitle` | T13 Ajuda | Soporte | Suporte | Support | pendente |  |
+| `help.supportAction` | T13 Ajuda | Escribir a soporte | Falar com o suporte | Contact support | pendente |  |
+| `app.name` | Componentes comuns | OpenDollars | OpenDollars | OpenDollars | pendente |  |
+| `language.label` | Componentes comuns | Idioma | Idioma | Language | pendente |  |
+| `language.es` | Componentes comuns | Español | Español | Español | pendente |  |
+| `language.pt` | Componentes comuns | Português | Português | Português | pendente |  |
+| `language.en` | Componentes comuns | English | English | English | pendente |  |
+| `common.loading` | Componentes comuns | Cargando | Carregando | Loading | pendente |  |
+| `common.close` | Componentes comuns | Cerrar | Fechar | Close | pendente |  |
+| `common.optional` | Componentes comuns | opcional | opcional | optional | pendente |  |
+| `common.retry` | Componentes comuns | Reintentar | Tentar de novo | Try again | pendente |  |
+| `select.placeholder` | Componentes comuns | Elegí una opción | Escolha uma opção | Choose an option | pendente |  |
+| `copy.action` | Componentes comuns | Copiar | Copiar | Copy | pendente |  |
+| `copy.done` | Componentes comuns | Copiado | Copiado | Copied | pendente |  |
+| `copy.failed` | Componentes comuns | No se pudo copiar. Seleccioná el texto y copialo a mano. | Não foi possível copiar. Selecione o texto e copie manualmente. | Could not copy. Select the text and copy it manually. | pendente |  |
+| `stepper.progress` | Componentes comuns | Paso {{current}} de {{total}} | Etapa {{current}} de {{total}} | Step {{current}} of {{total}} | pendente |  |
+| `stepper.label` | Componentes comuns | Progreso | Progresso | Progress | pendente |  |
+| `timeline.status.done` | Componentes comuns | Completado | Concluído | Done | pendente |  |
+| `timeline.status.current` | Componentes comuns | Paso actual | Etapa atual | Current step | pendente |  |
+| `timeline.status.upcoming` | Componentes comuns | Pendiente | Pendente | Upcoming | pendente |  |
+| `timeline.status.error` | Componentes comuns | Con problema | Com problema | Needs attention | pendente |  |
+| `costs.caption` | T5, T6, T8 Tabela de custos | Costos de este aporte | Custos deste aporte | Costs of this deposit | pendente |  |
+| `costs.item` | T5, T6, T8 Tabela de custos | Concepto | Item | Item | pendente |  |
+| `costs.percent` | T5, T6, T8 Tabela de custos | Porcentaje | Percentual | Percent | pendente |  |
+| `costs.amount` | T5, T6, T8 Tabela de custos | Monto | Valor | Amount | pendente |  |
+| `costs.estimated` | T5, T6, T8 Tabela de custos | estimado | estimado | estimated | pendente |  |
+| `costs.total` | T5, T6, T8 Tabela de custos | Costo total | Custo total | Total cost | pendente |  |
+| `costs.net` | T5, T6, T8 Tabela de custos | Llega para invertir | Chega para investir | Amount to invest | pendente |  |
+| `costs.kind.iof` | T5, T6, T8 Tabela de custos | IOF | IOF | IOF | pendente |  |
+| `costs.kind.fx_spread` | T5, T6, T8 Tabela de custos | Spread cambiario | Spread de câmbio | Exchange spread | pendente |  |
+| `costs.kind.rail_fee` | T5, T6, T8 Tabela de custos | Comisión de la transferencia | Tarifa da transferência | Transfer fee | pendente |  |
+| `costs.kind.allocation_min` | T5, T6, T8 Tabela de custos | Costo de asignación | Custo de alocação | Allocation cost | pendente |  |
+| `countdown.lastMinute` | Componentes comuns | Queda menos de un minuto. | Falta menos de um minuto. | Less than a minute left. | pendente |  |
+| `countdown.expired` | Componentes comuns | El plazo venció. | O prazo terminou. | Time is up. | pendente |  |
+| `states.loading` | Estados comuns (erro, sessão, manutenção) | Cargando información | Carregando informações | Loading information | pendente |  |
+| `states.error.title` | Estados comuns (erro, sessão, manutenção) | No pudimos cargar esta información | Não conseguimos carregar estas informações | We could not load this information | pendente |  |
+| `states.error.body` | Estados comuns (erro, sessão, manutenção) | Revisá tu conexión y probá de nuevo. Tus datos no cambiaron. | Verifique sua conexão e tente de novo. Seus dados não mudaram. | Check your connection and try again. Your data has not changed. | pendente |  |
+| `states.sessionExpired.title` | Estados comuns (erro, sessão, manutenção) | Tu sesión se cerró | Sua sessão foi encerrada | Your session ended | pendente |  |
+| `states.sessionExpired.body` | Estados comuns (erro, sessão, manutenção) | Por seguridad, cerramos tu sesión después de un tiempo sin actividad. | Por segurança, encerramos a sessão depois de um tempo sem atividade. | For your security, we end the session after a period of inactivity. | pendente |  |
+| `states.sessionExpired.action` | Estados comuns (erro, sessão, manutenção) | Volver a iniciar sesión | Entrar de novo | Sign in again | pendente |  |
+| `states.maintenance.title` | Estados comuns (erro, sessão, manutenção) | Estamos haciendo mantenimiento | Estamos em manutenção | We are down for maintenance | pendente |  |
+| `states.maintenance.body` | Estados comuns (erro, sessão, manutenção) | Tu cuenta y tus inversiones siguen en Interactive Brokers, a tu nombre. | Sua conta e seus investimentos continuam na Interactive Brokers, no seu nome. | Your account and your investments remain at Interactive Brokers, in your name. | pendente |  |
+| `states.maintenance.until` | Estados comuns (erro, sessão, manutenção) | El acceso vuelve a las {{time}}. | O acesso volta às {{time}}. | Access returns at {{time}}. | pendente |  |
+| `nav.label` | Navegação | Navegación principal | Navegação principal | Main navigation | pendente |  |
+| `nav.home` | Navegação | Inicio | Início | Home | pendente |  |
+| `nav.deposit` | Navegação | Aportar | Aportar | Deposit | pendente |  |
+| `nav.portfolio` | Navegação | Cartera | Carteira | Portfolio | pendente |  |
+| `nav.pending` | Navegação | Pendientes | Pendências | Pending | pendente |  |
+| `nav.profile` | Navegação | Perfil | Perfil | Profile | pendente |  |
+| `nav.plan` | Navegação | Plan mensual | Plano mensal | Monthly plan | pendente |  |
+| `shell.skipToContent` | Navegação | Ir al contenido | Ir para o conteúdo | Skip to content | pendente |  |
+| `waitlist.title` | T1, T2 Lista de espera | Todavía no está disponible en tu país | Ainda não está disponível no seu país | Not available in your country yet | pendente |  |
+| `waitlist.body` | T1, T2 Lista de espera | Por ahora funcionamos en un piloto cerrado. Dejanos tu e-mail y te avisamos cuando abramos en tu país. | Por enquanto funcionamos em um piloto fechado. Deixe seu e-mail e avisamos quando abrirmos no seu país. | For now we run a closed pilot. Leave your email and we will let you know when we open in your country. | pendente |  |
+| `waitlist.emailLabel` | T1, T2 Lista de espera | E-mail | E-mail | Email | pendente |  |
+| `waitlist.invalidEmail` | T1, T2 Lista de espera | Escribí un e-mail válido, por ejemplo nombre@dominio.com. | Digite um e-mail válido, por exemplo nome@dominio.com. | Enter a valid email, for example name@domain.com. | pendente |  |
+| `waitlist.submit` | T1, T2 Lista de espera | Anotarme en la lista | Entrar na lista de espera | Join the waitlist | pendente |  |
+| `waitlist.done` | T1, T2 Lista de espera | Listo. Te vamos a escribir a {{email}} cuando esté disponible. | Pronto. Vamos escrever para {{email}} quando estiver disponível. | Done. We will write to {{email}} when it is available. | pendente |  |
+| `waitlist.signOut` | T1, T2 Lista de espera | Cerrar sesión | Sair | Sign out | pendente |  |
+| `session.timeout.title` | Sessão, aviso de inatividade | ¿Seguís ahí? | Você ainda está aí? | Are you still there? | pendente |  |
+| `session.timeout.body` | Sessão, aviso de inatividade | Por seguridad, vamos a cerrar tu sesión si no hay actividad. | Por segurança, vamos encerrar sua sessão se não houver atividade. | For your security, we will end your session if there is no activity. | pendente |  |
+| `session.timeout.countdownLabel` | Sessão, aviso de inatividade | La sesión se cierra en | A sessão será encerrada em | Your session ends in | pendente |  |
+| `session.timeout.stay` | Sessão, aviso de inatividade | Seguir conectado | Continuar conectado | Stay signed in | pendente |  |
+| `session.timeout.signOut` | Sessão, aviso de inatividade | Cerrar sesión | Sair | Sign out | pendente |  |
+| `notFound.title` | Página não encontrada | No encontramos esta página | Não encontramos esta página | We could not find this page | pendente |  |
+| `notFound.body` | Página não encontrada | La dirección puede estar mal escrita o la página ya no existe. | O endereço pode estar errado ou a página não existe mais. | The address may be mistyped or the page no longer exists. | pendente |  |
+| `notFound.action` | Página não encontrada | Ir al inicio | Ir para o início | Go to the home page | pendente |  |
+| `mock:etfs.IE00B5BMR087.description` | T9 Carteira (vem da API) | Sigue al S&P 500: las 500 mayores empresas de EE. UU. Reinvierte los dividendos. | Acompanha o S&P 500: as 500 maiores empresas dos EUA. Reinveste os dividendos. | Tracks the S&P 500, the 500 largest US companies. Reinvests dividends. | pendente |  |
+| `mock:etfs.IE00BK5BQT80.description` | T9 Carteira (vem da API) | Miles de empresas de mercados desarrollados y emergentes. Reinvierte los dividendos. | Milhares de empresas de mercados desenvolvidos e emergentes. Reinveste os dividendos. | Thousands of companies across developed and emerging markets. Reinvests dividends. | pendente |  |
+| `mock:etfs.IE00B4L5Y983.description` | T9 Carteira (vem da API) | Grandes y medianas empresas de 23 países desarrollados. Reinvierte los dividendos. | Empresas grandes e médias de 23 países desenvolvidos. Reinveste os dividendos. | Large and mid-size companies in 23 developed countries. Reinvests dividends. | pendente |  |
+| `mock:documentRequests.pend-address-proof.title` | T3, T11 Documentos pedidos (vem da API) | Comprobante de domicilio | Comprovante de endereço | Proof of address | pendente |  |
+| `mock:documentRequests.pend-address-proof.description` | T3, T11 Documentos pedidos (vem da API) | Interactive Brokers pide una factura de servicios de los últimos 3 meses. | A Interactive Brokers pede uma conta de consumo dos últimos 3 meses. | Interactive Brokers asks for a utility bill from the last 3 months. | pendente |  |
+| `mock:documentRequests.pend-dni-back.title` | T3, T11 Documentos pedidos (vem da API) | Foto del dorso del DNI | Foto do verso do DNI | Photo of the back of your DNI | pendente |  |
+| `mock:documentRequests.pend-dni-back.description` | T3, T11 Documentos pedidos (vem da API) | La foto anterior no se leía bien. Sacala con buena luz y sin reflejos. | A foto anterior estava ilegível. Tire com boa luz e sem reflexos. | The previous photo was not readable. Take it in good light, without glare. | pendente |  |
+| `mock:depositAction.title` | T11 Pendências (vem da API) | Enviá el dinero de tu aporte | Envie o dinheiro do seu aporte | Send the money for your deposit | pendente |  |
+| `mock:depositAction.description` | T11 Pendências (vem da API) | Seguí las instrucciones de depósito para completar el aporte. | Siga as instruções de depósito para concluir o aporte. | Follow the deposit instructions to complete it. | pendente |  |
+| `mock:windowNotice.title` | T11 Pendências (vem da API) | Próxima ventana de inversión | Próxima janela de investimento | Next investment window | pendente |  |
+| `mock:windowNotice.description` | T11 Pendências (vem da API) | La próxima ventana de inversión está prevista para el 5 de noviembre. | A próxima janela de investimento está prevista para 5 de novembro. | The next investment window is expected on November 5. | pendente |  |
+| `mock:planReminder.title` | T11 Pendências (vem da API) | Hora de tu aporte | Hora do seu aporte | Time for your deposit | pendente |  |
+| `mock:planReminder.description` | T11 Pendências (vem da API) | Tu plan mensual te recuerda el aporte de este mes. | Seu plano mensal lembra você do aporte deste mês. | Your monthly plan reminds you of this month's deposit. | pendente |  |
+| `mock:termsUpdate.description` | T11 Pendências (vem da API) | Leé los cambios y aceptalos para seguir usando tu cuenta. | Leia as mudanças e aceite-as para continuar usando sua conta. | Read the changes and accept them to keep using your account. | pendente |  |

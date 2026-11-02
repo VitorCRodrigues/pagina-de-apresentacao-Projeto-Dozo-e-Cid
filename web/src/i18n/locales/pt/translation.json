@@ -15,7 +15,7 @@
     "retry": "Tentar de novo"
   },
   "select": {
-    "placeholder": "Escolher uma opção"
+    "placeholder": "Escolha uma opção"
   },
   "copy": {
     "action": "Copiar",
@@ -58,7 +58,7 @@
     "loading": "Carregando informações",
     "error": {
       "title": "Não conseguimos carregar estas informações",
-      "body": "Pode ser um problema de conexão. Seus dados não mudaram."
+      "body": "Verifique sua conexão e tente de novo. Seus dados não mudaram."
     },
     "sessionExpired": {
       "title": "Sua sessão foi encerrada",
@@ -75,7 +75,6 @@
     "default": "Investimentos têm risco. Resultados passados não garantem resultados futuros."
   },
   "dev": {
-    "placeholder": "Esta tela chega em uma próxima etapa.",
     "scenarios": {
       "label": "Cenário de teste",
       "groups": {
@@ -107,7 +106,7 @@
     "signInError": "Não conseguimos entrar. Tente de novo."
   },
   "waitlist": {
-    "title": "Ainda não disponível no seu país",
+    "title": "Ainda não está disponível no seu país",
     "body": "Por enquanto funcionamos em um piloto fechado. Deixe seu e-mail e avisamos quando abrirmos no seu país.",
     "emailLabel": "E-mail",
     "invalidEmail": "Digite um e-mail válido, por exemplo nome@dominio.com.",
@@ -136,7 +135,7 @@
     "account_not_open": "Sua conta ainda não está aberta.",
     "account_restricted": "Sua conta precisa de atenção. Fale com o suporte.",
     "compliance_hold": "Não é possível fazer esta operação no momento. Fale com o suporte.",
-    "market_not_live": "Ainda não disponível no seu país.",
+    "market_not_live": "Ainda não está disponível no seu país.",
     "idempotency_conflict": "Esta operação já foi enviada. Confira seus aportes antes de repetir.",
     "not_found": "Não encontramos o que você procurava.",
     "session_expired": "Sua sessão foi encerrada. Entre de novo.",
@@ -168,7 +167,7 @@
       "action": "Ver a data prevista"
     },
     "market_not_live": {
-      "message": "Ainda não disponível no seu país.",
+      "message": "Ainda não está disponível no seu país.",
       "action": "Entrar na lista de espera"
     }
   },

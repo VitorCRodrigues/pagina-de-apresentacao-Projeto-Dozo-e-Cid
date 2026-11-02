@@ -7,8 +7,8 @@
       "email": "E-mail",
       "country": "País",
       "account": "Conta na Interactive Brokers",
-      "note": "Para alterar estes dados, escreva para o suporte.",
-      "support": "Escrever para o suporte"
+      "note": "Para alterar estes dados, fale com o suporte.",
+      "support": "Falar com o suporte"
     },
     "language": {
       "title": "Idioma",
@@ -70,7 +70,7 @@
     "title": "Ajuda",
     "faqTitle": "Perguntas frequentes",
     "supportTitle": "Suporte",
-    "supportAction": "Escrever para o suporte",
+    "supportAction": "Falar com o suporte",
     "questions": {
       "custody": {
         "q": "Quem guarda meu dinheiro?",
@@ -94,7 +94,7 @@
       },
       "wrongNetwork": {
         "q": "O que faço se enviei pela rede errada?",
-        "a": "Escreva para o suporte na hora, com os dados do envio. Rede errada pode significar perda dos fundos: não podemos garantir a recuperação, mas vamos analisar seu caso."
+        "a": "Fale com o suporte imediatamente, com os dados do envio. Rede errada pode significar perda dos fundos: não podemos garantir a recuperação, mas vamos analisar seu caso."
       },
       "withdraw": {
         "q": "Como saco meu dinheiro?",

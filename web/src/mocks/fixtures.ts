@@ -141,9 +141,9 @@ export const windowNotice = {
     en: "Next investment window",
   },
   description: {
-    es: "El dinero en caja se invierte el 5 de noviembre.",
-    pt: "O dinheiro em caixa é investido em 5 de novembro.",
-    en: "Cash in your account is invested on November 5.",
+    es: "La próxima ventana de inversión está prevista para el 5 de noviembre.",
+    pt: "A próxima janela de investimento está prevista para 5 de novembro.",
+    en: "The next investment window is expected on November 5.",
   },
 } as const satisfies { title: Localized; description: Localized };
 
@@ -156,7 +156,7 @@ export const planReminder = {
   },
   description: {
     es: "Tu plan mensual te recuerda el aporte de este mes.",
-    pt: "Seu plano mensal lembra o aporte deste mês.",
+    pt: "Seu plano mensal lembra você do aporte deste mês.",
     en: "Your monthly plan reminds you of this month's deposit.",
   },
 } as const satisfies { title: Localized; description: Localized };
@@ -176,9 +176,9 @@ export const termsUpdate = {
 
 export const returnReasons = {
   thirdParty: {
-    es: "La transferencia salió de una cuenta que no está a tu nombre. El agente de cambio autorizado devuelve el dinero a la cuenta de origen.",
-    pt: "A transferência saiu de uma conta que não está no seu nome. O parceiro de câmbio devolve o dinheiro à conta de origem.",
-    en: "The transfer came from an account that is not in your name. The exchange partner returns the money to the source account.",
+    es: "La transferencia salió de una cuenta que no está a tu nombre. El socio de cambio licenciado devuelve el dinero a la cuenta de origen.",
+    pt: "A transferência saiu de uma conta que não está no seu nome. O parceiro de câmbio licenciado devolve o dinheiro à conta de origem.",
+    en: "The transfer came from an account that is not in your name. The licensed exchange partner returns the money to the source account.",
   },
 } as const satisfies Record<string, Localized>;
 
@@ -305,7 +305,7 @@ export const termsDocuments = [
   {
     id: "terms-costs",
     kind: "cost_disclosure" as const,
-    title: { es: "Divulgación de costos", pt: "Divulgação de custos", en: "Cost disclosure" },
+    title: { es: "Detalle de costos", pt: "Detalhamento de custos", en: "Cost disclosure" },
   },
   {
     id: "terms-privacy",

@@ -9,30 +9,29 @@
       "actionNote": "Documents are missing. See the list below."
     },
     "title": {
-      "draft": "Your application isn't finished",
+      "draft": "Your application is not finished",
       "submitted": "We received your application",
       "kyc_review": "We are verifying your identity",
       "ibkr_pending": "Interactive Brokers is reviewing your account",
       "action_required": "Interactive Brokers needs documents",
       "open": "Your account is open",
-      "rejected": "We couldn't open your account",
+      "rejected": "We could not open your account",
       "restricted": "Your account needs attention"
     },
     "body": {
       "draft": "Pick up where you left off: we saved every step.",
-      "waiting": "It usually takes a few business days. We'll email you when there's news.",
+      "waiting": "It usually takes a few business days. We will email you when there is news.",
       "action_required": "To continue opening your account, send these documents. Interactive Brokers asks for them.",
       "open": "Your Interactive Brokers account is now in your name. The next step is to create your monthly plan.",
-      "rejected": "We reviewed your application and can't open the account at this time. If you have questions, write to us.",
-      "restricted": "For now you can't make deposits. Your investments remain at Interactive Brokers, in your name. Write to us to sort it out."
+      "rejected": "We reviewed your application and cannot open the account at this time. If you have questions, contact support.",
+      "restricted": "For now you cannot make deposits. Your investments remain at Interactive Brokers, in your name. Contact support to resolve this."
     },
     "actions": {
       "continue": "Continue the application",
       "createPlan": "Create monthly plan",
-      "contact": "Write to support"
+      "contact": "Contact support"
     },
     "accountNumber": "Account number",
-    "supportEmail": "Support email",
     "upload": {
       "choose": "Choose file",
       "change": "Choose another file",
@@ -44,7 +43,7 @@
       "wrongType": "Use a JPG, PNG or PDF file.",
       "empty": "The file is empty."
     },
-    "allSent": "We received every document. Interactive Brokers reviews them and we'll email you.",
+    "allSent": "We received every document. Interactive Brokers reviews them and we will email you.",
     "documents": "Requested documents"
   }
 }

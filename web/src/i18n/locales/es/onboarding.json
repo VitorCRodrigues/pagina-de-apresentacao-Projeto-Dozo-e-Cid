@@ -73,7 +73,7 @@
     },
     "funds": {
       "title": "Origen de los fondos",
-      "lead": "Dos preguntas que nos pide la ley antes de abrir una cuenta de inversión.",
+      "lead": "Dos preguntas necesarias para abrir una cuenta de inversión.",
       "occupation": "Ocupación",
       "occupations": {
         "employee": "Empleado en relación de dependencia",
@@ -84,7 +84,7 @@
         "other": "Otra"
       },
       "source": "¿De dónde viene el dinero que vas a invertir?",
-      "sourceWhy": "Lo preguntamos porque la ley nos pide conocer el origen del dinero que se invierte.",
+      "sourceWhy": "Lo preguntamos por las normas de prevención de lavado de dinero, que piden conocer el origen de lo que se invierte.",
       "sources": {
         "salary": "Sueldo",
         "business": "Ingresos de mi actividad o empresa",

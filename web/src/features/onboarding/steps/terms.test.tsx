@@ -6,7 +6,7 @@ import { draftAt, savedSteps } from "./test-helpers";
 
 const titles = [
   "Contrato de asesoría",
-  "Divulgación de costos",
+  "Detalle de costos",
   "Política de privacidad",
   "Consentimiento para enviar tus datos a Interactive Brokers",
 ];

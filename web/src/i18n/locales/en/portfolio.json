@@ -10,7 +10,7 @@
       "title": "Next deposit",
       "on": "On {{date}}",
       "paused": "Your monthly plan is paused.",
-      "none": "You don't have a monthly plan yet.",
+      "none": "You do not have a monthly plan yet.",
       "create": "Create plan",
       "manage": "View plan"
     },
@@ -24,7 +24,7 @@
     },
     "window": {
       "title": "Next investment window",
-      "body": "Money that arrives before this date is invested on that day. Until then, it stays in your Interactive Brokers account."
+      "body": "Money that has already reached your account is invested in this window. Until then, it may sit as cash at Interactive Brokers."
     }
   },
   "portfolio": {
@@ -48,12 +48,12 @@
       "shares_one": "{{count}} share",
       "shares_other": "{{count}} shares",
       "weight": "{{current}} of portfolio · target {{target}}",
-      "about": "What this fund is"
+      "about": "About this fund"
     },
-    "waiting": "You don't own any funds yet. Your money is invested in the next investment window, on {{date}}.",
+    "waiting": "You do not own any funds yet. The next investment window is expected on {{date}}.",
     "empty": {
       "title": "You have no investments yet",
-      "body": "Once you make your first deposit, you'll see your funds here and how your money is split.",
+      "body": "Once you make your first deposit, you will see your funds here and how your money is split.",
       "action": "Make a deposit"
     },
     "statements": "View statements at Interactive Brokers",

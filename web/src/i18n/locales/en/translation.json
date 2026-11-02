@@ -41,7 +41,7 @@
     "amount": "Amount",
     "estimated": "estimated",
     "total": "Total cost",
-    "net": "Arrives to invest",
+    "net": "Amount to invest",
     "kind": {
       "iof": "IOF",
       "fx_spread": "Exchange spread",
@@ -58,7 +58,7 @@
     "loading": "Loading information",
     "error": {
       "title": "We could not load this information",
-      "body": "It may be a connection problem. Your data has not changed."
+      "body": "Check your connection and try again. Your data has not changed."
     },
     "sessionExpired": {
       "title": "Your session ended",
@@ -66,7 +66,7 @@
       "action": "Sign in again"
     },
     "maintenance": {
-      "title": "We are doing maintenance",
+      "title": "We are down for maintenance",
       "body": "Your account and your investments remain at Interactive Brokers, in your name.",
       "until": "Access returns at {{time}}."
     }
@@ -75,7 +75,6 @@
     "default": "Investing involves risk. Past performance does not guarantee future results."
   },
   "dev": {
-    "placeholder": "This screen arrives in a later stage.",
     "scenarios": {
       "label": "Test scenario",
       "groups": {
@@ -91,7 +90,7 @@
     "home": "Home",
     "deposit": "Deposit",
     "portfolio": "Portfolio",
-    "pending": "To do",
+    "pending": "Pending",
     "profile": "Profile",
     "plan": "Monthly plan"
   },
@@ -127,7 +126,7 @@
   "notFound": {
     "title": "We could not find this page",
     "body": "The address may be mistyped or the page no longer exists.",
-    "action": "Go to the start"
+    "action": "Go to the home page"
   },
   "errors": {
     "validation_failed": "Check the details and try again.",
@@ -136,11 +135,11 @@
     "account_not_open": "Your account is not open yet.",
     "account_restricted": "Your account needs attention. Contact support.",
     "compliance_hold": "This operation is not possible right now. Contact support.",
-    "market_not_live": "Not available in your country yet.",
+    "market_not_live": "This is not available in your country yet.",
     "idempotency_conflict": "This operation was already sent. Check your deposits before repeating it.",
     "not_found": "We could not find what you were looking for.",
     "session_expired": "Your session ended. Sign in again.",
-    "maintenance": "We are doing maintenance. Try again in a few minutes.",
+    "maintenance": "We are down for maintenance. Try again in a few minutes.",
     "rate_limited": "Too many attempts in a row. Wait a moment and try again.",
     "internal": "Something went wrong on our side. Try again.",
     "network": "No connection. Check your internet and try again.",
@@ -168,7 +167,7 @@
       "action": "See the expected date"
     },
     "market_not_live": {
-      "message": "Not available in your country yet.",
+      "message": "This is not available in your country yet.",
       "action": "Join the waitlist"
     }
   },

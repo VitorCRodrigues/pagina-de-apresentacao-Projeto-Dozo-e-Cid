@@ -22,10 +22,10 @@ describe("onboarding step 5, source of funds and PEP", () => {
     await open();
     expect(
       screen.getByText(
-        "Lo preguntamos porque la ley nos pide conocer el origen del dinero que se invierte.",
+        "Lo preguntamos por las normas de prevención de lavado de dinero, que piden conocer el origen de lo que se invierte.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText(/normas de prevención de lavado de dinero/)).toBeInTheDocument();
+    expect(screen.getByText(/ocupa u ocupó un cargo público/)).toBeInTheDocument();
   });
 
   it("asks for the office only after Sí, and requires it then", async () => {

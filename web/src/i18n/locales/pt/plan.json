@@ -43,15 +43,15 @@
       "edit": "Editar plano",
       "cancel": "Cancelar plano"
     },
-    "paused": "Seu plano está pausado. Não vamos avisar até você retomá-lo.",
+    "paused": "Seu plano está pausado. Não enviaremos avisos até você retomá-lo.",
     "cancelled": "Seu plano anterior foi cancelado. Você pode criar um novo.",
     "noRails": "Ainda não há meios de envio disponíveis para o seu país.",
     "cancelDialog": {
       "title": "Cancelar o plano mensal?",
-      "body": "Deixamos de avisar todo mês. Seus aportes e investimentos não mudam.",
+      "body": "Deixamos de enviar o aviso mensal. Seus aportes e investimentos não mudam.",
       "confirm": "Cancelar plano",
       "back": "Voltar"
     },
-    "window": "O dinheiro é investido na janela mensal de investimento, e nesse dia avisamos: «Hora do seu aporte»."
+    "window": "Todo mês, no dia que você escolheu, avisamos: «Hora do seu aporte». O dinheiro é investido na janela mensal de investimento."
   }
 }

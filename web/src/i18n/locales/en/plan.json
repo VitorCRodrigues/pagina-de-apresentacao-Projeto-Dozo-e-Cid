@@ -4,7 +4,7 @@
     "intro": "You choose how much and which day.",
     "form": {
       "amount": "Amount per month",
-      "amountHelp": "The minimum is {{min}} a month. Below that, fixed transfer costs weigh too much on what you invest.",
+      "amountHelp": "The minimum is {{min}} a month. Below that, fixed transfer costs take too large a share of what you invest.",
       "day": "Day of the month",
       "dayHelp": "From 1 to 28, so it exists in every month.",
       "dayOption": "Day {{day}}",
@@ -21,7 +21,7 @@
       "title": "Review your plan",
       "costs": "Estimated costs per deposit",
       "estimated": "Estimate: each deposit uses the rate of the day you make it.",
-      "unavailable": "We couldn't work out the costs for this transfer method. Try again.",
+      "unavailable": "We could not work out the costs for this transfer method. Try again.",
       "save": "Save plan",
       "saveChanges": "Save changes",
       "back": "Back"
@@ -43,15 +43,15 @@
       "edit": "Edit plan",
       "cancel": "Cancel plan"
     },
-    "paused": "Your plan is paused. We won't remind you until you resume it.",
-    "cancelled": "Your previous plan was cancelled. You can create a new one.",
+    "paused": "Your plan is paused. We will not remind you until you resume it.",
+    "cancelled": "Your previous plan was canceled. You can create a new one.",
     "noRails": "There are no transfer methods for your country yet.",
     "cancelDialog": {
       "title": "Cancel the monthly plan?",
-      "body": "We stop reminding you each month. Your deposits and investments don't change.",
+      "body": "We stop reminding you each month. Your deposits and investments do not change.",
       "confirm": "Cancel plan",
       "back": "Back"
     },
-    "window": "The money is invested in the monthly investment window, and on that day we remind you: “Time for your deposit”."
+    "window": "Each month, on the day you chose, we remind you: “Time for your deposit”. The money is invested in the monthly investment window."
   }
 }

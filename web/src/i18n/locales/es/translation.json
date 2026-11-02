@@ -75,7 +75,6 @@
     "default": "Invertir implica riesgos. Los resultados pasados no garantizan resultados futuros."
   },
   "dev": {
-    "placeholder": "Esta pantalla llega en una próxima etapa.",
     "scenarios": {
       "label": "Escenario de prueba",
       "groups": {

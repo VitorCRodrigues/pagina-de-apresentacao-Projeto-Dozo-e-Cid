@@ -81,7 +81,7 @@ describe("pending items (T11)", () => {
     const [first, second] = await screen.findAllByRole("link", { name: "Ver instrucciones" });
     expect(first?.className).toMatch(/\bbg-navy-900\b/);
     expect(second?.className).not.toMatch(/\bbg-navy-900\b/);
-    expect(screen.getByRole("button", { name: "Entendido" }).className).not.toMatch(
+    expect(screen.getByRole("button", { name: "Marcar como leído" }).className).not.toMatch(
       /\bbg-navy-900\b/,
     );
   });
@@ -201,9 +201,9 @@ describe("pending items (T11)", () => {
   it("a notice leaves the list once read", async () => {
     const user = userEvent.setup();
     await open("open");
-    await user.click(await screen.findByRole("button", { name: "Entendido" }));
+    await user.click(await screen.findByRole("button", { name: "Marcar como leído" }));
     await waitFor(() => {
-      expect(screen.queryByRole("button", { name: "Entendido" })).toBeNull();
+      expect(screen.queryByRole("button", { name: "Marcar como leído" })).toBeNull();
     });
   });
 

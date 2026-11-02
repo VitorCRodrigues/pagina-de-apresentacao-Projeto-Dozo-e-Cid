@@ -7,19 +7,19 @@
       "email": "Email",
       "country": "Country",
       "account": "Interactive Brokers account",
-      "note": "To change these details, write to support.",
-      "support": "Write to support"
+      "note": "To change these details, contact support.",
+      "support": "Contact support"
     },
     "language": {
       "title": "Language",
-      "failed": "We couldn't save the language. Try again."
+      "failed": "We could not save the language. Try again."
     },
     "notifications": {
       "title": "Notifications",
       "email": "Email notices",
       "push": "Notices on this device",
-      "pushNote": "We'll tell you as soon as it's available on your device.",
-      "failed": "We couldn't save the change. Try again."
+      "pushNote": "We will tell you as soon as it is available on your device.",
+      "failed": "We could not save the change. Try again."
     },
     "investing": {
       "title": "Your investment",
@@ -33,7 +33,7 @@
       "acceptedOn": "Accepted {{date}}",
       "pending": "{{title}}: version {{version}} to accept",
       "pendingAction": "View pending items",
-      "none": "You haven't accepted any document yet."
+      "none": "You have not accepted any document yet."
     },
     "withdrawals": {
       "title": "Withdrawals and statements",
@@ -70,7 +70,7 @@
     "title": "Help",
     "faqTitle": "Frequently asked questions",
     "supportTitle": "Support",
-    "supportAction": "Write to support",
+    "supportAction": "Contact support",
     "questions": {
       "custody": {
         "q": "Who holds my money?",
@@ -78,7 +78,7 @@
       },
       "cost": {
         "q": "How much does it cost?",
-        "a": "Before you confirm each deposit you see every cost, line by line, and how much arrives to invest. The details are in the terms."
+        "a": "Before you confirm each deposit you see every cost, line by line, and how much is left to invest. The details are in the terms."
       },
       "minimum": {
         "q": "Why is there a monthly minimum?",
@@ -94,7 +94,7 @@
       },
       "wrongNetwork": {
         "q": "What do I do if I sent on the wrong network?",
-        "a": "Write to support right away with the transfer details. A wrong network can mean losing the funds: we can't assure you they will be recovered, but we will review your case."
+        "a": "Contact support right away with the transfer details. A wrong network can mean losing the funds: we cannot assure you they will be recovered, but we will review your case."
       },
       "withdraw": {
         "q": "How do I take my money out?",

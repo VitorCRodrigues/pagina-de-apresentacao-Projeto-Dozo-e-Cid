@@ -24,7 +24,7 @@
     },
     "window": {
       "title": "Próxima janela de investimento",
-      "body": "O dinheiro que chega antes dessa data é investido nesse dia. Até lá, ele fica na sua conta na Interactive Brokers."
+      "body": "O dinheiro que já chegou à sua conta é investido nesta janela. Até lá, ele pode ficar em caixa na Interactive Brokers."
     }
   },
   "portfolio": {
@@ -50,7 +50,7 @@
       "weight": "{{current}} da carteira · alvo {{target}}",
       "about": "O que é este fundo"
     },
-    "waiting": "Você ainda não tem fundos comprados. Seu dinheiro é investido na próxima janela de investimento, em {{date}}.",
+    "waiting": "Você ainda não tem fundos comprados. A próxima janela de investimento está prevista para {{date}}.",
     "empty": {
       "title": "Você ainda não tem investimentos",
       "body": "Quando fizer seu primeiro aporte, aqui você vai ver seus fundos e como seu dinheiro se divide.",

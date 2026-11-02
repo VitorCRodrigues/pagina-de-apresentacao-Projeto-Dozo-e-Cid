@@ -38,8 +38,8 @@
       "lead": "For now we open accounts for people who live in Argentina.",
       "country": "Country of residence",
       "nationality": "Nationality",
-      "waitlistTitle": "We don't open accounts in {{country}} yet",
-      "waitlistBody": "We are in a closed pilot in Argentina. Leave your email and we'll let you know when we open in your country.",
+      "waitlistTitle": "We do not open accounts in {{country}} yet",
+      "waitlistBody": "We are in a closed pilot in Argentina. Leave your email and we will let you know when we open in your country.",
       "changeCountry": "Change the country"
     },
     "personal": {
@@ -73,7 +73,7 @@
     },
     "funds": {
       "title": "Source of funds",
-      "lead": "Two questions the law requires before opening an investment account.",
+      "lead": "Two questions needed to open an investment account.",
       "occupation": "Occupation",
       "occupations": {
         "employee": "Employee",
@@ -84,7 +84,7 @@
         "other": "Other"
       },
       "source": "Where does the money you will invest come from?",
-      "sourceWhy": "We ask because the law requires us to know where invested money comes from.",
+      "sourceWhy": "We ask because of anti-money-laundering rules, which call for knowing where invested money comes from.",
       "sources": {
         "salary": "Salary",
         "business": "Income from my work or business",
@@ -102,12 +102,12 @@
     },
     "identity": {
       "title": "Verify your identity",
-      "lead": "You'll take a photo of both sides of your ID and a selfie. A specialised provider handles it.",
+      "lead": "You will take a photo of both sides of your ID and a selfie. A specialized provider handles the verification.",
       "need": "Have your ID at hand and find a well-lit place.",
       "start": "Start verification",
       "running": "We are verifying your identity.",
       "approved": "Your identity is verified.",
-      "failed": "We couldn't complete the verification. Try again."
+      "failed": "We could not complete the verification. Try again."
     },
     "terms": {
       "title": "Terms and consents",
@@ -118,7 +118,7 @@
     },
     "review": {
       "title": "Review your application",
-      "lead": "If something isn't right, edit it before you submit.",
+      "lead": "If something is not right, edit it before you submit.",
       "editSection": "Edit {{section}}",
       "verified": "Verified",
       "after": "Once you submit, we review it and request your account at Interactive Brokers. It usually takes a few business days.",

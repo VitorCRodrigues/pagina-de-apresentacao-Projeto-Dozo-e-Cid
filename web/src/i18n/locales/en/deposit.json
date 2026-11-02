@@ -8,19 +8,19 @@
     },
     "steps": {
       "amount": "Amount",
-      "rail": "Payment method",
+      "rail": "Transfer method",
       "preview": "Review"
     },
     "amount": {
       "title": "How much do you want to deposit?",
       "label": "Amount in dollars",
-      "help": "The minimum is {{min}}. Below it, fixed sending costs weigh too much on what you invest.",
+      "help": "The minimum is {{min}}. Below it, fixed transfer costs take too large a share of what you invest.",
       "invalidAmount": "Enter an amount in dollars, for example 500 or 1,250.50.",
       "belowMinimum": "The minimum is {{min}}: with less, fixed costs take too large a share."
     },
     "rail": {
       "title": "How will you send the money?",
-      "label": "Payment method",
+      "label": "Transfer method",
       "names": {
         "ar_usdc": "USDC from an exchange",
         "ar_swift": "SWIFT bank transfer",
@@ -34,8 +34,8 @@
     },
     "preview": {
       "title": "Review your deposit",
-      "lead": "This is what sending {{amount}} costs and what arrives to invest.",
-      "net": "Arrives to invest",
+      "lead": "This is what sending {{amount}} costs and how much is left to invest.",
+      "net": "Amount to invest",
       "countdown": "The quote expires in",
       "expired": "The quote expired",
       "expiredBody": "Costs may have changed. Get a new quote to continue.",
@@ -46,7 +46,7 @@
     "actions": {
       "continue": "Continue",
       "back": "Back",
-      "support": "Write to support",
+      "support": "Contact support",
       "followUp": "See your account status"
     },
     "state": {
@@ -55,7 +55,7 @@
       "deposit_notified": "Waiting for your deposit",
       "partner_collected": "We received your money",
       "partner_collected_usdc": "USDC received",
-      "fx_executed": "Exchange done",
+      "fx_executed": "Exchange completed",
       "wire_sent": "Transfer sent",
       "broker_credited": "Money in your account",
       "invested": "Invested",
@@ -68,17 +68,16 @@
       "costs": "Costs",
       "credited": "Credited to your account",
       "invested": "Invested",
-      "rail": "Payment method",
       "quote": "Quote used",
-      "window": "Your money waits in your Interactive Brokers account until the next investment window, on {{date}}. We invest once a month.",
+      "window": "Your money waits in your Interactive Brokers account until the next investment window, expected on {{date}}. We invest once a month.",
       "overdue": "This step is taking longer than usual.",
-      "overdueBody": "You don't need to do anything. If you like, write to us and we'll check.",
+      "overdueBody": "You do not need to do anything. If you like, contact support and we will check.",
       "returned": "We returned this deposit",
-      "refund": "The money goes back to the source account. Timing and costs of the return depend on the payment method.",
+      "refund": "The money goes back to the source account. Timing and costs of the return depend on the transfer method.",
       "hold": "Your deposit is in a security period",
-      "holdBody": "It continues when it ends, around {{date}}.",
+      "holdBody": "It resumes when the period ends, around {{date}}.",
       "blocked": "Deposit instructions are not available while your account needs attention.",
-      "notFound": "We couldn't find this deposit"
+      "notFound": "We could not find this deposit"
     },
     "instructions": {
       "title": "How to send the money",
@@ -92,7 +91,7 @@
         "memoNote": "If your exchange asks for a memo or tag, copy it from here.",
         "qr": "QR code of the deposit address",
         "warning": "Send only USDC on this network. Another token or network may result in losing the money.",
-        "usdt": "Have USDT? Convert it to USDC on your exchange before sending.",
+        "usdt": "Do you have USDT? Convert it to USDC on your exchange before sending.",
         "testSend": "This is your first deposit: we suggest sending a small test amount first and, once it is credited, the rest."
       },
       "wire": {
@@ -101,14 +100,14 @@
         "bank": "Bank",
         "swift": "SWIFT/BIC",
         "reference": "Reference",
-        "referenceNote": "Required. Enter it exactly in the transfer's reference field: without it we can't identify your money.",
+        "referenceNote": "Required. Enter it exactly in the transfer's reference field: without it we cannot identify your money.",
         "ownAccount": "The transfer must come from an account in your name. If it comes from someone else's account, it is returned.",
         "bankFees": "Your bank may charge its own fees for international transfers."
       },
       "sent": {
-        "action": "I've sent it",
-        "help": "Lets our team know. The status changes when the money arrives.",
-        "done": "We told the team. We'll write when we receive it."
+        "action": "I have sent it",
+        "help": "This lets our team know. The status changes when the money arrives.",
+        "done": "We let the team know. We will write when we receive it."
       }
     },
     "history": {

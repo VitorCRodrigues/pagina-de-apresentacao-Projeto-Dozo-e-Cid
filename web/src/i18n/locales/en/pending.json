@@ -14,10 +14,10 @@
       "deposit": "Make the deposit",
       "document": "Send document",
       "terms": "Review and accept",
-      "notice": "Got it"
+      "notice": "Mark as read"
     },
     "empty": {
-      "title": "You're all caught up",
+      "title": "You are all caught up",
       "body": "Nothing needs your attention. If Interactive Brokers or we ask you for something, it shows up here."
     },
     "terms": {
@@ -26,7 +26,7 @@
       "accept": "I have read and accept “{{title}}”",
       "confirm": "Accept",
       "back": "Back",
-      "missing": "We couldn't find this document. Try again later."
+      "missing": "We could not find this document. Try again later."
     }
   }
 }

@@ -15,14 +15,14 @@
       "title": "Quanto você quer aportar?",
       "label": "Valor em dólares",
       "help": "O mínimo é {{min}}. Abaixo desse valor, os custos fixos de envio pesam demais sobre o que você investe.",
-      "invalidAmount": "Escreva um valor em dólares, por exemplo 500 ou 1.250,50.",
+      "invalidAmount": "Digite um valor em dólares, por exemplo 500 ou 1.250,50.",
       "belowMinimum": "O mínimo é {{min}}: com menos, os custos fixos levam uma parte grande demais."
     },
     "rail": {
       "title": "Como você vai enviar o dinheiro?",
       "label": "Meio de envio",
       "names": {
-        "ar_usdc": "USDC a partir de uma exchange",
+        "ar_usdc": "USDC de uma exchange",
         "ar_swift": "Transferência bancária SWIFT",
         "br_efx": "Pix com parceiro de câmbio",
         "br_fxbank": "Banco de câmbio"
@@ -38,7 +38,7 @@
       "net": "Chega para investir",
       "countdown": "A cotação vence em",
       "expired": "A cotação venceu",
-      "expiredBody": "Os custos podem ter mudado. Gere uma nova cotação para seguir.",
+      "expiredBody": "Os custos podem ter mudado. Gere uma nova cotação para continuar.",
       "newQuote": "Gerar nova cotação",
       "confirm": "Confirmar aporte",
       "next": "Depois de confirmar mostramos como enviar o dinheiro."
@@ -46,7 +46,7 @@
     "actions": {
       "continue": "Continuar",
       "back": "Voltar",
-      "support": "Escrever para o suporte",
+      "support": "Falar com o suporte",
       "followUp": "Ver o status da sua conta"
     },
     "state": {
@@ -68,15 +68,14 @@
       "costs": "Custos",
       "credited": "Creditado na sua conta",
       "invested": "Investido",
-      "rail": "Meio de envio",
       "quote": "Cotação usada",
-      "window": "Seu dinheiro aguarda na sua conta da Interactive Brokers até a próxima janela de investimento, em {{date}}. Investimos uma vez por mês.",
+      "window": "Seu dinheiro aguarda na sua conta da Interactive Brokers até a próxima janela de investimento, prevista para {{date}}. Investimos uma vez por mês.",
       "overdue": "Esta etapa está demorando mais que o normal.",
-      "overdueBody": "Você não precisa fazer nada. Se quiser, escreva para nós e verificamos.",
+      "overdueBody": "Você não precisa fazer nada. Se quiser, fale com o suporte e verificamos.",
       "returned": "Devolvemos este depósito",
       "refund": "O dinheiro volta para a conta de origem. O prazo e os custos da devolução dependem do meio de envio.",
       "hold": "Seu aporte está em período de segurança",
-      "holdBody": "Ele segue quando terminar, por volta de {{date}}.",
+      "holdBody": "O aporte continua quando o período terminar, por volta de {{date}}.",
       "blocked": "As instruções de depósito não estão disponíveis enquanto sua conta precisa de atenção.",
       "notFound": "Não encontramos este aporte"
     },
@@ -107,8 +106,8 @@
       },
       "sent": {
         "action": "Já enviei",
-        "help": "Avisa nossa equipe. O status muda quando o dinheiro chega.",
-        "done": "Avisamos a equipe. Escrevemos quando recebermos."
+        "help": "Isso avisa nossa equipe. O status muda quando o dinheiro chegar.",
+        "done": "Avisamos a equipe. Entraremos em contato quando recebermos."
       }
     },
     "history": {

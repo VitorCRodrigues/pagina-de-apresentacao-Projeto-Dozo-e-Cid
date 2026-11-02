@@ -3,8 +3,11 @@ import type {
   CreateDepositRequest,
   CreatePlanRequest,
   OnboardingStep,
+  NotificationPrefs,
   QuoteRequest,
+  SaveSuitabilityRequest,
   TermsAcceptance,
+  UpdateMeRequest,
   UpdatePlanRequest,
   WaitlistRequest,
 } from "./proposed-types";
@@ -124,6 +127,27 @@ export function acceptTerms(api: ApiClient, body: TermsAcceptance) {
 // A notice the client has read ("Entendido") leaves the list (docs/api-gaps.md, item 1).
 export function markNotificationRead(api: ApiClient, id: string) {
   return api.request("POST", `/notifications/${encodeURIComponent(id)}/read`);
+}
+
+// The language saved on the account (docs/api-gaps.md, item 1).
+export function updateMe(api: ApiClient, body: UpdateMeRequest) {
+  return api.request("PATCH", "/me", { body, response: "me" });
+}
+
+export function getNotificationPrefs(api: ApiClient) {
+  return api.request("GET", "/me/notifications", { response: "notificationPrefs" });
+}
+
+export function updateNotificationPrefs(api: ApiClient, body: Partial<NotificationPrefs>) {
+  return api.request("PATCH", "/me/notifications", { body, response: "notificationPrefs" });
+}
+
+export function getSuitability(api: ApiClient) {
+  return api.request("GET", "/account/suitability", { response: "suitability" });
+}
+
+export function saveSuitability(api: ApiClient, body: SaveSuitabilityRequest) {
+  return api.request("PUT", "/account/suitability", { body, response: "suitability" });
 }
 
 // docs/api-gaps.md, item 1.

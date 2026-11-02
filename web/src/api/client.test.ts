@@ -246,4 +246,38 @@ describe("api client", () => {
       await expect(upload(xhr)).rejects.toMatchObject({ code: "validation_failed", status: 422 });
     });
   });
+
+  describe("onSessionExpired", () => {
+    function clientAnswering(status: number, code: string) {
+      const onSessionExpired = vi.fn();
+      const api = createApiClient({
+        getToken: () => "t",
+        getLocale: () => "es",
+        validate: false,
+        onSessionExpired,
+        fetch: () =>
+          Promise.resolve(
+            new Response(JSON.stringify({ error: { code, message: "x" } }), {
+              status,
+              headers: { "Content-Type": "application/json" },
+            }),
+          ),
+      });
+      return { api, onSessionExpired };
+    }
+
+    it("is told of a 401 session_expired, and the caller still gets the error", async () => {
+      const { api, onSessionExpired } = clientAnswering(401, "session_expired");
+      await expect(api.request("GET", "/portfolio")).rejects.toMatchObject({
+        code: "session_expired",
+      });
+      expect(onSessionExpired).toHaveBeenCalledTimes(1);
+    });
+
+    it("is not told of any other error", async () => {
+      const { api, onSessionExpired } = clientAnswering(403, "market_not_live");
+      await expect(api.request("GET", "/portfolio")).rejects.toBeDefined();
+      expect(onSessionExpired).not.toHaveBeenCalled();
+    });
+  });
 });

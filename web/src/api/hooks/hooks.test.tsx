@@ -9,6 +9,7 @@ import { ApiProvider } from "../ApiProvider";
 import { createMockAuthClient } from "../auth";
 import { AuthProvider } from "../AuthProvider";
 import type { DepositDetail } from "../proposed-types";
+import { useAuth } from "../auth-context";
 import { useMe, useTermsDocuments } from "./account";
 import { useConfig } from "./config";
 import { depositPollingInterval, useCreateDeposit, useDeposits } from "./deposits";
@@ -150,16 +151,17 @@ describe("query hooks", () => {
     expect(result.current.hasNextPage).toBe(false);
   });
 
-  it("surfaces 401 session_expired as an ApiError code", async () => {
+  it("a 401 session_expired ends the session, whichever request it answers", async () => {
     server.use(
       http.get("/api/v1/me", () =>
         HttpResponse.json({ error: { code: "session_expired", message: "" } }, { status: 401 }),
       ),
     );
-    const { result } = renderHook(() => useMe(), { wrapper });
+    const { result } = renderHook(() => ({ me: useMe(), auth: useAuth() }), { wrapper });
     await waitFor(() => {
-      expect(result.current.error).toMatchObject({ status: 401, code: "session_expired" });
+      expect(result.current.auth.status).toBe("expired");
     });
+    expect(result.current.auth.getAccessToken()).toBeNull();
   });
 });
 

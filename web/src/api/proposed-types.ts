@@ -5,6 +5,7 @@ import type {
   Deposit,
   DepositInstructionsUsdc,
   DepositInstructionsWire,
+  Locale,
   PendingItem,
   Plan,
   Rail,
@@ -91,6 +92,23 @@ export interface Notification extends PendingItem {
   termsId?: string;
 }
 
+// api-gaps.md, item 1: the investor profile outside onboarding (T12).
+export interface SuitabilityRecord {
+  questionnaireVersion: string;
+  answers: Record<string, unknown>;
+  completedAt?: string;
+}
+
+export interface SaveSuitabilityRequest {
+  questionnaireVersion: string;
+  answers: Record<string, unknown>;
+}
+
+// api-gaps.md, item 1: the language saved on the account.
+export interface UpdateMeRequest {
+  locale: Locale;
+}
+
 export interface NotificationPrefs {
   email: boolean;
   push: boolean;
@@ -104,6 +122,8 @@ export interface TermsDocument {
   title: string;
   url: string;
   acceptedAt?: string;
+  // api-gaps.md, item 10: what the client accepted before, so a new version keeps the record.
+  acceptances?: { version: string; acceptedAt: string }[];
 }
 
 // api-gaps.md, item 7: the client must know whether to reuse an address.

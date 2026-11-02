@@ -6,6 +6,7 @@ import type {
   OnboardingDraft,
   ProposedConfig,
   Questionnaire,
+  SuitabilityRecord,
   TermsDocument,
 } from "./proposed-types";
 import type { Account, Me, Plan, Portfolio, Quote } from "./types";
@@ -26,6 +27,7 @@ export interface ResponseTypes {
   depositsPage: DepositsPage;
   notifications: Notification[];
   notificationPrefs: NotificationPrefs;
+  suitability: SuitabilityRecord;
   terms: TermsDocument[];
 }
 

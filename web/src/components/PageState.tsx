@@ -68,13 +68,25 @@ export function ErrorState({ onRetry }: { onRetry: () => void }) {
   );
 }
 
+// For one part of a screen that is still loading while the rest is already there.
+export function InlineLoading() {
+  const { t } = useTranslation();
+  return (
+    <div role="status" className="flex flex-col gap-2">
+      <span className="sr-only">{t("common.loading")}</span>
+      <Skeleton className="h-5 w-1/2" />
+      <Skeleton className="h-4 w-1/3" />
+    </div>
+  );
+}
+
 // For one part of a screen (a card, a link) that failed while the rest stays useful.
 export function InlineError({ onRetry }: { onRetry: () => void }) {
   const { t } = useTranslation();
   return (
     <div className="flex flex-col items-start gap-2">
       <p className="type-body text-graphite-900">{t("states.error.title")}</p>
-      <Button variant="ghost" onClick={onRetry}>
+      <Button variant="ghost" fullWidth="never" onClick={onRetry}>
         {t("common.retry")}
       </Button>
     </div>

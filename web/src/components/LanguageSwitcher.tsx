@@ -1,13 +1,21 @@
 import { ToggleGroup } from "radix-ui";
 import { useTranslation } from "react-i18next";
-import { supportedLocales, type SupportedLocale } from "@/i18n";
+import {
+  isSupportedLocale,
+  readExplicitLocale,
+  saveExplicitLocale,
+  supportedLocales,
+  type SupportedLocale,
+} from "@/i18n/locale-preference";
 
-function isSupportedLocale(value: string): value is SupportedLocale {
-  return (supportedLocales as readonly string[]).includes(value);
+interface LanguageSwitcherProps {
+  // Told of the client's choice, with a way to take it back (the Profile saves it on the account
+  // and undoes it if that fails).
+  onSelect?: (locale: SupportedLocale, undo: () => void) => void;
 }
 
 // Plain words with the active one underlined, like the active tab in the bottom navigation.
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ onSelect }: LanguageSwitcherProps) {
   const { t, i18n } = useTranslation();
 
   return (
@@ -16,7 +24,17 @@ export function LanguageSwitcher() {
       value={i18n.resolvedLanguage}
       onValueChange={(value) => {
         // Radix sends "" when the active item is clicked again; keep the current locale.
-        if (isSupportedLocale(value)) void i18n.changeLanguage(value);
+        if (!isSupportedLocale(value)) return;
+        const previous = i18n.resolvedLanguage;
+        const previousExplicit = readExplicitLocale();
+        saveExplicitLocale(value);
+        void i18n.changeLanguage(value);
+        onSelect?.(value, () => {
+          // A later choice stands: only the language that failed goes back.
+          if (readExplicitLocale() !== value) return;
+          saveExplicitLocale(previousExplicit);
+          if (previous) void i18n.changeLanguage(previous);
+        });
       }}
       aria-label={t("language.label")}
       className="-mx-1 inline-flex gap-2"

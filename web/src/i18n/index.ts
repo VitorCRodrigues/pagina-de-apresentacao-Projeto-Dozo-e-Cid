@@ -1,10 +1,10 @@
 import i18n, { type BackendModule, type InitOptions } from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
+import { LOCALE_KEY, supportedLocales, type SupportedLocale } from "./locale-preference";
 import esTranslation from "./locales/es/translation.json";
 
-export const supportedLocales = ["es", "pt", "en"] as const;
-export type SupportedLocale = (typeof supportedLocales)[number];
+export { supportedLocales, type SupportedLocale };
 export const defaultLocale: SupportedLocale = "es";
 
 // "translation" holds what every screen needs; each area loads its own texts with its route.
@@ -16,6 +16,7 @@ export const namespaces = [
   "portfolio",
   "plan",
   "pending",
+  "profile",
 ] as const;
 export type Namespace = (typeof namespaces)[number];
 
@@ -69,6 +70,14 @@ i18n.on("languageChanged", (lng) => {
   document.documentElement.lang = i18n.resolvedLanguage ?? lng;
 });
 
+// Reads the explicit choice, then the browser. Stores nothing by itself: detecting a language is
+// not choosing one, and the account's language must still be able to apply (locale-preference).
+export const detectionOptions = {
+  order: ["localStorage", "navigator"],
+  caches: [] as string[],
+  lookupLocalStorage: LOCALE_KEY,
+};
+
 // Resolves once the detected language's common texts are in: main.tsx renders after it.
 export const i18nReady = i18n
   .use(lazyBackend)
@@ -76,12 +85,7 @@ export const i18nReady = i18n
   .use(initReactI18next)
   .init({
     ...initOptions(),
-    detection: {
-      // Language choice is a UI preference, not personal data.
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
-      lookupLocalStorage: "od.locale",
-    },
+    detection: detectionOptions,
   });
 
 export default i18n;

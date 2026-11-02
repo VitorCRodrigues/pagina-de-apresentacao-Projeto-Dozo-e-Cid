@@ -1,0 +1,3 @@
+# Generated outside web/: browser automation output and local agent workspaces.
+.playwright-mcp/
+.superpowers/

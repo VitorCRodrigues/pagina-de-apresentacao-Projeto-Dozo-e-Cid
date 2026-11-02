@@ -11,10 +11,6 @@ import {
 } from "@/features/session/RequireSession";
 
 // Guards and layouts load eagerly; screens load per route.
-const placeholder = (name: keyof typeof import("@/features/placeholders")) => async () => {
-  const screens = await import("@/features/placeholders");
-  return { Component: screens[name] };
-};
 
 // Area screens: their texts (i18n namespace) and their chunk load in parallel, not one after
 // the other, so the first visit costs a single round trip.
@@ -151,7 +147,27 @@ export const routes: RouteObject[] = [
                   "PendingScreen",
                 ),
               },
-              { path: "perfil", lazy: placeholder("ProfileScreen") },
+              {
+                path: "perfil",
+                lazy: area(
+                  "profile",
+                  () => import("@/features/profile/ProfileScreen"),
+                  "ProfileScreen",
+                ),
+              },
+              {
+                path: "perfil/ayuda",
+                lazy: area("profile", () => import("@/features/help/HelpScreen"), "HelpScreen"),
+              },
+              {
+                path: "perfil/inversor",
+                // The questions read the onboarding texts.
+                lazy: area(
+                  ["profile", "onboarding"],
+                  () => import("@/features/profile/SuitabilityScreen"),
+                  "SuitabilityScreen",
+                ),
+              },
               {
                 path: "plan",
                 // Rail names and the amount field read the deposit texts.

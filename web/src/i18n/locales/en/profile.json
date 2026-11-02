@@ -1,0 +1,105 @@
+{
+  "profile": {
+    "title": "Profile",
+    "data": {
+      "title": "Your details",
+      "name": "Name",
+      "email": "Email",
+      "country": "Country",
+      "account": "Interactive Brokers account",
+      "note": "To change these details, write to support.",
+      "support": "Write to support"
+    },
+    "language": {
+      "title": "Language",
+      "failed": "We couldn't save the language. Try again."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "email": "Email notices",
+      "push": "Notices on this device",
+      "pushNote": "We'll tell you as soon as it's available on your device.",
+      "failed": "We couldn't save the change. Try again."
+    },
+    "investing": {
+      "title": "Your investment",
+      "plan": "Monthly plan",
+      "suitability": "Investor profile",
+      "suitabilityDate": "Last updated: {{date}}"
+    },
+    "terms": {
+      "title": "Documents and terms",
+      "version": "Version {{version}}",
+      "acceptedOn": "Accepted {{date}}",
+      "pending": "{{title}}: version {{version}} to accept",
+      "pendingAction": "View pending items",
+      "none": "You haven't accepted any document yet."
+    },
+    "withdrawals": {
+      "title": "Withdrawals and statements",
+      "body": "Withdrawals and official statements are handled at Interactive Brokers. A withdrawal can only go to a bank account in your name.",
+      "action": "Go to Interactive Brokers",
+      "newTab": "(opens in a new tab)"
+    },
+    "soon": {
+      "title": "Other services",
+      "reports": "Tax reports",
+      "card": "Debit card",
+      "label": "Coming soon"
+    },
+    "help": "Help",
+    "logout": {
+      "action": "Sign out",
+      "title": "Sign out?",
+      "confirm": "Sign out",
+      "back": "Back"
+    },
+    "suitability": {
+      "title": "Investor profile",
+      "intro": "Update your answers if your situation changed. Your adviser reviews the answers.",
+      "save": "Save answers",
+      "back": "Back",
+      "saved": "We saved your answers",
+      "changed": "The questions changed since your last answers. Please answer them again.",
+      "missing_one": "{{count}} answer missing.",
+      "missing_other": "{{count}} answers missing."
+    },
+    "preferences": "Preferences"
+  },
+  "help": {
+    "title": "Help",
+    "faqTitle": "Frequently asked questions",
+    "supportTitle": "Support",
+    "supportAction": "Write to support",
+    "questions": {
+      "custody": {
+        "q": "Who holds my money?",
+        "a": "Interactive Brokers, in an account in your name. Interactive Brokers is the broker and custodian; OpenDollars is your investment adviser."
+      },
+      "cost": {
+        "q": "How much does it cost?",
+        "a": "Before you confirm each deposit you see every cost, line by line, and how much arrives to invest. The details are in the terms."
+      },
+      "minimum": {
+        "q": "Why is there a monthly minimum?",
+        "a": "The monthly plan minimum is {{min}}. With less, fixed transfer costs take too large a share of what you invest."
+      },
+      "window": {
+        "q": "Why does investing happen once a month?",
+        "a": "The portfolio is invested in a monthly window, around day {{day}}. Money that has already arrived may sit as cash in your Interactive Brokers account until then."
+      },
+      "opening": {
+        "q": "How long does opening the account take?",
+        "a": "A few business days. Interactive Brokers reviews your information and, if it needs anything else, we ask you under Pending."
+      },
+      "wrongNetwork": {
+        "q": "What do I do if I sent on the wrong network?",
+        "a": "Write to support right away with the transfer details. A wrong network can mean losing the funds: we can't assure you they will be recovered, but we will review your case."
+      },
+      "withdraw": {
+        "q": "How do I take my money out?",
+        "a": "From your Interactive Brokers account, through the link in Profile. A withdrawal can only go to a bank account in your name."
+      }
+    }
+  }
+}

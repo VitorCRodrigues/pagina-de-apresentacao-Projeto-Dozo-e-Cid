@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createMockAuthClient, type AuthClient } from "./auth";
 import { useAuth } from "./auth-context";
 import { AuthProvider } from "./AuthProvider";
@@ -48,5 +48,24 @@ describe("AuthProvider", () => {
       await expect(result.current.login()).rejects.toThrow("denied");
     });
     expect(result.current.status).toBe("signedOut");
+  });
+
+  it("an expired session also ends at the provider, ignoring its failure", async () => {
+    const logout = vi.fn(() => Promise.reject(new Error("offline")));
+    const client: AuthClient = { ...createMockAuthClient({ delayMs: 0 }), logout };
+    const { result } = renderHook(() => useAuth(), {
+      wrapper: ({ children }: { children: ReactNode }) => (
+        <AuthProvider client={client} initialSession={{ accessToken: "t" }}>
+          {children}
+        </AuthProvider>
+      ),
+    });
+    act(() => {
+      result.current.expireSession();
+    });
+    expect(result.current.status).toBe("expired");
+    expect(result.current.getAccessToken()).toBeNull();
+    expect(logout).toHaveBeenCalledTimes(1);
+    await Promise.resolve();
   });
 });

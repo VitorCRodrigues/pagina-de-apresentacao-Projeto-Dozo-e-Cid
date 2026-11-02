@@ -7,6 +7,7 @@ import type {
   NotificationPrefs,
   OnboardingDraft,
   Questionnaire,
+  SuitabilityRecord,
   TermsDocument,
 } from "@/api/proposed-types";
 import type { Account, Locale, Me, Plan, Portfolio, Quote } from "@/api/types";
@@ -366,6 +367,43 @@ describe("mock API handlers", () => {
     expect(after.json.some((n) => n.kind === "terms")).toBe(false);
     const terms = await call<TermsDocument[]>("GET", "/account/terms");
     expect(terms.json.find((doc) => doc.id === "terms-advisory")?.acceptedAt).toBe(acceptedAt);
+  });
+
+  it("saves the language on the account", async () => {
+    scenario("open");
+    const saved = await call<Me>("PATCH", "/me", { body: { locale: "pt" } });
+    expect(saved.json.locale).toBe("pt");
+    expect((await call("PATCH", "/me", { body: { locale: "fr" } })).status).toBe(422);
+    expect((await call<Me>("GET", "/me")).json.locale).toBe("pt");
+  });
+
+  it("serves and saves the investor profile outside onboarding", async () => {
+    scenario("open");
+    const saved = await call<SuitabilityRecord>("GET", "/account/suitability");
+    expect(saved.json.completedAt).toBeTruthy();
+    const body = { questionnaireVersion: saved.json.questionnaireVersion, answers: { a: "b" } };
+    const next = await call<SuitabilityRecord>("PUT", "/account/suitability", { body });
+    expect(next.json.answers).toEqual({ a: "b" });
+    expect(Date.parse(next.json.completedAt ?? "")).toBeGreaterThan(
+      Date.parse(saved.json.completedAt ?? ""),
+    );
+    const stale = { questionnaireVersion: "1999-01", answers: {} };
+    expect((await call("PUT", "/account/suitability", { body: stale })).status).toBe(422);
+  });
+
+  it("keeps the versions already accepted when a new one is accepted", async () => {
+    scenario("terms_update");
+    const before = await call<TermsDocument[]>("GET", "/account/terms");
+    expect(before.json.find((d) => d.id === "terms-advisory")?.acceptances).toEqual([
+      { version: "2026-10", acceptedAt: expect.any(String) as string },
+    ]);
+    await call("POST", "/account/terms/terms-advisory/accept", {
+      body: { id: "terms-advisory", version: "2026-11", acceptedAt: "2026-11-02T12:00:00Z" },
+    });
+    const after = await call<TermsDocument[]>("GET", "/account/terms");
+    expect(
+      after.json.find((d) => d.id === "terms-advisory")?.acceptances?.map((a) => a.version),
+    ).toEqual(["2026-10", "2026-11"]);
   });
 
   it("marks a notice as read, and it leaves the list", async () => {

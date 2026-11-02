@@ -1,11 +1,13 @@
 import { createContext, useContext } from "react";
 
-export type AuthStatus = "signedOut" | "signingIn" | "signedIn";
+// "expired": the API refused the token (401). Like signed out, but the guard says why.
+export type AuthStatus = "signedOut" | "signingIn" | "signedIn" | "expired";
 
 export interface AuthContextValue {
   status: AuthStatus;
   login: () => Promise<void>;
   logout: () => Promise<void>;
+  expireSession: () => void;
   getAccessToken: () => string | null;
 }
 

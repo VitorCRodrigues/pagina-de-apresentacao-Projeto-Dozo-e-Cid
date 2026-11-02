@@ -7,7 +7,9 @@ import {
   depositStateSchema,
   notificationPrefsSchema,
   quoteRequestSchema,
+  saveSuitabilitySchema,
   termsAcceptanceSchema,
+  updateMeRequestSchema,
   updatePlanRequestSchema,
   waitlistRequestSchema,
 } from "@/api/schemas";
@@ -124,6 +126,35 @@ export function createHandlers(getDb: () => MockDb) {
       return db instanceof Response ? db : HttpResponse.json(db.me);
     }),
 
+    // api-gaps.md, item 1: the language saved on the account.
+    http.patch(api("/me"), async ({ request }) => {
+      const db = await prepare(request, getDb);
+      if (db instanceof Response) return db;
+      const parsed = updateMeRequestSchema.safeParse(await readJson(request));
+      if (!parsed.success) return invalid(parsed.error.issues);
+      db.me = { ...db.me, locale: parsed.data.locale };
+      return HttpResponse.json(db.me);
+    }),
+
+    // api-gaps.md, item 1: the investor profile outside onboarding.
+    http.get(api("/account/suitability"), async ({ request }) => {
+      const db = await prepare(request, getDb);
+      if (db instanceof Response) return db;
+      return db.suitability ? HttpResponse.json(db.suitability) : notFound();
+    }),
+
+    http.put(api("/account/suitability"), async ({ request }) => {
+      const db = await prepare(request, getDb);
+      if (db instanceof Response) return db;
+      const parsed = saveSuitabilitySchema.safeParse(await readJson(request));
+      if (!parsed.success) return invalid(parsed.error.issues);
+      if (parsed.data.questionnaireVersion !== questionnairePayload(db, "es").version) {
+        return invalid([{ path: ["questionnaireVersion"] }]);
+      }
+      db.suitability = { ...parsed.data, completedAt: new Date().toISOString() };
+      return HttpResponse.json(db.suitability);
+    }),
+
     // --- Onboarding (T2) ---
 
     http.get(api("/onboarding"), async ({ request }) => {
@@ -211,6 +242,10 @@ export function createHandlers(getDb: () => MockDb) {
       if (parsed.data.id !== id) return invalid([{ path: ["id"] }]);
       if (parsed.data.version !== termsVersion(db, id)) return invalid([{ path: ["version"] }]);
       db.acceptedTerms[id] = parsed.data.acceptedAt;
+      db.termsHistory[id] = [
+        ...(db.termsHistory[id] ?? []),
+        { version: parsed.data.version, acceptedAt: parsed.data.acceptedAt },
+      ];
       db.notices = db.notices.filter((notice) => notice.termsId !== id);
       return new HttpResponse(null, { status: 204 });
     }),

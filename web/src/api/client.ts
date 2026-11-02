@@ -47,6 +47,8 @@ export interface ApiClient {
 interface ClientOptions {
   getToken: () => string | null;
   getLocale: () => Locale;
+  // The API said the session is over (401 session_expired).
+  onSessionExpired?: () => void;
   fetch?: typeof fetch;
   // XMLHttpRequest factory for upload(); tests replay progress events with a fake.
   xhr?: () => XMLHttpRequest;
@@ -77,10 +79,18 @@ async function validated(
 export function createApiClient({
   getToken,
   getLocale,
+  onSessionExpired,
   fetch: fetchImpl,
   xhr: createXhr = () => new XMLHttpRequest(),
   validate = import.meta.env.DEV || import.meta.env.MODE === "test",
 }: ClientOptions): ApiClient {
+  // A 401 from any request ends the session, not only the ones a guard happens to watch.
+  async function failure(response: Response): Promise<ApiError> {
+    const error = await toApiError(response);
+    if (error.code === "session_expired") onSessionExpired?.();
+    return error;
+  }
+
   async function request(
     method: HttpMethod,
     path: string,
@@ -108,7 +118,7 @@ export function createApiClient({
     }
 
     options.onResponse?.(response);
-    if (!response.ok) throw await toApiError(response);
+    if (!response.ok) throw await failure(response);
     if (response.status === 204 || !options.response) return undefined;
 
     const data: unknown = await response.json();
@@ -144,7 +154,7 @@ export function createApiClient({
             status: xhr.status,
             headers: { "Content-Type": xhr.getResponseHeader("Content-Type") ?? "" },
           });
-          if (!reply.ok) throw await toApiError(reply);
+          if (!reply.ok) throw await failure(reply);
           const data: unknown = await reply.json();
           return validate ? validated(response, data, "POST", path, reply.status) : data;
         };

@@ -21,10 +21,7 @@ export function QuestionField({ question, value, onChange, error }: QuestionFiel
   const errorId = useId();
 
   return (
-    <fieldset
-      aria-describedby={error ? errorId : undefined}
-      className="flex flex-col gap-3 border-t border-gray-200 pt-6 first:border-t-0 first:pt-0"
-    >
+    <fieldset aria-describedby={error ? errorId : undefined} className="flex flex-col gap-3">
       <legend className="type-heading float-left mb-3 w-full text-navy-900">
         {question.label}
       </legend>
@@ -41,7 +38,12 @@ export function QuestionField({ question, value, onChange, error }: QuestionFiel
             onValueChange={onChange}
           >
             {question.options.map((option) => (
-              <RadioCard key={option.value} value={option.value} title={option.label} />
+              <RadioCard
+                key={option.value}
+                value={option.value}
+                // Short answers, not cards with a description: the weight of the checkboxes below.
+                title={<span className="type-body">{option.label}</span>}
+              />
             ))}
           </RadioCardGroup>
         ) : (

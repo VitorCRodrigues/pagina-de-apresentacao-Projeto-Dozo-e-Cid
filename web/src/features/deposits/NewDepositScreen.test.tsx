@@ -99,7 +99,10 @@ describe("new deposit (T6)", () => {
     await user.click(screen.getByRole("button", { name: "Continuar" }));
     const confirm = await screen.findByRole("button", { name: "Confirmar aporte" });
     expect(screen.getByRole("table")).toBeInTheDocument();
-    expect(screen.getByText("Llega para invertir")).toBeInTheDocument();
+    const net = screen.getByText("Llega para invertir");
+    expect(net).toBeInTheDocument();
+    expect(net.className).toMatch(/text-navy-900/);
+    expect(net.className).not.toMatch(/green/);
     expect(confirm).toBeEnabled();
   });
 

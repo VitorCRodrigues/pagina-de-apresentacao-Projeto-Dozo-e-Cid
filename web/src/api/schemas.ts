@@ -241,7 +241,23 @@ export const termsDocumentSchema = z.object({
   title: z.string(),
   url: z.string(),
   acceptedAt: isoDate.optional(),
+  acceptances: z.array(z.object({ version: z.string(), acceptedAt: isoDate })).optional(),
 });
+
+// GET and PUT /account/suitability (api-gaps.md, item 1).
+export const suitabilityRecordSchema = z.object({
+  questionnaireVersion: z.string(),
+  answers: z.record(z.string(), z.unknown()),
+  completedAt: isoDate.optional(),
+});
+
+export const saveSuitabilitySchema = z.object({
+  questionnaireVersion: z.string().min(1),
+  answers: z.record(z.string(), z.unknown()),
+});
+
+// PATCH /me (api-gaps.md, item 1).
+export const updateMeRequestSchema = z.object({ locale: z.enum(["es", "pt", "en"]) });
 
 const scope = z.object({ scope: z.enum(["account", "deposit"]) });
 
@@ -303,5 +319,6 @@ export const responseSchemas = {
   depositsPage: depositsPageSchema,
   notifications: z.array(notificationSchema),
   notificationPrefs: notificationPrefsSchema,
+  suitability: suitabilityRecordSchema,
   terms: z.array(termsDocumentSchema),
 } satisfies { [K in ResponseName]: z.ZodType<ResponseTypes[K]> };

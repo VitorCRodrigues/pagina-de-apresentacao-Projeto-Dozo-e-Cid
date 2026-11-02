@@ -5,6 +5,8 @@ import { createMockAuthClient } from "@/api/auth";
 import { AuthProvider } from "@/api/AuthProvider";
 import { SessionTimeout } from "./SessionTimeout";
 
+const providerLogout = vi.fn(() => Promise.resolve());
+
 function setup() {
   const router = createMemoryRouter(
     [
@@ -16,7 +18,7 @@ function setup() {
   );
   render(
     <AuthProvider
-      client={createMockAuthClient({ delayMs: 0 })}
+      client={{ ...createMockAuthClient({ delayMs: 0 }), logout: providerLogout }}
       initialSession={{ accessToken: "t" }}
     >
       <RouterProvider router={router} />
@@ -33,6 +35,7 @@ function advance(ms: number) {
 
 describe("SessionTimeout", () => {
   beforeEach(() => {
+    providerLogout.mockClear();
     vi.useFakeTimers({ now: Date.parse("2026-10-28T12:00:00Z") });
   });
 
@@ -58,6 +61,8 @@ describe("SessionTimeout", () => {
     const router = setup();
     advance(15 * 60_000);
     expect(router.state.location.pathname).toBe("/sesion-expirada");
+    // Ended right here (this test's expired route does nothing): the real chunk may never load.
+    expect(providerLogout).toHaveBeenCalledTimes(1);
   });
 
   it("signs out from the warning", () => {

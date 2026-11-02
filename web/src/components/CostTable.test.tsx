@@ -28,4 +28,21 @@ describe("CostTable", () => {
     expect(screen.getByRole("row", { name: /Costo total 0\.8% \$4\.00/ })).toBeInTheDocument();
     expect(screen.getByRole("row", { name: /Llega para invertir \$496\.00/ })).toBeInTheDocument();
   });
+
+  it("states what arrives to invest in navy, never in a colour of gain", () => {
+    render(
+      <CostTable
+        locale="es"
+        amountCents={50000}
+        totalCostCents={400}
+        netToInvestCents={49600}
+        lines={[]}
+      />,
+    );
+    const net = screen.getByRole("rowheader", { name: "Llega para invertir" });
+    for (const cell of [net, net.closest("tr")?.lastElementChild as HTMLElement]) {
+      expect(cell.className).toMatch(/text-navy-900/);
+      expect(cell.className).not.toMatch(/green/);
+    }
+  });
 });

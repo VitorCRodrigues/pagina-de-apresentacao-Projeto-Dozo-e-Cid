@@ -441,12 +441,12 @@ function PreviewStep({
       {/* The one headline figure of the screen, apart from the table: Fraunces has no
           tabular figures, so it never sits in a column. */}
       <div className="flex flex-col gap-1 border-t-[3px] border-double border-graphite-900 pt-4">
-        <span className="type-label text-green-700">{t("deposit.preview.net")}</span>
+        <span className="type-label text-navy-900">{t("deposit.preview.net")}</span>
         <Money
           cents={option.netToInvestCents}
           locale={locale}
           size="display"
-          className="text-green-700"
+          className="text-navy-900"
         />
       </div>
 

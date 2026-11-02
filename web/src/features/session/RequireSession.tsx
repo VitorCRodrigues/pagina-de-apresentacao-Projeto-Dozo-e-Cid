@@ -9,6 +9,7 @@ import { ErrorState, LoadingState } from "@/components/PageState";
 import { paths } from "@/routes";
 import { hasOpenedAccount, landingPathFor } from "./account-routing";
 import { SessionTimeout } from "./SessionTimeout";
+import { useAccountLocale } from "./useAccountLocale";
 
 // The waitlist form (React Hook Form + Zod) loads only for clients outside the live markets.
 const NotAvailableScreen = lazy(async () => ({
@@ -18,6 +19,7 @@ const NotAvailableScreen = lazy(async () => ({
 // Signed in, profile loaded, country live. Everything behind it can rely on useMe().data.
 export function RequireSession() {
   const { status } = useAuth();
+  if (status === "expired") return <Navigate to={paths.sessionExpired} replace />;
   if (status !== "signedIn") return <Navigate to={paths.entry} replace />;
   return <SessionGate />;
 }
@@ -26,6 +28,7 @@ function SessionGate() {
   const me = useMe();
   const config = useConfig();
   const error = me.error ?? config.error;
+  useAccountLocale(me.data?.locale);
 
   if (error) {
     if (isApiError(error) && error.code === "session_expired") {

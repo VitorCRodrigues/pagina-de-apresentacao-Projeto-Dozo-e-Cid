@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { accountStatuses } from "@/api/schemas";
 import type { AccountStatus } from "@/api/types";
 import { landingPathFor } from "@/features/session/account-routing";
+import { saveExplicitLocale } from "@/i18n/locale-preference";
 import { renderApp } from "@/test/render-app";
 
 describe("routing by account status", () => {
@@ -82,6 +83,8 @@ describe("entry and global screens", () => {
   });
 
   it("offers the waitlist when the country is not live, and accepts an email", async () => {
+    // The fictitious client's account is in Portuguese; this test reads Spanish.
+    saveExplicitLocale("es");
     const user = userEvent.setup();
     renderApp({ path: "/inicio", scenario: "market_not_live" });
 
@@ -137,5 +140,15 @@ describe("entry and global screens", () => {
       await screen.findByRole("heading", { name: "No encontramos esta página" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Ir al inicio" })).toBeInTheDocument();
+  });
+
+  it.each([
+    ["/perfil", "Perfil"],
+    ["/perfil/ayuda", "Ayuda"],
+    ["/perfil/inversor", "Perfil de inversor"],
+  ])("%s keeps the Perfil tab current", async (path, title) => {
+    renderApp({ path });
+    await screen.findByRole("heading", { level: 1, name: title }, { timeout: 4000 });
+    expect(screen.getByRole("link", { name: "Perfil" })).toHaveAttribute("aria-current", "page");
   });
 });

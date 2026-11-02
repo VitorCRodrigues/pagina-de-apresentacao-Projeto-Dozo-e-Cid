@@ -11,7 +11,7 @@ import type { Account, Locale, Portfolio } from "@/api/types";
 import { Banner } from "@/components/Banner";
 import { buttonClass } from "@/components/component-styles";
 import { Money } from "@/components/Money";
-import { ErrorState, InlineError } from "@/components/PageState";
+import { ErrorState, InlineError, InlineLoading } from "@/components/PageState";
 import { Skeleton } from "@/components/Skeleton";
 import { DepositRow } from "@/features/deposits/DepositRow";
 import { inProgressStates, newestFirst } from "@/features/deposits/history";
@@ -171,17 +171,6 @@ function HomeSection({ title, children }: { title: string; children: ReactNode }
 
 const statementBlock = "flex flex-col gap-2 border-y border-gray-200 py-4";
 
-function SectionLoading() {
-  const { t } = useTranslation("portfolio");
-  return (
-    <div role="status" className="flex flex-col gap-2">
-      <span className="sr-only">{t("common.loading")}</span>
-      <Skeleton className="h-5 w-1/2" />
-      <Skeleton className="h-4 w-1/3" />
-    </div>
-  );
-}
-
 function NextDepositSection({ locale }: { locale: Locale }) {
   const { t } = useTranslation("portfolio");
   const plans = usePlans();
@@ -190,7 +179,7 @@ function NextDepositSection({ locale }: { locale: Locale }) {
 
   let body;
   if (plans.isError) body = <InlineError onRetry={() => void plans.refetch()} />;
-  else if (!plans.data) body = <SectionLoading />;
+  else if (!plans.data) body = <InlineLoading />;
   else if (!plan || plan.status === "paused") {
     body = (
       <div className={statementBlock}>
@@ -236,7 +225,7 @@ function InProgressSection({ locale, offerStart }: { locale: Locale; offerStart:
 
   let body;
   if (deposits.isError) body = <InlineError onRetry={() => void deposits.refetch()} />;
-  else if (!deposits.data) body = <SectionLoading />;
+  else if (!deposits.data) body = <InlineLoading />;
   else if (items.length === 0) {
     body = (
       <div className={statementBlock}>
@@ -278,7 +267,7 @@ function WindowSection({ locale }: { locale: Locale }) {
 
   let body;
   if (config.isError) body = <InlineError onRetry={() => void config.refetch()} />;
-  else if (!config.data || deposits.isPending) body = <SectionLoading />;
+  else if (!config.data || deposits.isPending) body = <InlineLoading />;
   else {
     const window = resolveInvestmentWindow({
       config: config.data,

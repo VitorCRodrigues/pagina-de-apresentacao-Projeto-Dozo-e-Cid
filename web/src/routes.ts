@@ -15,6 +15,8 @@ export const paths = {
   portfolio: "/cartera",
   pending: "/pendientes",
   profile: "/perfil",
+  help: "/perfil/ayuda",
+  suitability: "/perfil/inversor",
   sessionExpired: "/sesion-expirada",
   maintenance: "/mantenimiento",
 } as const;

@@ -1,4 +1,4 @@
-import { expect, test, type Browser, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const phone = { width: 375, height: 812 };
 test.use({ locale: "es-AR", viewport: phone });
@@ -92,40 +92,41 @@ test("the plan reminder opens a new deposit with the amount filled in and no amo
 
 const statements = [
   {
-    locale: "es-AR",
+    language: "Español",
     signIn: /^Entrar$/,
     tab: "Cartera",
     link: "Ver extractos en Interactive Brokers",
   },
   {
-    locale: "pt-BR",
+    language: "Português",
     signIn: /^Entrar$/,
     tab: "Carteira",
     link: "Ver extratos na Interactive Brokers",
   },
   {
-    locale: "en-US",
+    language: "English",
     signIn: /^Sign in$/,
     tab: "Portfolio",
     link: "View statements at Interactive Brokers",
   },
 ];
 
-async function statementsHeight(browser: Browser, entry: (typeof statements)[number]) {
-  const context = await browser.newContext({ locale: entry.locale, viewport: phone });
-  const page = await context.newPage();
-  await signIn(page, "open", entry.signIn);
+async function statementsHeight(page: Page, entry: (typeof statements)[number]) {
+  await page.goto("/?scenario=open");
+  // An explicit choice on the device: it wins over the language of the account.
+  await page.getByRole("radio", { name: entry.language }).click();
+  await page.getByRole("button", { name: entry.signIn }).click();
+  await expect(page).toHaveURL(/\/inicio$/);
   await goTo(page, entry.tab);
   const box = await page.getByRole("link", { name: new RegExp(entry.link) }).boundingBox();
-  await context.close();
   return box?.height ?? Number.POSITIVE_INFINITY;
 }
 
 for (const entry of statements) {
-  test(`the statements button stays on one line at 375 px (${entry.locale})`, async ({
-    browser,
+  test(`the statements button stays on one line at 375 px (${entry.language})`, async ({
+    page,
   }) => {
     // One line of a 48 px button; two lines would grow it past that.
-    expect(await statementsHeight(browser, entry)).toBeLessThanOrEqual(48);
+    expect(await statementsHeight(page, entry)).toBeLessThanOrEqual(48);
   });
 }

@@ -2,6 +2,7 @@ import type {
   DepositDetail,
   Notification,
   NotificationPrefs,
+  SuitabilityRecord,
   OnboardingDraft,
   Questionnaire,
   TermsDocument,
@@ -76,6 +77,9 @@ export interface MockDb {
   onboarding: OnboardingDraft;
   prefs: NotificationPrefs;
   acceptedTerms: Record<string, string>;
+  // What was accepted before the version in force (api-gaps.md, item 10).
+  termsHistory: Record<string, { version: string; acceptedAt: string }[]>;
+  suitability: SuitabilityRecord | null;
   // A document republished in a new version (terms_update); the rest are "2026-10".
   termsVersions: Record<string, string>;
   latencyMs: number;
@@ -345,6 +349,19 @@ function base(status: AccountStatus, now: Date): MockDb {
       ? Object.fromEntries(termsDocuments.map((doc) => [doc.id, iso(daysFrom(now, -40))]))
       : {},
     termsVersions: {},
+    termsHistory: {},
+    suitability: opened
+      ? {
+          questionnaireVersion: "2026-10",
+          answers: Object.fromEntries(
+            questionnaire.questions.map((question) => {
+              const first = question.options[0]?.value ?? "";
+              return [question.id, question.kind === "multi" ? [first] : first];
+            }),
+          ),
+          completedAt: iso(daysFrom(now, -40)),
+        }
+      : null,
     latencyMs: 0,
     failure: null,
     quoteTtlSeconds: 300,
@@ -466,6 +483,9 @@ export function buildMockDb(id: ScenarioId, now: Date = new Date()): MockDb {
         ...db,
         acceptedTerms,
         termsVersions: { "terms-advisory": "2026-11" },
+        termsHistory: {
+          "terms-advisory": [{ version: "2026-10", acceptedAt: iso(daysFrom(now, -40)) }],
+        },
         notices: [
           {
             id: "notice-terms",
@@ -582,6 +602,7 @@ export function termsPayload(db: MockDb, lang: Locale): TermsDocument[] {
       // TODO(compliance): drafts; real documents pending legal review (PRD section 10).
       url: `#terms/${doc.kind}`,
       ...(acceptedAt && { acceptedAt }),
+      ...(db.termsHistory[doc.id] && { acceptances: db.termsHistory[doc.id] }),
     };
   });
 }

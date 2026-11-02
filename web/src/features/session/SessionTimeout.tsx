@@ -20,11 +20,13 @@ export function SessionTimeout({
 }: SessionTimeoutProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, expireSession } = useAuth();
 
+  // Ended here, not by the screen it leads to: that chunk may never load on a lost connection.
   const onTimeout = useCallback(() => {
+    expireSession();
     void navigate(paths.sessionExpired, { replace: true });
-  }, [navigate]);
+  }, [expireSession, navigate]);
 
   const { deadline, stayActive } = useIdleTimeout({ timeoutMs, warningMs, onTimeout });
 

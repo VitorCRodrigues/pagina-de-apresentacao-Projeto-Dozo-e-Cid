@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { type QueryKey, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { asLocale } from "@/lib/locale";
@@ -6,6 +6,7 @@ import type { Locale } from "./types";
 import { ApiContext } from "./api-context";
 import { useAuth } from "./auth-context";
 import { createApiClient } from "./client";
+import { clearSessionData } from "./session-data";
 
 function localeSource(initial: Locale) {
   let current = initial;
@@ -18,7 +19,7 @@ function localeSource(initial: Locale) {
 }
 
 export function ApiProvider({ children }: { children: ReactNode }) {
-  const { status, getAccessToken } = useAuth();
+  const { status, getAccessToken, expireSession } = useAuth();
   const { i18n } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -27,8 +28,13 @@ export function ApiProvider({ children }: { children: ReactNode }) {
   const [locale] = useState(() => localeSource(asLocale(i18n.resolvedLanguage ?? i18n.language)));
 
   const client = useMemo(
-    () => createApiClient({ getToken: getAccessToken, getLocale: locale.get }),
-    [getAccessToken, locale],
+    () =>
+      createApiClient({
+        getToken: getAccessToken,
+        getLocale: locale.get,
+        onSessionExpired: expireSession,
+      }),
+    [getAccessToken, locale, expireSession],
   );
 
   // Editorial content comes translated from the API (decisions.md, item 12): refetch it.
@@ -45,8 +51,21 @@ export function ApiProvider({ children }: { children: ReactNode }) {
 
   // No personal data stays in the cache after the session ends.
   useEffect(() => {
-    if (status === "signedOut") queryClient.removeQueries({ queryKey: ["session"] });
+    if (status === "signedOut" || status === "expired") clearSessionData(queryClient);
   }, [status, queryClient]);
+
+  // A request can outlive its session: a late answer must not bring personal data back.
+  useEffect(
+    () =>
+      queryClient.getQueryCache().subscribe((event) => {
+        if (event.type !== "updated" || event.action.type !== "success") return;
+        const queryKey = event.query.queryKey as QueryKey;
+        if (queryKey[0] === "session" && !getAccessToken()) {
+          queryClient.removeQueries({ queryKey, exact: true });
+        }
+      }),
+    [queryClient, getAccessToken],
+  );
 
   return <ApiContext value={client}>{children}</ApiContext>;
 }

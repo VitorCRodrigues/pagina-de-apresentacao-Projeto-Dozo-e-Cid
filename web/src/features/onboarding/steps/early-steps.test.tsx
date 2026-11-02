@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import { server } from "@/mocks/node";
+import { saveExplicitLocale } from "@/i18n/locale-preference";
 import { renderApp } from "@/test/render-app";
 
 // Records the bodies sent to a route, still answering with the given status.
@@ -77,6 +78,8 @@ describe("onboarding steps 1 to 3", () => {
   });
 
   it("T1 waitlist still joins with the client's own country", async () => {
+    // The fictitious client's account is in Portuguese; this test reads Spanish.
+    saveExplicitLocale("es");
     const posted = record("post", "/waitlist");
     const user = userEvent.setup();
     renderApp({ path: "/inicio", scenario: "market_not_live" });

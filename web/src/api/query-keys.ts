@@ -17,4 +17,6 @@ export const queryKeys = {
   deposit: (id: string) => ["session", "deposit", id] as const,
   notifications: ["session", "notifications"],
   terms: ["session", "terms"],
+  notificationPrefs: ["session", "notification-prefs"],
+  suitability: ["session", "suitability"],
 } as const;

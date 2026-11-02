@@ -71,11 +71,11 @@ export function CostTable({
         </tr>
         {netRow && (
           <tr className="border-t-[3px] border-double border-graphite-900 align-baseline">
-            <th scope="row" className="type-label pt-4 text-left text-green-700">
+            <th scope="row" className="type-label pt-4 text-left text-navy-900">
               {t("costs.net")}
             </th>
             <td />
-            <td className="type-value-lg pt-4 text-right whitespace-nowrap text-green-700">
+            <td className="type-value-lg pt-4 text-right whitespace-nowrap text-navy-900">
               {formatMoney(netToInvestCents, locale)}
             </td>
           </tr>

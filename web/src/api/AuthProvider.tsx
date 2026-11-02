@@ -33,11 +33,21 @@ export function AuthProvider({ client, initialSession, children }: AuthProviderP
     await client.logout();
   }, [client]);
 
+  // Only a session that exists can expire: a late 401 after sign-out changes nothing. The
+  // provider hears of it too, so a refresh token does not outlive the session; offline, the
+  // local session still ends.
+  const expireSession = useCallback(() => {
+    if (!token.current) return;
+    token.current = null;
+    setStatus("expired");
+    client.logout().catch(() => undefined);
+  }, [client]);
+
   const getAccessToken = useCallback(() => token.current, []);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ status, login, logout, getAccessToken }),
-    [status, login, logout, getAccessToken],
+    () => ({ status, login, logout, expireSession, getAccessToken }),
+    [status, login, logout, expireSession, getAccessToken],
   );
 
   return <AuthContext value={value}>{children}</AuthContext>;

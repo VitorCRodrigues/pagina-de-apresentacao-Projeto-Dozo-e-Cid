@@ -55,7 +55,7 @@ export function PlanForm({ config, rails, locale, initial, onBack, onSubmit }: P
       id={formId}
       noValidate
       onSubmit={(event) => void submit(event)}
-      className="flex flex-col gap-6 pb-24"
+      className="flex flex-col gap-6"
     >
       <Field
         label={t("plan.form.amount")}
@@ -100,6 +100,10 @@ export function PlanForm({ config, rails, locale, initial, onBack, onSubmit }: P
         name="rail"
         render={({ field }) => (
           <div className="flex flex-col gap-2">
+            {/* The group's accessible name comes from `label`; this is its visible twin. */}
+            <p aria-hidden={true} className="type-label text-graphite-900">
+              {t("plan.form.rail")}
+            </p>
             <RadioCardGroup
               label={t("plan.form.rail")}
               value={String(field.value)}

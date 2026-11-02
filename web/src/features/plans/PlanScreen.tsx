@@ -10,6 +10,7 @@ import { buttonClass } from "@/components/component-styles";
 import { ErrorState, LoadingState } from "@/components/PageState";
 import { RiskNote } from "@/components/RiskNote";
 import { accountBlock } from "@/features/deposits/rules";
+import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
 import { SUPPORT_EMAIL } from "@/lib/support";
 import { currentPlan, planRails } from "./plan-rules";
@@ -41,7 +42,14 @@ export function PlanScreen() {
   );
 
   const failed = [plans, account, config, me].find((query) => query.isError);
+  // What the step around the body shows. Instructions only where there is something to choose;
+  // the risk note wherever a plan or its costs are on screen (PRD section 10).
   let body;
+  let title = t("plan.title");
+  let instructions = false;
+  let explainsWindow = false;
+  let riskNote = false;
+  let actionBar = false;
   if (failed) {
     body = <ErrorState onRetry={() => void failed.refetch()} />;
   } else if (!plans.data || !account.data || !config.data || !me.data) {
@@ -53,6 +61,7 @@ export function PlanScreen() {
     const toView = () => {
       setMode({ step: "view" });
     };
+    riskNote = true;
 
     if (block) {
       const keys = blockMessageKeys(block.reason);
@@ -75,6 +84,8 @@ export function PlanScreen() {
     } else if (rails.length === 0) {
       body = <Banner tone="warning" title={t("plan.noRails")} />;
     } else if (mode.step === "review") {
+      title = t("plan.review.title");
+      actionBar = true;
       body = (
         <PlanReview
           draft={mode.draft}
@@ -87,6 +98,7 @@ export function PlanScreen() {
         />
       );
     } else if (plan && mode.step === "view") {
+      explainsWindow = true;
       body = (
         <PlanSummary
           plan={plan}
@@ -98,6 +110,8 @@ export function PlanScreen() {
         />
       );
     } else {
+      instructions = true;
+      actionBar = true;
       body = (
         <>
           {hadCancelled && <Banner title={t("plan.cancelled")} quiet />}
@@ -117,13 +131,21 @@ export function PlanScreen() {
   }
 
   return (
-    <section className="flex flex-col gap-8 py-2">
+    // pb-24 on the whole screen: nothing, the risk note included, ends behind the ActionBar.
+    <section className={cx("flex flex-col gap-8 py-2", actionBar && "pb-24")}>
       <header className="flex flex-col gap-3">
-        <h1 className="type-title text-navy-900">{t("plan.title")}</h1>
-        <p className="type-body max-w-prose text-gray-600">{t("plan.intro")}</p>
+        <h1 className="type-title text-navy-900">{title}</h1>
+        {instructions && (
+          <p className="type-body max-w-prose text-gray-600">
+            {t("plan.intro")} {t("plan.window")}
+          </p>
+        )}
       </header>
       {body}
-      <RiskNote />
+      {explainsWindow && (
+        <p className="type-caption max-w-prose text-gray-600">{t("plan.window")}</p>
+      )}
+      {riskNote && <RiskNote />}
     </section>
   );
 }

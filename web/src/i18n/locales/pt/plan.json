@@ -1,7 +1,7 @@
 {
   "plan": {
     "title": "Plano mensal",
-    "intro": "Você escolhe quanto e em que dia. O dinheiro é investido na janela mensal de investimento, e nesse dia avisamos: «Hora do seu aporte».",
+    "intro": "Você escolhe quanto e em que dia.",
     "form": {
       "amount": "Valor por mês",
       "amountHelp": "O mínimo é {{min}} por mês. Abaixo disso, os custos fixos de envio pesam demais sobre o que você investe.",
@@ -32,7 +32,6 @@
       "dayValue": "{{day}} de cada mês",
       "rail": "Meio de envio",
       "next": "Próximo aporte",
-      "status": "Status",
       "statuses": {
         "active": "Ativo",
         "paused": "Pausado"
@@ -52,6 +51,7 @@
       "body": "Deixamos de avisar todo mês. Seus aportes e investimentos não mudam.",
       "confirm": "Cancelar plano",
       "back": "Voltar"
-    }
+    },
+    "window": "O dinheiro é investido na janela mensal de investimento, e nesse dia avisamos: «Hora do seu aporte»."
   }
 }

@@ -27,7 +27,9 @@ export function PendingScreen() {
       groups.length === 0 ? (
         <EmptyState title={t("pending.empty.title")} body={t("pending.empty.body")} />
       ) : (
-        groups.map((group) => <Group key={group.kind} group={group} locale={locale} />)
+        groups.map((group, index) => (
+          <Group key={group.kind} group={group} locale={locale} isFirst={index === 0} />
+        ))
       );
   }
 
@@ -39,7 +41,15 @@ export function PendingScreen() {
   );
 }
 
-function Group({ group, locale }: { group: PendingGroup; locale: Locale }) {
+function Group({
+  group,
+  locale,
+  isFirst,
+}: {
+  group: PendingGroup;
+  locale: Locale;
+  isFirst: boolean;
+}) {
   const { t } = useTranslation("pending");
   const id = `pending-${group.kind}`;
   const title = t(`pending.groups.${group.kind}`);
@@ -49,15 +59,29 @@ function Group({ group, locale }: { group: PendingGroup; locale: Locale }) {
         {title}
       </h2>
       <ul aria-label={title} className="border-y border-gray-200">
-        {group.items.map((item) => (
-          <PendingRow key={item.id} item={item} locale={locale} />
+        {group.items.map((item, index) => (
+          <PendingRow
+            key={item.id}
+            item={item}
+            locale={locale}
+            // Groups go money first, so this is the most urgent item, when money is waiting.
+            primary={isFirst && index === 0 && group.kind === "deposit_action"}
+          />
         ))}
       </ul>
     </section>
   );
 }
 
-function PendingRow({ item, locale }: { item: Notification; locale: Locale }) {
+function PendingRow({
+  item,
+  locale,
+  primary,
+}: {
+  item: Notification;
+  locale: Locale;
+  primary: boolean;
+}) {
   const { t } = useTranslation("pending");
   const overdue = isOverdue(item, new Date());
   return (
@@ -67,13 +91,16 @@ function PendingRow({ item, locale }: { item: Notification; locale: Locale }) {
       {item.dueAt && (
         // An overdue deadline is a warning (amber), never a loss colour.
         <p
-          className={cx("type-caption tabular-nums", overdue ? "text-amber-700" : "text-gray-600")}
+          className={cx(
+            "tabular-nums",
+            overdue ? "type-label text-amber-700" : "type-caption text-gray-600",
+          )}
         >
           {t(overdue ? "pending.overdue" : "pending.due", { date: formatDate(item.dueAt, locale) })}
         </p>
       )}
-      <div className="-ml-1 pt-1">
-        <PendingItemAction item={item} />
+      <div className={primary ? "w-full pt-3 sm:w-auto" : "-ml-1 pt-1"}>
+        <PendingItemAction item={item} primary={primary} />
       </div>
     </li>
   );

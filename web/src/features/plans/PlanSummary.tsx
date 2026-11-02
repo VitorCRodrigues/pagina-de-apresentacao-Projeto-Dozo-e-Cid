@@ -45,22 +45,28 @@ export function PlanSummary({ plan, locale, readOnly, onEdit }: PlanSummaryProps
   return (
     <div className="flex flex-col gap-6">
       {plan.status === "paused" && <Banner title={t("plan.paused")} quiet />}
+      {/* One focus: how much goes in each month. Inter: Fraunces is for the total alone. */}
+      <div className="flex items-end justify-between gap-4">
+        <div className="flex flex-col gap-0.5">
+          <p className="type-label text-gray-600">{t("plan.summary.amount")}</p>
+          <p className="type-value-lg text-graphite-900">{formatMoney(plan.amountCents, locale)}</p>
+        </div>
+        {plan.status !== "cancelled" && (
+          <p className="type-label text-gray-600">{t(`plan.summary.statuses.${plan.status}`)}</p>
+        )}
+      </div>
       <Ledger>
-        <LedgerRow label={t("plan.summary.amount")}>
-          {formatMoney(plan.amountCents, locale)}
-        </LedgerRow>
         <LedgerRow label={t("plan.summary.day")}>
-          {t("plan.summary.dayValue", { day: plan.dayOfMonth })}
+          <span className="type-body">{t("plan.summary.dayValue", { day: plan.dayOfMonth })}</span>
         </LedgerRow>
         <LedgerRow label={t("plan.summary.rail")}>
-          {td(`deposit.rail.names.${plan.rail}`)}
+          <span className="type-body">{td(`deposit.rail.names.${plan.rail}`)}</span>
         </LedgerRow>
         {plan.status === "active" && plan.nextRunAt && (
-          <LedgerRow label={t("plan.summary.next")}>{formatDate(plan.nextRunAt, locale)}</LedgerRow>
+          <LedgerRow label={t("plan.summary.next")}>
+            <span className="type-body tabular-nums">{formatDate(plan.nextRunAt, locale)}</span>
+          </LedgerRow>
         )}
-        <LedgerRow label={t("plan.summary.status")}>
-          {plan.status === "cancelled" ? null : t(`plan.summary.statuses.${plan.status}`)}
-        </LedgerRow>
       </Ledger>
 
       {!confirmCancel && errorBanner}

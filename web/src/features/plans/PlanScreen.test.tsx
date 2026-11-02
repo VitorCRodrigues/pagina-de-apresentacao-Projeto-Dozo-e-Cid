@@ -60,7 +60,7 @@ describe("monthly plan (T5)", () => {
 
   it("explains the monthly window and the reminder", async () => {
     await open("empty");
-    expect(screen.getByText(/ventana mensual de inversión/)).toBeInTheDocument();
+    expect(await screen.findByText(/ventana mensual de inversión/)).toBeInTheDocument();
     expect(screen.getByText(/Hora de tu aporte/)).toBeInTheDocument();
   });
 
@@ -198,6 +198,47 @@ describe("monthly plan (T5)", () => {
     for (const name of ["Pausar plan", "Editar plan", "Cancelar plan", "Continuar"]) {
       expect(screen.queryByRole("button", { name })).toBeNull();
     }
+  });
+
+  it("the preview has one headline of its own and no form instructions", async () => {
+    const user = userEvent.setup();
+    await open("empty");
+    await toReview(user, "500");
+    expect(await screen.findByRole("heading", { level: 1, name: "Revisá tu plan" })).toBeVisible();
+    expect(screen.queryByRole("heading", { level: 1, name: "Plan mensual" })).toBeNull();
+    expect(screen.queryByText(/Elegís cuánto/)).toBeNull();
+    expect(screen.getByText(/Invertir implica riesgos/)).toBeInTheDocument();
+  });
+
+  it("an existing plan leads with its amount; only the amount reads as a figure", async () => {
+    await open("open");
+    const amount = await screen.findByText("US$ 500,00");
+    expect(amount.className).toMatch(/\btype-value-lg\b/);
+    expect(screen.getByText("5 de cada mes").className).toMatch(/\btype-body\b/);
+    // Nothing to choose here: the window is explained, the form's instructions are not.
+    expect(screen.queryByText(/Elegís cuánto/)).toBeNull();
+    expect(screen.getByText(/ventana mensual de inversión/)).toBeInTheDocument();
+  });
+
+  it("the transfer method has a visible label, like the other fields", async () => {
+    await open("empty");
+    await screen.findByLabelText("Valor por mes");
+    expect(screen.getByText("Medio de envío")).toBeVisible();
+  });
+
+  it("loading and error show neither form instructions nor the risk note", async () => {
+    server.use(
+      http.get("/api/v1/plans", () =>
+        HttpResponse.json({ error: { code: "internal", message: "x" } }, { status: 500 }),
+      ),
+    );
+    await open();
+    const title = await screen.findByRole("heading", {
+      name: "No pudimos cargar esta información",
+    });
+    expect(title.className).toMatch(/\btype-heading\b/);
+    expect(screen.queryByText(/Elegís cuánto/)).toBeNull();
+    expect(screen.queryByText(/Invertir implica riesgos/)).toBeNull();
   });
 
   it("error: retry asks again", async () => {

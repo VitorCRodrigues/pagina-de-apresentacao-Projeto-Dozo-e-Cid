@@ -1,7 +1,7 @@
 {
   "plan": {
     "title": "Plan mensual",
-    "intro": "Elegís cuánto y qué día. El dinero se invierte en la ventana mensual de inversión, y ese día te avisamos: «Hora de tu aporte».",
+    "intro": "Elegís cuánto y qué día.",
     "form": {
       "amount": "Valor por mes",
       "amountHelp": "El mínimo es {{min}} por mes. Debajo de ese monto, los costos fijos de envío pesan demasiado sobre lo que invertís.",
@@ -32,7 +32,6 @@
       "dayValue": "{{day}} de cada mes",
       "rail": "Medio de envío",
       "next": "Próximo aporte",
-      "status": "Estado",
       "statuses": {
         "active": "Activo",
         "paused": "Pausado"
@@ -52,6 +51,7 @@
       "body": "Dejamos de avisarte cada mes. Tus aportes e inversiones no cambian.",
       "confirm": "Cancelar plan",
       "back": "Volver"
-    }
+    },
+    "window": "El dinero se invierte en la ventana mensual de inversión, y ese día te avisamos: «Hora de tu aporte»."
   }
 }

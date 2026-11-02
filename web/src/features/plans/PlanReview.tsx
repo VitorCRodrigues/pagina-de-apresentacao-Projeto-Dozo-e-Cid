@@ -61,17 +61,16 @@ export function PlanReview({ draft, planId, locale, onBack, onSaved }: PlanRevie
   };
 
   return (
-    <div className="flex flex-col gap-6 pb-24">
-      <h2 className="type-heading text-navy-900">{t("plan.review.title")}</h2>
+    <div className="flex flex-col gap-6">
       <Ledger>
         <LedgerRow label={t("plan.summary.amount")}>
           {formatMoney(draft.amountCents, locale)}
         </LedgerRow>
         <LedgerRow label={t("plan.summary.day")}>
-          {t("plan.summary.dayValue", { day: draft.dayOfMonth })}
+          <span className="type-body">{t("plan.summary.dayValue", { day: draft.dayOfMonth })}</span>
         </LedgerRow>
         <LedgerRow label={t("plan.summary.rail")}>
-          {td(`deposit.rail.names.${draft.rail}`)}
+          <span className="type-body">{td(`deposit.rail.names.${draft.rail}`)}</span>
         </LedgerRow>
       </Ledger>
 

@@ -22,6 +22,31 @@ async function expectNoHorizontalScroll(page: Page) {
   expect(overflow).toBeLessThanOrEqual(0);
 }
 
+// PRD section 10: the risk notice must be readable on plan screens, never behind the fixed bar.
+async function expectRiskNoteClearOfActionBar(page: Page) {
+  await page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)");
+  const note = await page.getByText(/Invertir implica riesgos/).boundingBox();
+  const bar = await page.locator("div.fixed.bottom-0").first().boundingBox();
+  expect(note).not.toBeNull();
+  expect(bar).not.toBeNull();
+  expect((note?.y ?? 0) + (note?.height ?? 0)).toBeLessThanOrEqual(bar?.y ?? 0);
+}
+
+for (const viewport of [phone, { width: 1280, height: 900 }]) {
+  test(`the risk note stays readable above the action bar at ${String(viewport.width)} px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await signIn(page, "empty");
+    await page.getByRole("link", { name: "Crear plan" }).click();
+    await page.getByLabel("Valor por mes").fill("500");
+    await expectRiskNoteClearOfActionBar(page);
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await expect(page.getByRole("table")).toBeVisible();
+    await expectRiskNoteClearOfActionBar(page);
+  });
+}
+
 test("creates, pauses, resumes and cancels the monthly plan", async ({ page }) => {
   await signIn(page, "empty");
   await page.getByRole("link", { name: "Crear plan" }).click();

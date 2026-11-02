@@ -60,6 +60,7 @@ export function ErrorState({ onRetry }: { onRetry: () => void }) {
   const { t } = useTranslation();
   return (
     <StateLayout
+      titleSize="heading"
       title={t("states.error.title")}
       body={t("states.error.body")}
       action={<Button onClick={onRetry}>{t("common.retry")}</Button>}

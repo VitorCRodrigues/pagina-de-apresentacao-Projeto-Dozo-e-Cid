@@ -71,6 +71,40 @@ describe("pending items (T11)", () => {
     expect(within(row("Título later")).getByText(/^Hasta el /)).toBeInTheDocument();
   });
 
+  it("money waiting on the client is the screen's one primary action", async () => {
+    serve([
+      item("a1", "deposit_action", { depositId: "dep-1" }),
+      item("a2", "deposit_action", { depositId: "dep-2" }),
+      item("n", "notice"),
+    ]);
+    await open();
+    const [first, second] = await screen.findAllByRole("link", { name: "Ver instrucciones" });
+    expect(first?.className).toMatch(/\bbg-navy-900\b/);
+    expect(second?.className).not.toMatch(/\bbg-navy-900\b/);
+    expect(screen.getByRole("button", { name: "Entendido" }).className).not.toMatch(
+      /\bbg-navy-900\b/,
+    );
+  });
+
+  it("without money waiting there is no primary action", async () => {
+    serve([item("d", "document"), item("n", "notice")]);
+    await open();
+    await screen.findByText("Título d");
+    expect(document.querySelector("main .bg-navy-900, section .bg-navy-900")).toBeNull();
+  });
+
+  it("an overdue deadline carries more weight than a future one", async () => {
+    serve([
+      item("late", "document", { dueAt: "2020-01-10T12:00:00Z" }),
+      item("later", "document", { dueAt: "2099-01-10T12:00:00Z" }),
+    ]);
+    await open();
+    const late = await screen.findByText(/^Venció el /);
+    expect(late.className).toMatch(/\btype-label\b/);
+    expect(late.className).toMatch(/\btext-amber-700\b/);
+    expect(screen.getByText(/^Hasta el /).className).toMatch(/\btype-caption\b/);
+  });
+
   it("a deposit waiting on the client links to its instructions", async () => {
     serve([item("a", "deposit_action", { depositId: "dep-7" })]);
     await open();
@@ -92,7 +126,9 @@ describe("pending items (T11)", () => {
     const user = userEvent.setup();
     await open();
     await user.click(await screen.findByRole("button", { name: "Enviar documento" }));
-    const sheet = await screen.findByRole("dialog", { name: "Título d" });
+    // The sheet names the action; the document's name appears once, in the upload itself.
+    const sheet = await screen.findByRole("dialog", { name: "Enviar documento" });
+    expect(within(sheet).getAllByText("Título d")).toHaveLength(1);
     expect(within(sheet).getByText("Descripción d")).toBeInTheDocument();
   });
 

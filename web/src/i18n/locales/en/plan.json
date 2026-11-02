@@ -1,7 +1,7 @@
 {
   "plan": {
     "title": "Monthly plan",
-    "intro": "You choose how much and which day. The money is invested in the monthly investment window, and on that day we remind you: “Time for your deposit”.",
+    "intro": "You choose how much and which day.",
     "form": {
       "amount": "Amount per month",
       "amountHelp": "The minimum is {{min}} a month. Below that, fixed transfer costs weigh too much on what you invest.",
@@ -32,7 +32,6 @@
       "dayValue": "Day {{day}} of each month",
       "rail": "Transfer method",
       "next": "Next deposit",
-      "status": "Status",
       "statuses": {
         "active": "Active",
         "paused": "Paused"
@@ -52,6 +51,7 @@
       "body": "We stop reminding you each month. Your deposits and investments don't change.",
       "confirm": "Cancel plan",
       "back": "Back"
-    }
+    },
+    "window": "The money is invested in the monthly investment window, and on that day we remind you: “Time for your deposit”."
   }
 }

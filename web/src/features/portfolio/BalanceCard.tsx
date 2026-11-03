@@ -15,7 +15,8 @@ interface BalanceCardProps {
   children?: ReactNode;
 }
 
-// The one headline figure of T4 and T9: the total in Fraunces, gold on navy (decisions.md, 10).
+// The one headline figure of T4 and T9: the total in Inter Display, cream on navy; gold is
+// left only on the "Total" label (decisions.md, 03/11).
 // The total is the sum of the buckets shown below it, so the lines always add up on screen.
 export function BalanceCard({ portfolio, locale, note, children }: BalanceCardProps) {
   const { t } = useTranslation("portfolio");
@@ -31,13 +32,18 @@ export function BalanceCard({ portfolio, locale, note, children }: BalanceCardPr
   return (
     <Card tone="inverse" className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <p className="type-label text-cream-50">{t("portfolio.total")}</p>
         {totalCents <= 0 ? (
-          // Nothing to celebrate (no balance yet, or cash owed for a fee): gold and Fraunces
-          // wait until there is a balance.
-          <p className="type-value-lg text-cream-50">{formatMoney(totalCents, locale)}</p>
+          // Nothing to mark (no balance yet, or cash owed for a fee): the gold label and the
+          // display figure wait until there is a balance.
+          <>
+            <p className="type-label text-cream-50">{t("portfolio.total")}</p>
+            <p className="type-value-lg text-cream-50">{formatMoney(totalCents, locale)}</p>
+          </>
         ) : (
-          <Money cents={totalCents} locale={locale} size="display" className="text-gold-500" />
+          <>
+            <p className="type-label text-gold-500">{t("portfolio.total")}</p>
+            <Money cents={totalCents} locale={locale} size="display" className="text-cream-50" />
+          </>
         )}
       </div>
       {children}

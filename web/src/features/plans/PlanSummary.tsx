@@ -45,7 +45,7 @@ export function PlanSummary({ plan, locale, readOnly, onEdit }: PlanSummaryProps
   return (
     <div className="flex flex-col gap-6">
       {plan.status === "paused" && <Banner title={t("plan.paused")} quiet />}
-      {/* One focus: how much goes in each month. Inter: Fraunces is for the total alone. */}
+      {/* One focus: how much goes in each month. The display size is for the total alone. */}
       <div className="flex items-end justify-between gap-4">
         <div className="flex flex-col gap-0.5">
           <p className="type-label text-gray-600">{t("plan.summary.amount")}</p>

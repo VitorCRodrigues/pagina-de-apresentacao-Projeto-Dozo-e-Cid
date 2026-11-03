@@ -17,7 +17,7 @@ export const DisplayOnInverse = meta.story({
         cents={1248050}
         locale={storyLocale(globals)}
         size="display"
-        className="text-gold-500"
+        className="text-cream-50"
       />
     </div>
   ),

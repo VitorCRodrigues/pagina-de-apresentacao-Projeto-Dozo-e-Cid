@@ -37,8 +37,9 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 
 - Estética "private banking digital": fundo creme, marinho, muito respiro. Um foco e uma ação primária por tela.
 - Cores e espaçamentos só por tokens (@theme em src/styles/tokens.css, Tailwind v4). Nunca hex solto em componente.
-- Fraunces em títulos; Inter na UI.
-- Valores em coluna, tabela ou contagem: Inter com tabular-nums. Fraunces só em número isolado de destaque (ex.: saldo total), pois não tem algarismos tabulares.
+- Uma família só: Inter (variável, opsz + wght, self-hosted). Sem serifada no produto (decisions.md, 19).
+- Títulos de destaque (type-display, type-title) e o número isolado de destaque (type-value-display, ex.: saldo total) em Inter Display (opsz 32). Valores em coluna, tabela ou contagem: Inter com algarismos tabulares (type-value*).
+- Saldo total: creme sobre marinho; centavos na mesma linha de base, menores e mais leves, nunca sobrescritos. Dourado só no rótulo "Total".
 - Proibido: gradientes, neon, emoji, ícones de moeda/foguete, linguagem de hype ou de cripto, gráfico de rentabilidade diária.
 - Mobile-first (referência 375 px), WCAG 2.1 AA, respeitar prefers-reduced-motion.
 - Reutilize componentes de src/components antes de criar novos.

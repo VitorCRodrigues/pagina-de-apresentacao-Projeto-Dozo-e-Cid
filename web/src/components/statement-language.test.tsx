@@ -99,16 +99,16 @@ describe("statement language", () => {
     expect(done?.className).not.toBe(current?.className);
   });
 
-  it("Wordmark sizes come from the type scale, with no arbitrary values", () => {
+  it("Wordmark sizes come from the spacing scale, with no arbitrary values", () => {
     const { container } = render(
       <>
         <Wordmark />
         <Wordmark size="lg" />
       </>,
     );
-    const names = [...container.querySelectorAll("span > span")].map((el) => el.className);
+    const names = [...container.querySelectorAll("img")].map((el) => el.className);
     expect(names.join(" ")).not.toMatch(/\[/);
-    expect(names.some((name) => name.includes("type-title"))).toBe(true);
+    expect(names.map((name) => name.match(/\bh-\d+\b/)?.[0])).toEqual(["h-8", "h-10"]);
   });
 
   it("Ledger lays out label/value pairs as a description list between rules", () => {
@@ -178,7 +178,6 @@ describe("className overrides win over built-in colours", () => {
     ["RiskNote", <RiskNote className="text-graphite-900" />, "text-gray-600", "text-graphite-900"],
     ["Skeleton", <Skeleton className="bg-gray-200" />, "bg-gray-100", "bg-gray-200"],
     ["Input", <Input className="border-navy-900" />, "border-gray-500", "border-navy-900"],
-    ["Wordmark", <Wordmark className="text-gold-500" />, "text-navy-900", "text-gold-500"],
   ] as const)("%s", (_name, element, builtIn, override) => {
     const { container } = render(element);
     const html = container.innerHTML;

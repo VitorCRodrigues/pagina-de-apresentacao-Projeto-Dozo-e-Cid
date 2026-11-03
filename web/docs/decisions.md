@@ -25,3 +25,9 @@
 | 16 | Plano mensal | Trilho obrigatório. `dayOfMonth` de 1 a 28. |
 | 17 | Prazo de abertura de conta | Sempre "alguns dias úteis". Nunca "minutos". |
 | 18 | Branch | O front vive na branch `Front-end-web`. Nenhum merge na `main` sem alinhar com o Dozo. |
+
+## Decisões de 03/11
+
+| # | Tema | Decisão para o front |
+|---|---|---|
+| 19 | Tipografia | Decisão de 03/11: a Fraunces sai do produto. Motivo: o logo é uma sans geométrica e o padrão do setor (Wealthfront, Mercury, Betterment) é sem serifa nos números e no produto. Serifada só em marketing, se houver. No app: Inter em tudo; Inter Display (opsz 32) em títulos de destaque e no saldo total, com algarismos regulares e tabulares. Substitui, na decisão 10, "dourado só no saldo total": o número do saldo é creme sobre marinho, e o dourado fica só no rótulo "Total". |

@@ -11,7 +11,7 @@ interface CostTableProps {
   locale: Locale;
   caption?: string;
   // false leaves out the amount that arrives to invest, for a screen that shows it apart as
-  // its headline figure (T6). Fraunces never goes inside the table columns.
+  // its headline figure (T6). The display size never goes inside the table columns.
   netRow?: boolean;
 }
 

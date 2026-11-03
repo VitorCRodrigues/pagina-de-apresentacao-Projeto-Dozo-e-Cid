@@ -68,11 +68,21 @@ describe("home (T4)", () => {
     expect(screen.getByText(/Actualizado el .*2026.*\d{2}:\d{2}/)).toBeInTheDocument();
   });
 
-  it("the total is the only figure in Fraunces", async () => {
+  it("the total is the only display figure", async () => {
     serve({});
     await open();
     await screen.findByText("US$ 2.012,00");
     expect(document.querySelectorAll(".type-value-display")).toHaveLength(1);
+  });
+
+  it("the total is cream on navy; gold marks only the Total label (decision of 03/11)", async () => {
+    serve({});
+    await open();
+    const total = (await screen.findByText("US$ 2.012,00")).parentElement;
+    expect(total).toHaveClass("text-cream-50");
+    expect(total).not.toHaveClass("text-gold-500");
+    const gold = [...document.querySelectorAll(".text-gold-500")];
+    expect(gold.map((el) => el.textContent)).toEqual(["Total"]);
   });
 
   it("next deposit: the active plan's date and amount", async () => {

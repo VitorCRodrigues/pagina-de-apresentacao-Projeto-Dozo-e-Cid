@@ -89,7 +89,8 @@ Quem decide: **Jurídico** (pareceres e textos), **Dozo** (backend e contrato de
 | decisão | `src/api/auth.ts` | Renovação silenciosa do token | Implementar com o provedor escolhido | Dozo |
 | decisão | `src/App.tsx` | Autenticação ainda é simulada | Trocar pelo cliente OIDC real | Dozo |
 | decisão | `src/components/RouteFallback.tsx` | Fallback de rota ainda simples | Trocar pelo esqueleto de carregamento | Produto |
-| decisão | `src/components/Wordmark.tsx` | Logo provisório | Receber o logo final | Produto |
+| decisão | `src/components/Wordmark.tsx` | Logo oficial em PNG, versões chapadas geradas por `scripts/brand-assets.py` | Receber do designer o SVG do wordmark e do símbolo chapados | Produto |
+| decisão | `src/components/BrandSymbol.tsx` | Símbolo oficial em PNG, versões chapadas geradas por `scripts/brand-assets.py` | Receber do designer o SVG do wordmark e do símbolo chapados | Produto |
 
 ## Fora do código: depende do registro RIA
 

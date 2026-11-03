@@ -172,8 +172,8 @@ function Domain({ locale, quoteExpiresAt }: { locale: Locale; quoteExpiresAt: st
   return (
     <Column title={i18n.t("demo:overview.domain")}>
       <Card tone="inverse" className="flex flex-col gap-1">
-        <p className="type-label">{i18n.t("demo:balance.total")}</p>
-        <Money cents={1248050} locale={locale} size="display" className="text-gold-500" />
+        <p className="type-label text-gold-500">{i18n.t("demo:balance.total")}</p>
+        <Money cents={1248050} locale={locale} size="display" className="text-cream-50" />
       </Card>
       <Ledger>
         <LedgerRow label={i18n.t("demo:balance.invested")}>

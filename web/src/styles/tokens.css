@@ -7,7 +7,7 @@
   /* Brand */
   --od-navy-900: #0b1f3a;
   --od-green-700: #1f6f54;
-  --od-gold-500: #c9a227; /* only the total balance on navy; never text on cream, never a button */
+  --od-gold-500: #c9a227; /* only the "Total" label on navy; never text on cream, never a button */
   --od-cream-50: #f7f4ee;
   --od-graphite-900: #1c1c1c;
 
@@ -31,9 +31,9 @@
   --od-brick-50: #f5e2dc; /* countdown, expired */
 
   /* Type */
-  --od-font-serif: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
   --od-font-sans:
-    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
   --od-font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
 
   /* Shape: 8 px for controls, 12 px for cards and sheets. */
@@ -83,7 +83,8 @@
   --color-brick-50: var(--od-brick-50);
   --color-brick-700: var(--od-brick-700);
 
-  --font-serif: var(--od-font-serif);
+  /* No serif in the product (decisions.md, 03/11): only these two families exist. */
+  --font-*: initial;
   --font-sans: var(--od-font-sans);
   --font-mono: var(--od-font-mono);
 

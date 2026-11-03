@@ -1,32 +1,33 @@
 /*
- * Semantic type scale. Fraunces for titles and headline figures; Inter for UI.
- * Every value class sets tabular-nums. On Fraunces it is a no-op (the font has no
- * tabular figures), so type-value-display is for a single figure, never a column.
+ * Semantic type scale, all in Inter (decisions.md, 03/11). Display, title and the headline
+ * figure pin opsz 32 (the Inter Display cut: tighter spacing, finer details); the rest let
+ * the browser match the optical size to the font size. Large sizes get negative tracking,
+ * as Inter Display is drawn for it. Every value class sets lining, tabular figures.
  */
 @utility type-display {
-  font-family: var(--od-font-serif);
+  font-family: var(--od-font-sans);
   font-size: 2.5rem;
   line-height: 2.75rem;
-  font-weight: 480;
-  letter-spacing: -0.005em;
-  font-variation-settings: "opsz" 72;
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  font-variation-settings: "opsz" 32;
 }
 
-/* Lighter weight and a moderate optical size (variant A): titles read as headings, not posters. */
 @utility type-title {
-  font-family: var(--od-font-serif);
+  font-family: var(--od-font-sans);
   font-size: 1.75rem;
   line-height: 2.125rem;
-  font-weight: 460;
-  font-variation-settings: "opsz" 36;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 32;
 }
 
 @utility type-heading {
-  font-family: var(--od-font-serif);
+  font-family: var(--od-font-sans);
   font-size: 1.25rem;
   line-height: 1.75rem;
-  font-weight: 460;
-  font-variation-settings: "opsz" 24;
+  font-weight: 600;
+  letter-spacing: -0.012em;
 }
 
 @utility type-body {
@@ -53,7 +54,7 @@
 @utility type-value {
   font-family: var(--od-font-sans);
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 @utility type-value-lg {
@@ -61,17 +62,29 @@
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* The headline figure: whole units. Its cents use type-value-cents on the same baseline.
+   44 px keeps US$ 1.234.567,89 inside the inverse card at 375 px. */
 @utility type-value-display {
-  font-family: var(--od-font-serif);
-  font-size: 3rem;
-  line-height: 3.25rem;
-  font-weight: 520;
-  letter-spacing: -0.025em;
-  font-variation-settings: "opsz" 144;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--od-font-sans);
+  font-size: 2.75rem;
+  line-height: 3rem;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 32;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+@utility type-value-cents {
+  font-family: var(--od-font-sans);
+  font-size: 1.625rem;
+  line-height: 1.875rem;
+  font-weight: 420;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 32;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 @utility type-mono {

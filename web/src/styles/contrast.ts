@@ -26,7 +26,8 @@ export const contrastPairs: readonly ContrastPair[] = [
   { fg: "graphite-900", bg: "navy-50", min: 4.5, use: "Selected text" },
   { fg: "cream-50", bg: "navy-900", min: 4.5, use: "Primary button, inverse card" },
   { fg: "cream-50", bg: "navy-800", min: 4.5, use: "Primary button hover" },
-  { fg: "gold-500", bg: "navy-900", min: 4.5, use: "Total value on inverse card" },
+  { fg: "cream-50", bg: "navy-900", min: 4.5, use: "Total value on inverse card" },
+  { fg: "gold-500", bg: "navy-900", min: 4.5, use: "Total label on inverse card" },
   { fg: "white", bg: "brick-700", min: 4.5, use: "Destructive button" },
   { fg: "navy-900", bg: "cream-50", min: 3, use: "Focus ring (non-text)" },
 ];

@@ -438,8 +438,8 @@ function PreviewStep({
         netRow={false}
       />
 
-      {/* The one headline figure of the screen, apart from the table: Fraunces has no
-          tabular figures, so it never sits in a column. */}
+      {/* The one headline figure of the screen, apart from the table: the display size is
+          for a single figure, never a column. */}
       <div className="flex flex-col gap-1 border-t-[3px] border-double border-graphite-900 pt-4">
         <span className="type-label text-navy-900">{t("deposit.preview.net")}</span>
         <Money

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/lib/cx";
 import { BottomNav } from "./BottomNav";
-import { Wordmark } from "./Wordmark";
+import { BrandSymbol } from "./BrandSymbol";
 
 interface AppShellProps {
   // Bottom navigation exists only once the account is open (PRD section 7).
@@ -31,7 +31,7 @@ export function AppShell({ nav = false, children }: AppShellProps) {
             nav && "lg:max-w-[880px]",
           )}
         >
-          <Wordmark />
+          <BrandSymbol />
         </div>
       </header>
       <main

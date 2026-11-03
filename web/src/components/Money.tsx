@@ -6,7 +6,7 @@ interface MoneyProps {
   // Integer USD cents, as the API sends them.
   cents: number;
   locale: Locale;
-  // "display": one headline figure in Fraunces. "inline": tabular Inter that inherits size.
+  // "display": one headline figure in Inter Display. "inline": tabular Inter that inherits size.
   size?: "display" | "inline";
   className?: string;
 }
@@ -20,7 +20,8 @@ export function Money({ cents, locale, size = "inline", className }: MoneyProps)
     );
   }
 
-  // Statement style: small currency and cents set against the cap height of the whole units.
+  // Statement style: currency, units and cents on one baseline; currency and cents smaller and
+  // lighter, never raised.
   const parts = formatMoneyParts(cents, locale);
   const sign = parts.filter((p) => p.type === "minusSign").map((p) => p.value);
   const currency = parts.find((p) => p.type === "currency")?.value;
@@ -36,13 +37,13 @@ export function Money({ cents, locale, size = "inline", className }: MoneyProps)
   return (
     <span className={cx("inline-block whitespace-nowrap", className)}>
       <span className="sr-only">{text}</span>
-      <span aria-hidden={true} className="inline-flex items-start">
-        <span className="type-label mt-2 mr-1.5">
+      <span aria-hidden={true} className="inline-flex items-baseline">
+        <span className="type-label mr-1.5">
           {sign}
           {currency}
         </span>
         <span className="type-value-display">{units}</span>
-        <span className="type-heading mt-1.5 leading-none">{decimals}</span>
+        <span className="type-value-cents">{decimals}</span>
       </span>
     </span>
   );

@@ -28,12 +28,12 @@ export const Paper = meta.story({
 export const Inverse = meta.story({
   render: (_args, { globals }) => (
     <Card tone="inverse" className="flex flex-col gap-1">
-      <p className="type-label text-cream-50">{i18n.t("demo:balance.total")}</p>
+      <p className="type-label text-gold-500">{i18n.t("demo:balance.total")}</p>
       <Money
         cents={1248050}
         locale={storyLocale(globals)}
         size="display"
-        className="text-gold-500"
+        className="text-cream-50"
       />
     </Card>
   ),

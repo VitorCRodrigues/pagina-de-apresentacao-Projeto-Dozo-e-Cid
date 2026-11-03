@@ -8,7 +8,10 @@ const assets = [
   ...readFileSync(html, "utf8").matchAll(
     /<(?:script|link)\b[^>]*?(?:src|href)="\/(assets\/[^"]+)"/g,
   ),
-].map((match) => `dist/${match[1]}`);
+]
+  .map((match) => `dist/${match[1]}`)
+  // Icons are linked from index.html too, but are not part of the code the app waits for.
+  .filter((path) => /\.(js|css)$/.test(path));
 
 export default [
   {
@@ -19,10 +22,10 @@ export default [
   },
   {
     // woff2 is already compressed, so it is measured as is.
-    name: "Fonts (Fraunces + Inter 400/600, Latin)",
+    name: "Fonts (Inter Variable, opsz + wght, Latin)",
     path: "dist/assets/*.woff2",
     gzip: false,
     brotli: false,
-    limit: "120 kB",
+    limit: "80 kB",
   },
 ];

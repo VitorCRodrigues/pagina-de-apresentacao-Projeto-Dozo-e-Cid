@@ -13,7 +13,7 @@ import { useStepForm } from "../useStepForm";
 // Step 7. One box per document from GET /account/terms, in the API order, none pre-checked.
 export function TermsStep() {
   const terms = useTermsDocuments();
-  if (terms.isPending) return <LoadingState />;
+  if (terms.isPending) return <LoadingState shape="form" />;
   if (terms.isError) return <ErrorState onRetry={() => void terms.refetch()} />;
   return <TermsForm docs={terms.data} />;
 }

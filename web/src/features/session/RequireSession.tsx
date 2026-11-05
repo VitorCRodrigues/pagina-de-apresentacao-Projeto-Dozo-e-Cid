@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { type ComponentType, lazy, Suspense } from "react";
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "@/api/auth-context";
 import { isApiError } from "@/api/errors";
@@ -6,15 +6,28 @@ import { useConfig } from "@/api/hooks/config";
 import { useMe } from "@/api/hooks/account";
 import { AppShell } from "@/components/AppShell";
 import { ErrorState, LoadingState } from "@/components/PageState";
+import { reportIssue } from "@/lib/report";
 import { paths } from "@/routes";
 import { hasOpenedAccount, landingPathFor } from "./account-routing";
-import { SessionTimeout } from "./SessionTimeout";
 import { useAccountLocale } from "./useAccountLocale";
 
 // The waitlist form (React Hook Form + Zod) loads only for clients outside the live markets.
 const NotAvailableScreen = lazy(async () => ({
   default: (await import("./NotAvailableScreen")).NotAvailableScreen,
 }));
+
+// The inactivity warning is a dialog (Radix Dialog, scroll lock, focus trap): only signed-in
+// screens need it, so it stays out of the entry screen's download.
+// If its chunk cannot load (a deploy replaced it, the network dropped), the screens stay and only
+// the warning is missing; the server still ends an expired token. Monitoring hears of it.
+const SessionTimeout = lazy(async (): Promise<{ default: ComponentType }> => {
+  try {
+    return { default: (await import("./SessionTimeout")).SessionTimeout };
+  } catch {
+    reportIssue("session_timeout_unavailable");
+    return { default: () => null };
+  }
+});
 
 // Signed in, profile loaded, country live. Everything behind it can rely on useMe().data.
 export function RequireSession() {
@@ -40,6 +53,7 @@ function SessionGate() {
     return (
       <AppShell>
         <ErrorState
+          page
           onRetry={() => {
             void me.refetch();
             void config.refetch();
@@ -69,7 +83,9 @@ function SessionGate() {
 
   return (
     <>
-      <SessionTimeout />
+      <Suspense fallback={null}>
+        <SessionTimeout />
+      </Suspense>
       <Outlet />
     </>
   );

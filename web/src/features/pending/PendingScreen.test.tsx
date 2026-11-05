@@ -130,6 +130,8 @@ describe("pending items (T11)", () => {
     const sheet = await screen.findByRole("dialog", { name: "Enviar documento" });
     expect(within(sheet).getAllByText("Título d")).toHaveLength(1);
     expect(within(sheet).getByText("Descripción d")).toBeInTheDocument();
+    // Alone in the sheet, the upload is not a list item (axe: listitem outside a list).
+    expect(within(sheet).queryByRole("listitem")).toBeNull();
   });
 
   it("new terms: no acceptance before the document is shown, then an explicit unticked box", async () => {
@@ -157,7 +159,7 @@ describe("pending items (T11)", () => {
     expect(accepted).toHaveLength(0);
 
     await user.click(
-      within(dialog).getByRole("link", { name: /Leer el documento \(versión 2026-11\)/ }),
+      within(dialog).getByRole("link", { name: /Leer el documento \(versión noviembre de 2026\)/ }),
     );
     expect(box).toBeEnabled();
     expect(confirm).toBeDisabled();
@@ -195,7 +197,9 @@ describe("pending items (T11)", () => {
     await open();
     await user.click(await screen.findByRole("button", { name: "Revisar y aceptar" }));
     const dialog = await screen.findByRole("dialog", { name: "Política de privacidad" });
-    expect(within(dialog).getByRole("link", { name: /versión 2026-11/ })).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole("link", { name: /versión noviembre de 2026/ }),
+    ).toBeInTheDocument();
   });
 
   it("a notice leaves the list once read", async () => {

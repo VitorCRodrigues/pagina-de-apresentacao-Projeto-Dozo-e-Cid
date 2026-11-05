@@ -1,5 +1,5 @@
-import { Check, ChevronDown } from "lucide-react";
-import { Select as RadixSelect } from "radix-ui";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/lib/cx";
 import { useFieldControl } from "./field-context";
@@ -18,9 +18,11 @@ interface SelectProps {
   onValueChange?: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  defaultOpen?: boolean;
 }
 
+// A native <select> in the field frame. On a phone it opens the system picker, and unlike a
+// popover listbox it never hides the rest of the page from assistive technology (axe
+// aria-hidden-focus). The placeholder is a disabled first option: shown, never chosen back.
 export function Select({
   options,
   value,
@@ -28,63 +30,51 @@ export function Select({
   onValueChange,
   placeholder,
   disabled,
-  defaultOpen,
 }: SelectProps) {
   const { t } = useTranslation();
   const field = useFieldControl();
   const invalid = field?.["aria-invalid"] === true;
+  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? "");
+  // A value no option carries (an unknown code, "undefined") shows the placeholder: a native
+  // select would otherwise show its first option as if the client had picked it.
+  const wanted = value ?? uncontrolled;
+  const current = options.some((option) => option.value === wanted) ? wanted : "";
 
   return (
-    <RadixSelect.Root
-      {...(value !== undefined && { value })}
-      {...(defaultValue !== undefined && { defaultValue })}
-      {...(onValueChange && { onValueChange })}
-      {...(disabled !== undefined && { disabled })}
-      {...(defaultOpen !== undefined && { defaultOpen })}
+    <div
+      className={cx(
+        controlFrame,
+        "relative p-0",
+        disabled ? "border-gray-200 bg-gray-50" : invalid ? "border-brick-700" : "border-gray-500",
+      )}
     >
-      <RadixSelect.Trigger
+      <select
         {...field}
+        value={current}
+        disabled={disabled}
+        onChange={(event) => {
+          if (value === undefined) setUncontrolled(event.target.value);
+          onValueChange?.(event.target.value);
+        }}
         className={cx(
-          controlFrame,
-          "type-body justify-between py-3 text-left text-graphite-900 outline-none",
-          "data-[placeholder]:text-gray-600 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500",
-          invalid ? "border-brick-700" : "border-gray-500",
+          "type-body min-h-12 w-full cursor-pointer appearance-none bg-transparent py-3 pr-10 pl-3 outline-none",
+          "disabled:cursor-not-allowed disabled:text-gray-500",
+          current === "" ? "text-gray-600" : "text-graphite-900",
         )}
       >
-        <RadixSelect.Value placeholder={placeholder ?? t("select.placeholder")} />
-        <RadixSelect.Icon>
-          <Icon icon={ChevronDown} className="text-gray-600" />
-        </RadixSelect.Icon>
-      </RadixSelect.Trigger>
-      <RadixSelect.Portal>
-        <RadixSelect.Content
-          position="popper"
-          sideOffset={4}
-          className={cx(
-            "z-50 max-h-[min(20rem,var(--radix-select-content-available-height))] w-[var(--radix-select-trigger-width)]",
-            "overflow-hidden rounded-control border border-gray-200 bg-paper shadow-overlay",
-            "data-[state=open]:animate-[od-fade-in_var(--od-duration-fast)_var(--od-ease)]",
-          )}
-        >
-          <RadixSelect.Viewport className="p-1">
-            {options.map((option) => (
-              <RadixSelect.Item
-                key={option.value}
-                value={option.value}
-                className={cx(
-                  "type-body relative flex min-h-11 cursor-default items-center rounded-control py-2 pr-3 pl-9 outline-none select-none",
-                  "data-[highlighted]:bg-gray-50 data-[state=checked]:font-semibold",
-                )}
-              >
-                <RadixSelect.ItemIndicator className="absolute left-3 inline-flex text-navy-900">
-                  <Icon icon={Check} size={16} />
-                </RadixSelect.ItemIndicator>
-                <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
-              </RadixSelect.Item>
-            ))}
-          </RadixSelect.Viewport>
-        </RadixSelect.Content>
-      </RadixSelect.Portal>
-    </RadixSelect.Root>
+        <option value="" disabled>
+          {placeholder ?? t("select.placeholder")}
+        </option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value} className="text-graphite-900">
+            {option.label}
+          </option>
+        ))}
+      </select>
+      <Icon
+        icon={ChevronDown}
+        className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-600"
+      />
+    </div>
   );
 }

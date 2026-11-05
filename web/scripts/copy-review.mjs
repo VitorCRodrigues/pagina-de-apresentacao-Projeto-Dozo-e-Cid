@@ -32,6 +32,7 @@ const complianceRules = [
   ["deposit.detail.returned", "A política de devolução depende do contrato com o parceiro."],
   ["deposit.instructions.exactAmountNote", "Consequências de enviar um valor diferente."],
   ["deposit.instructions.usdc.warning", "Risco de perda por rede errada (PRD, seção 5)."],
+  ["deposit.rail.why.", "Por que escolher cada trilho: sem promessa de prazo ou custo."],
   ["help.questions.", "FAQ: sem promessa de rentabilidade, legalidade ou proteção fiscal."],
   ["onboarding.funds.", "Origem dos recursos e pessoa exposta: redação e listas."],
   ["onboarding.terms.ibkrConsent", "Cita a Lei 25.326 e o envio de dados aos Estados Unidos."],

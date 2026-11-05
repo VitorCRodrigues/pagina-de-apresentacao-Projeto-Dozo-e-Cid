@@ -34,4 +34,11 @@ describe("Stepper", () => {
     render(<Stepper steps={["Documento", "Documento"]} current={0} />);
     expect(error).not.toHaveBeenCalled();
   });
+
+  it("draws future steps in gray-500, at 3:1 on cream (WCAG 1.4.11), thinner than the rest", () => {
+    const { container } = render(<Stepper steps={["Uno", "Dos", "Tres"]} current={1} />);
+    const upcoming = container.querySelector('[data-step-state="upcoming"]');
+    expect(upcoming).toHaveClass("bg-gray-500", "h-0.5");
+    expect(upcoming).not.toHaveClass("bg-gray-200");
+  });
 });

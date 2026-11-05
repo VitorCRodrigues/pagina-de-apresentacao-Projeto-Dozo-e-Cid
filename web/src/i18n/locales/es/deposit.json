@@ -27,6 +27,12 @@
         "br_efx": "Pix con un socio de cambio",
         "br_fxbank": "Banco de cambio"
       },
+      "why": {
+        "ar_usdc": "Desde tu cuenta en una exchange, en USDC.",
+        "ar_swift": "Desde tu banco, en dólares, sin pasar por una exchange.",
+        "br_efx": "Pagás en reales con Pix y el socio de cambio envía los dólares.",
+        "br_fxbank": "Para montos grandes: un banco de cambio convierte y envía los dólares."
+      },
       "summary": "Costo total {{cost}} ({{percent}}). Llega en {{days}}.",
       "days_one": "{{min}} a {{count}} día hábil",
       "days_other": "{{min}} a {{count}} días hábiles",

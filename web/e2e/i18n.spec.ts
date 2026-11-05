@@ -18,6 +18,20 @@ test("detects Spanish and switches language on the entry screen", async ({ page 
   await expect(page.locator("html")).toHaveAttribute("lang", "pt");
 });
 
+test("Portuguese chosen on the entry screen, already detected from the browser, survives signing in", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ locale: "pt-BR" });
+  const page = await context.newPage();
+  await page.goto("/?scenario=open");
+  await expect(page.locator("html")).toHaveAttribute("lang", "pt");
+  await page.getByRole("radio", { name: "Português" }).click();
+  await page.getByRole("button", { name: "Entrar" }).click();
+  await expect(page).toHaveURL(/\/inicio$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sua conta");
+  await context.close();
+});
+
 test("falls back to Spanish for an unsupported browser language", async ({ browser }) => {
   const context = await browser.newContext({ locale: "fr-FR" });
   const page = await context.newPage();

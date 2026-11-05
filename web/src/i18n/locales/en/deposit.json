@@ -27,6 +27,12 @@
         "br_efx": "Pix via an exchange partner",
         "br_fxbank": "Exchange bank"
       },
+      "why": {
+        "ar_usdc": "From your account at an exchange, in USDC.",
+        "ar_swift": "From your bank, in dollars, without an exchange.",
+        "br_efx": "You pay in reais with Pix and the exchange partner sends the dollars.",
+        "br_fxbank": "For larger amounts: a foreign exchange bank converts and sends the dollars."
+      },
       "summary": "Total cost {{cost}} ({{percent}}). Arrives in {{days}}.",
       "days_one": "{{min}} to {{count}} business day",
       "days_other": "{{min}} to {{count}} business days",

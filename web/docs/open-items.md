@@ -48,6 +48,7 @@ Quem decide: **Jurídico** (pareceres e textos), **Dozo** (backend e contrato de
 |---|---|---|---|---|
 | decisão | `src/mocks/fixtures.ts` | Mínimo do aporte avulso ainda "a confirmar" | Definir `minDepositUsdCents` | Produto |
 | decisão | `src/components/CostTable.tsx` | `CostLine.label` da API é ignorado | Definir o idioma do campo ou removê-lo do contrato | Dozo |
+| compliance | `src/features/deposits/NewDepositScreen.tsx` | Por que escolher cada trilho (T5 e T6) | Aprovar `deposit.rail.why.*` | Jurídico |
 | compliance | `src/features/deposits/instructions/ExactAmount.tsx` | Consequências de enviar um valor diferente | Aprovar `deposit.instructions.exactAmountNote` | Jurídico |
 | compliance | `src/features/deposits/DepositDetailScreen.tsx` | Política de devolução depende do contrato com o parceiro | Assinar o contrato e aprovar `deposit.detail.refund` | Jurídico |
 
@@ -89,6 +90,7 @@ Quem decide: **Jurídico** (pareceres e textos), **Dozo** (backend e contrato de
 | decisão | `src/api/auth.ts` | Renovação silenciosa do token | Implementar com o provedor escolhido | Dozo |
 | decisão | `src/App.tsx` | Autenticação ainda é simulada | Trocar pelo cliente OIDC real | Dozo |
 | decisão | `src/components/RouteFallback.tsx` | Fallback de rota ainda simples | Trocar pelo esqueleto de carregamento | Produto |
+| decisão | `vite.config.ts` | Origens do SDK de verificação de identidade e do analytics na CSP | Escolher os fornecedores e acrescentar as origens (também em `docs/hosting-headers.md`) | Produto |
 | decisão | `src/components/Wordmark.tsx` | Logo oficial em PNG, versões chapadas geradas por `scripts/brand-assets.py` | Receber do designer o SVG do wordmark e do símbolo chapados | Produto |
 | decisão | `src/components/BrandSymbol.tsx` | Símbolo oficial em PNG, versões chapadas geradas por `scripts/brand-assets.py` | Receber do designer o SVG do wordmark e do símbolo chapados | Produto |
 

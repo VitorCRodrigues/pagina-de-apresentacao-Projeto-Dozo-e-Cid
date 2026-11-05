@@ -68,6 +68,19 @@ describe("home (T4)", () => {
     expect(screen.getByText(/Actualizado el .*2026.*\d{2}:\d{2}/)).toBeInTheDocument();
   });
 
+  it("while the total loads, its placeholder has the card's own lines, so nothing below jumps", async () => {
+    server.use(http.get("/api/v1/portfolio", () => new Promise<Response>(() => undefined)));
+    renderApp({ path: "/inicio", scenario: "open" });
+    await screen.findByRole("heading", { level: 1, name: "Tu cuenta" }, { timeout: 4000 });
+    const card = document.querySelector('[data-skeleton="balance"]');
+    expect(card).toHaveClass("bg-navy-900");
+    // The same type styles as the loaded card: label, display figure and three split lines.
+    expect(card?.querySelector(".type-label")).not.toBeNull();
+    expect(card?.querySelector(".type-value-display")).not.toBeNull();
+    expect(card?.querySelectorAll("li")).toHaveLength(3);
+    expect(card?.querySelector(".type-caption")).not.toBeNull();
+  });
+
   it("the total is the only display figure", async () => {
     serve({});
     await open();
@@ -153,7 +166,7 @@ describe("home (T4)", () => {
       ),
     );
     await open();
-    expect(await screen.findByText(/^-\s?US\$\s?5,00$/, { selector: "p" })).toBeInTheDocument();
+    expect(await screen.findByText(/^−US\$\s?5,00$/, { selector: "p" })).toBeInTheDocument();
     expect(document.querySelector(".text-gold-500")).toBeNull();
   });
 

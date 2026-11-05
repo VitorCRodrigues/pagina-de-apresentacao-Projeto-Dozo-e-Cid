@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import type { CreatePlanRequest } from "@/api/proposed-types";
 import type { AppConfig, Country, Locale, Plan, Rail } from "@/api/types";
 import { amountField } from "@/features/deposits/rules";

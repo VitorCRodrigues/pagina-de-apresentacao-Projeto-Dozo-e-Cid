@@ -62,7 +62,8 @@
   },
   "select": {
     "label": "Dia do aporte",
-    "day": "Dia {{day}} de cada mês"
+    "day": "Dia {{day}} de cada mês",
+    "error": "Escolha um dia."
   },
   "checkbox": {
     "terms": "Aceito o contrato de consultoria",

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   applyBasisPoints,
+  formatMoneyParts,
   centsToDecimalString,
   centsToInputText,
   currencySymbol,
@@ -34,9 +35,16 @@ describe("money", () => {
     expect(() => formatMoney(12.5, "es")).toThrow(TypeError);
   });
 
+  it("writes a negative amount with the minus sign, not a hyphen, flush with the figures", () => {
+    expect(formatMoney(-500, "es")).toBe("−US$ 5,00");
+    expect(formatMoney(-500, "en")).toBe("−$5.00");
+    const sign = formatMoneyParts(-500, "pt").find((part) => part.type === "minusSign");
+    expect(sign?.value).toBe("−");
+  });
+
   it("formats the smallest amounts exactly", () => {
     expect(formatMoney(1, "es")).toBe("US$ 0,01");
-    expect(formatMoney(-1, "en")).toBe("-$0.01");
+    expect(formatMoney(-1, "en")).toBe("−$0.01");
     expect(formatMoney(99, "pt")).toBe("US$ 0,99");
     expect(formatMoney(100, "en")).toBe("$1.00");
   });

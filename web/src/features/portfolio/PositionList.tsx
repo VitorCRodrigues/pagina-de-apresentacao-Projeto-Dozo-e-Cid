@@ -66,7 +66,9 @@ function PositionItem({ position, locale }: { position: Position; locale: Locale
         </p>
       </div>
 
-      <details className="group">
+      {/* The summary keeps its 44 px target; -mt-2 gives back the space its box adds above the
+          text, so the line sits at the same rhythm as the ones above it. */}
+      <details className="group -mt-2">
         <summary className="type-caption inline-flex min-h-11 cursor-pointer list-none items-center gap-1 text-navy-900 [&::-webkit-details-marker]:hidden">
           {t("portfolio.positions.about")}
           <Icon

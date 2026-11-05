@@ -5,7 +5,7 @@ import type { Locale } from "@/api/types";
 import { Banner } from "@/components/Banner";
 import { buttonClass } from "@/components/component-styles";
 import { InlineError, InlineLoading } from "@/components/PageState";
-import { formatDate } from "@/lib/dates";
+import { formatDate, formatVersion } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { paths } from "@/routes";
 import { ProfileSection, sectionBlock } from "./ProfileSection";
@@ -28,7 +28,10 @@ export function TermsSection({ locale }: { locale: Locale }) {
           <Banner
             title={pending.map((doc) => (
               <span key={doc.id} className="block">
-                {t("profile.terms.pending", { title: doc.title, version: doc.version })}
+                {t("profile.terms.pending", {
+                  title: doc.title,
+                  version: formatVersion(doc.version, locale),
+                })}
               </span>
             ))}
             quiet
@@ -55,7 +58,9 @@ export function TermsSection({ locale }: { locale: Locale }) {
                   {row.title}
                 </a>
                 <span className="type-caption flex flex-wrap justify-between gap-x-4 text-gray-600 tabular-nums">
-                  <span>{t("profile.terms.version", { version: row.version })}</span>
+                  <span>
+                    {t("profile.terms.version", { version: formatVersion(row.version, locale) })}
+                  </span>
                   <span>
                     {t("profile.terms.acceptedOn", { date: formatDate(row.acceptedAt, locale) })}
                   </span>

@@ -19,6 +19,7 @@
     },
     "errors": {
       "required": "Fill in this field.",
+      "pickOne": "Choose one of the options.",
       "invalidName": "Use letters, spaces, apostrophes or hyphens only, as on your ID.",
       "nameTwoWords": "Write your first and last name, as on your ID.",
       "invalidDate": "Check the date.",

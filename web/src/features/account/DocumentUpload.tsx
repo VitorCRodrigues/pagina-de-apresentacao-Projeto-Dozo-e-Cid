@@ -8,6 +8,7 @@ import { Icon } from "@/components/Icon";
 import { asLocale, toIntlLocale } from "@/lib/locale";
 import {
   ACCEPT_ATTRIBUTE,
+  PHOTO_ACCEPT_ATTRIBUTE,
   documentProblem,
   formatFileSize,
   isImage,
@@ -18,11 +19,16 @@ interface DocumentUploadProps {
   item: PendingItem;
   // Sends the file; onProgress gets 0–1. The screen wires it to POST /account/documents.
   upload: (file: File, onProgress: (fraction: number) => void) => Promise<unknown>;
+  // "li" inside the account status list (T3); "div" where it stands alone (the Pendientes sheet).
+  as?: "li" | "div";
 }
+
+const pickerLink =
+  "type-label inline-flex min-h-11 cursor-pointer items-center text-green-700 underline decoration-1 underline-offset-4 hover:decoration-2 has-[:focus-visible]:outline-2";
 
 // One document Interactive Brokers asked for: pick a file, check it, preview it, send it.
 // A statement line like the rest of the screen; progress is a thin bar, as in the Stepper.
-export function DocumentUpload({ item, upload }: DocumentUploadProps) {
+export function DocumentUpload({ item, upload, as: Root = "li" }: DocumentUploadProps) {
   const { t, i18n } = useTranslation("account");
   const inputId = useId();
   const [file, setFile] = useState<File | null>(null);
@@ -79,7 +85,7 @@ export function DocumentUpload({ item, upload }: DocumentUploadProps) {
   const sending = percent !== null;
 
   return (
-    <li className="flex flex-col gap-3 border-t border-gray-200 py-5 first:border-t-0">
+    <Root className="flex flex-col gap-3 border-t border-gray-200 py-5 first:border-t-0">
       <div className="flex flex-col gap-1">
         <p className="type-label text-graphite-900">{item.title}</p>
         <p className="type-caption text-gray-600">{item.description}</p>
@@ -135,22 +141,34 @@ export function DocumentUpload({ item, upload }: DocumentUploadProps) {
           </Button>
         )}
         {!sending && (
-          <label
-            htmlFor={inputId}
-            className="type-label cursor-pointer text-green-700 underline decoration-1 underline-offset-4 hover:decoration-2 has-[:focus-visible]:outline-2"
-          >
-            {file ? t("account.upload.change") : t("account.upload.choose")}
-            <input
-              id={inputId}
-              type="file"
-              accept={ACCEPT_ATTRIBUTE}
-              onChange={choose}
-              className="sr-only"
-            />
-          </label>
+          <>
+            {/* The phone's camera, straight away (capture); on a computer, an image picker. */}
+            <label htmlFor={`${inputId}-photo`} className={pickerLink}>
+              {t("account.upload.photo")}
+              <input
+                id={`${inputId}-photo`}
+                type="file"
+                accept={PHOTO_ACCEPT_ATTRIBUTE}
+                capture="environment"
+                onChange={choose}
+                className="sr-only"
+              />
+            </label>
+            {/* No capture: the gallery and the files, for a PDF or a photo taken earlier. */}
+            <label htmlFor={inputId} className={pickerLink}>
+              {file ? t("account.upload.change") : t("account.upload.choose")}
+              <input
+                id={inputId}
+                type="file"
+                accept={ACCEPT_ATTRIBUTE}
+                onChange={choose}
+                className="sr-only"
+              />
+            </label>
+          </>
         )}
       </div>
       {!file && <p className="type-caption text-gray-600">{t("account.upload.accepted")}</p>}
-    </li>
+    </Root>
   );
 }

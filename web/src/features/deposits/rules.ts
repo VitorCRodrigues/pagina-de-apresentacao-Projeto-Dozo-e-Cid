@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import type { Account, AppConfig, BlockReason, Locale, Quote, RailOption } from "@/api/types";
 import { parseAmountToCents } from "@/lib/money";
 

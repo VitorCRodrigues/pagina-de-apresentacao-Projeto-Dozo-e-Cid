@@ -39,12 +39,20 @@ function currencyFormat(locale: Locale): Intl.NumberFormat {
   return format;
 }
 
-export function formatMoney(cents: number, locale: Locale): string {
-  return currencyFormat(locale).format(centsToDecimalString(cents));
-}
+// Intl writes a hyphen-minus; the true minus sign (U+2212) has the width and height of the
+// figures, so a negative value lines up with the rest of a tabular column.
+const MINUS = "−";
 
 export function formatMoneyParts(cents: number, locale: Locale): Intl.NumberFormatPart[] {
-  return currencyFormat(locale).formatToParts(centsToDecimalString(cents));
+  return currencyFormat(locale)
+    .formatToParts(centsToDecimalString(cents))
+    .map((part) => (part.type === "minusSign" ? { ...part, value: MINUS } : part));
+}
+
+export function formatMoney(cents: number, locale: Locale): string {
+  return formatMoneyParts(cents, locale)
+    .map((part) => part.value)
+    .join("");
 }
 
 // "US$" in es and pt, "$" in en: whatever the client's locale writes for dollars.

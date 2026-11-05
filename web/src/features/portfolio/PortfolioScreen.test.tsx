@@ -79,10 +79,10 @@ describe("portfolio (T9)", () => {
     });
     await open();
     const split = await screen.findByRole("region", { name: "Cómo se divide" });
-    expect(within(split).getByText(/^-\s?US\$\s?5,00$/)).toBeInTheDocument();
+    expect(within(split).getByText(/^−US\$\s?5,00$/)).toBeInTheDocument();
     expect(within(split).getByText(/^100,00\s?% del total$/)).toBeInTheDocument();
     expect(within(split).getAllByText(/^0,00\s?% del total$/)).toHaveLength(2);
-    expect(split).not.toHaveTextContent(/-\d+,\d+\s?% del total/);
+    expect(split).not.toHaveTextContent(/[-−]\d+,\d+\s?% del total/);
     for (const segment of split.querySelectorAll<HTMLElement>("[style*='width']")) {
       expect(segment.style.width).not.toMatch(/^-/);
     }
@@ -164,6 +164,15 @@ describe("portfolio (T9)", () => {
     expect(link).toHaveAttribute("target", "_blank");
     expect(link.getAttribute("rel")).toMatch(/noopener/);
     expect(screen.getByText(/Invertir implica riesgos/)).toBeInTheDocument();
+  });
+
+  it("money only in transit is a dashed segment, never mistaken for an empty track (D11)", async () => {
+    await open("in_flight_only");
+    const split = await screen.findByRole("region", { name: "Cómo se divide" });
+    const segments = split.querySelectorAll("[aria-hidden='true'] > span");
+    expect(segments).toHaveLength(1);
+    expect(segments[0]).toHaveClass("border-dashed", "border-gray-500");
+    expect(segments[0]).not.toHaveClass("bg-gray-200");
   });
 
   it("only in transit: no positions, and the date of the next investment window", async () => {

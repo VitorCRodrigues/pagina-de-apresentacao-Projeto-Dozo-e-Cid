@@ -20,7 +20,12 @@
     "build-storybook": "storybook build",
     "size": "size-limit",
     "copy:review": "node scripts/copy-review.mjs",
-    "ci": "npm run typecheck && npm run lint && npm test && npm run build && npm run size && npm run e2e"
+    "ci": "npm run typecheck && npm run lint && npm test && npm run build && npm run size && npm run e2e",
+    "a11y:stories": "storybook build -o storybook-static --quiet && node scripts/a11y-stories.mjs",
+    "build:measure": "tsc -b && vite build --mode measure",
+    "perf": "npm run build && npm run build:measure && node scripts/lighthouse.mjs",
+    "postbuild": "node scripts/check-build.mjs",
+    "test:csp": "npm run build:measure && node scripts/test-csp.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^6.0.2",
@@ -41,6 +46,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.39.5",
+    "@mswjs/interceptors": "^0.45.9",
     "@playwright/test": "^1.64.1",
     "@size-limit/file": "^14.3.0",
     "@storybook/react-vite": "^10.6.4",
@@ -53,6 +59,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "chrome-launcher": "^1.2.2",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-i18next": "^6.1.5",
@@ -61,6 +68,7 @@
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
     "jsdom": "^29.1.1",
+    "lighthouse": "^12.8.2",
     "msw": "^3.0.3",
     "msw-storybook-addon": "^3.0.3",
     "prettier": "^3.9.10",

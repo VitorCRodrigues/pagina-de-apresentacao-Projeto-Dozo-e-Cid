@@ -35,6 +35,22 @@ function spy(method: string, path: string): unknown[] {
 }
 
 describe("profile (T12)", () => {
+  it("a restricted account explains the restriction, as Início and Plan do (decision 14)", async () => {
+    await open("restricted");
+    expect(await screen.findByText("Tu cuenta necesita atención.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Hablar con soporte" })).toHaveAttribute(
+      "href",
+      expect.stringMatching(/^mailto:/),
+    );
+  });
+
+  it("Cerrar sesión is a neutral navy outline, not a green link", async () => {
+    await open();
+    const logout = await screen.findByRole("button", { name: "Cerrar sesión" });
+    expect(logout).toHaveClass("border-navy-900", "text-navy-900");
+    expect(logout).not.toHaveClass("text-green-700");
+  });
+
   afterEach(() => {
     server.events.removeAllListeners();
   });
@@ -109,13 +125,21 @@ describe("profile (T12)", () => {
   });
 
   it("says so when an earlier toggle fails, even if a later one succeeds", async () => {
+    // The e-mail answer fails only once the push toggle has been sent: the earlier toggle is
+    // still in flight when the later one starts, whatever the machine's speed.
+    let pushSent: () => void = () => undefined;
+    const pushArrived = new Promise<void>((resolve) => {
+      pushSent = resolve;
+    });
     server.use(
       http.patch("/api/v1/me/notifications", async ({ request }) => {
         const body = (await request.json()) as Record<string, boolean>;
         if ("email" in body) {
-          await delay(100);
+          await pushArrived;
+          await delay(50);
           return failure();
         }
+        pushSent();
         return HttpResponse.json({ email: true, push: true });
       }),
     );
@@ -179,7 +203,7 @@ describe("profile (T12)", () => {
     const list = await within(terms).findByRole("list");
     const rows = within(list).getAllByRole("listitem");
     expect(rows.length).toBeGreaterThan(0);
-    expect(rows[0]).toHaveTextContent(/Versión 2026-10/);
+    expect(rows[0]).toHaveTextContent(/Versión octubre de 2026/);
     expect(rows[0]).toHaveTextContent(/Aceptado el /);
   });
 
@@ -187,13 +211,13 @@ describe("profile (T12)", () => {
     await open("terms_update");
     const terms = await section("Documentos y términos");
     await within(terms).findByRole("list");
-    expect(terms).toHaveTextContent(/versión 2026-11 para aceptar/);
+    expect(terms).toHaveTextContent(/versión noviembre de 2026 para aceptar/);
     expect(within(terms).getByRole("link", { name: "Ver pendientes" })).toHaveAttribute(
       "href",
       "/pendientes",
     );
-    expect(terms).not.toHaveTextContent(/Versión 2026-11/);
-    expect(terms).toHaveTextContent(/Versión 2026-10/);
+    expect(terms).not.toHaveTextContent(/Versión noviembre de 2026/);
+    expect(terms).toHaveTextContent(/Versión octubre de 2026/);
     // What needs the client comes before the record of what is done.
     const note = within(terms).getByRole("status");
     const list = within(terms).getByRole("list");

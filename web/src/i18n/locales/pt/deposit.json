@@ -27,6 +27,12 @@
         "br_efx": "Pix com parceiro de câmbio",
         "br_fxbank": "Banco de câmbio"
       },
+      "why": {
+        "ar_usdc": "Da sua conta numa exchange, em USDC.",
+        "ar_swift": "Do seu banco, em dólares, sem passar por uma exchange.",
+        "br_efx": "Você paga em reais com Pix e o parceiro de câmbio envia os dólares.",
+        "br_fxbank": "Para valores maiores: um banco de câmbio converte e envia os dólares."
+      },
       "summary": "Custo total {{cost}} ({{percent}}). Chega em {{days}}.",
       "days_one": "{{min}} a {{count}} dia útil",
       "days_other": "{{min}} a {{count}} dias úteis",

@@ -19,6 +19,7 @@
     },
     "errors": {
       "required": "Preencha este campo.",
+      "pickOne": "Escolha uma das opções.",
       "invalidName": "Use só letras, espaços, apóstrofos ou hífens, como no seu documento.",
       "nameTwoWords": "Digite seu nome e sobrenome, como no seu documento.",
       "invalidDate": "Confira a data.",

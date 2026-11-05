@@ -28,8 +28,9 @@ function errors(result: {
 describe("residence", () => {
   it("requires two ISO country codes", () => {
     expect(residenceSchema.safeParse({ country: "AR", nationality: "UY" }).success).toBe(true);
+    // A choice, not something to type: "Elegí una opción", not "Completá este dato" (D14).
     expect(errors(residenceSchema.safeParse({ country: "", nationality: "AR" }))).toEqual({
-      country: "required",
+      country: "pickOne",
     });
   });
 });
@@ -95,7 +96,7 @@ describe("address", () => {
     });
     expect(
       errors(addressSchema.safeParse({ ...address, province: "XX", postalCode: "1043" })),
-    ).toEqual({ province: "required" });
+    ).toEqual({ province: "pickOne" });
   });
 });
 
@@ -114,7 +115,7 @@ describe("funds", () => {
 
   it("requires an answer to the PEP question", () => {
     expect(errors(fundsSchema.safeParse({ ...funds, isPep: undefined }))).toEqual({
-      isPep: "required",
+      isPep: "pickOne",
     });
   });
 });
@@ -192,10 +193,10 @@ describe("questionnaire answers", () => {
 
   it("rejects an unanswered multi and an option the API did not send", () => {
     expect(errors(schema.safeParse({ q1: "c", q2: [] }))).toEqual({
-      q1: "required",
-      q2: "required",
+      q1: "pickOne",
+      q2: "pickOne",
     });
-    expect(errors(schema.safeParse({ q1: "a", q2: ["z"] }))).toEqual({ q2: "required" });
+    expect(errors(schema.safeParse({ q1: "a", q2: ["z"] }))).toEqual({ q2: "pickOne" });
   });
 
   describe("normalized identifiers", () => {

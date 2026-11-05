@@ -1,22 +1,20 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { blockMessageKeys } from "@/api/error-messages";
 import { useAccount, useMe } from "@/api/hooks/account";
 import { useConfig } from "@/api/hooks/config";
 import { usePlans } from "@/api/hooks/plans";
 import type { CreatePlanRequest } from "@/api/proposed-types";
 import { Banner } from "@/components/Banner";
-import { buttonClass } from "@/components/component-styles";
 import { ErrorState, LoadingState } from "@/components/PageState";
 import { RiskNote } from "@/components/RiskNote";
 import { accountBlock } from "@/features/deposits/rules";
 import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
-import { SUPPORT_EMAIL } from "@/lib/support";
 import { currentPlan, planRails } from "./plan-rules";
 import { PlanForm } from "./PlanForm";
 import { PlanReview } from "./PlanReview";
 import { PlanSummary } from "./PlanSummary";
+import { AccountBlockNote } from "@/features/account/AccountBlockNote";
 
 // Form and preview live in component state, never in the URL (no amount in a link).
 type Mode =
@@ -64,20 +62,9 @@ export function PlanScreen() {
     riskNote = true;
 
     if (block) {
-      const keys = blockMessageKeys(block.reason);
       body = (
         <>
-          <Banner
-            tone="warning"
-            title={t(keys.message)}
-            {...(block.action === "support" && {
-              action: (
-                <a href={`mailto:${SUPPORT_EMAIL}`} className={buttonClass("ghost", "never")}>
-                  {t(keys.action)}
-                </a>
-              ),
-            })}
-          />
+          <AccountBlockNote account={account.data} />
           {plan && <PlanSummary plan={plan} locale={locale} readOnly onEdit={toView} />}
         </>
       );

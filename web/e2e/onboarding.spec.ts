@@ -3,8 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 test.use({ locale: "es-AR" });
 
 async function choose(page: Page, field: string, option: string) {
-  await page.getByRole("combobox", { name: field }).click();
-  await page.getByRole("option", { name: option }).click();
+  await page.getByRole("combobox", { name: field }).selectOption({ label: option });
 }
 
 // The draft scenario stops at the address. The browser mock keeps its db in memory, so a

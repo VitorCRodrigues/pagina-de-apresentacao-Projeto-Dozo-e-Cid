@@ -61,7 +61,7 @@ describe("onboarding step 4, investor profile", () => {
     await user.click(screen.getByRole("button", { name: "Continuar" }));
 
     const multi = screen.getByRole("group", { name: "¿Qué productos conocés?" });
-    expect(await within(multi).findByText("Completá este dato.")).toBeInTheDocument();
+    expect(await within(multi).findByText("Elegí una de las opciones.")).toBeInTheDocument();
     expect(puts).toEqual([]);
   });
 

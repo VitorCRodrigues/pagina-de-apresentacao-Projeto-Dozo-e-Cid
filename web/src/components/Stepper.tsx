@@ -36,7 +36,7 @@ export function Stepper({ steps, current }: StepperProps) {
                 "flex-1 rounded-full transition-colors duration-base ease-od",
                 state === "done" && "h-1 bg-green-700",
                 state === "current" && "h-1.5 bg-navy-900",
-                state === "upcoming" && "h-1 bg-gray-200",
+                state === "upcoming" && "h-0.5 bg-gray-500",
               )}
             />
           );

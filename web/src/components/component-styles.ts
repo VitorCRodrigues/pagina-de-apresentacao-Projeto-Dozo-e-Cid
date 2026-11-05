@@ -40,7 +40,8 @@ export function focusPanel(event: Event): void {
   if (event.currentTarget instanceof HTMLElement) event.currentTarget.focus();
 }
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "destructive";
+export type ButtonVariant =
+  "primary" | "secondary" | "ghost" | "destructive" | "destructive-outline";
 
 export const buttonBase = cx(
   "type-label inline-flex min-h-12 items-center justify-center gap-2 rounded-control px-5",
@@ -54,6 +55,9 @@ export const buttonVariants: Record<ButtonVariant, string> = {
   // Reads as a text link: everything that is not the one primary action (direction doc).
   ghost: "text-green-700 underline decoration-1 underline-offset-4 hover:decoration-2 px-1",
   destructive: "bg-brick-700 text-white hover:opacity-90",
+  // A destructive action that is not yet the confirmation ("Cancelar plan" before its dialog):
+  // outlined like a secondary button, in brick, so it never reads as navigation.
+  "destructive-outline": "border border-brick-700 text-brick-700 hover:bg-brick-50",
 };
 
 export const buttonWidths = {

@@ -28,6 +28,14 @@ const questions = [
 ];
 
 describe("help (T13)", () => {
+  it("has a clear way back to the profile, before the title", async () => {
+    await open();
+    const back = screen.getByRole("link", { name: "Volver al perfil" });
+    expect(back).toHaveAttribute("href", "/perfil");
+    const title = screen.getByRole("heading", { level: 1 });
+    expect(back.compareDocumentPosition(title) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("lists the questions closed, and one opens at a time", async () => {
     const user = userEvent.setup();
     await open();

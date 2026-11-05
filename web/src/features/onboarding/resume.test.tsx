@@ -8,8 +8,10 @@ import { renderApp } from "@/test/render-app";
 async function fillAddress(user: ReturnType<typeof userEvent.setup>) {
   await user.type(await screen.findByLabelText("Calle y número"), "Av. Santa Fe 1000");
   await user.type(screen.getByLabelText("Localidad"), "Buenos Aires");
-  await user.click(screen.getByRole("combobox", { name: "Provincia" }));
-  await user.click(await screen.findByRole("option", { name: "Ciudad Autónoma de Buenos Aires" }));
+  await user.selectOptions(
+    screen.getByRole("combobox", { name: "Provincia" }),
+    "Ciudad Autónoma de Buenos Aires",
+  );
   await user.type(screen.getByLabelText("Código postal"), "C1059ABC");
 }
 

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { onboardingSteps } from "./proposed-types";
 import type { ResponseName, ResponseTypes } from "./response-types";
 

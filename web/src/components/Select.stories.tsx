@@ -28,13 +28,12 @@ export const Selected = meta.story({
   ),
 });
 
-export const Open = meta.story({
+// A native select: the open list is the browser's own, so the story shows the error instead.
+export const Invalid = meta.story({
   render: () => (
-    <div className="min-h-80">
-      <Field label={i18n.t("demo:select.label")}>
-        <Select options={dayOptions()} defaultValue="5" defaultOpen />
-      </Field>
-    </div>
+    <Field label={i18n.t("demo:select.label")} error={i18n.t("demo:select.error")}>
+      <Select options={dayOptions()} />
+    </Field>
   ),
 });
 

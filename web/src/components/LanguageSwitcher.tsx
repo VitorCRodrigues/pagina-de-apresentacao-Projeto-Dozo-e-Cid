@@ -22,9 +22,19 @@ export function LanguageSwitcher({ onSelect }: LanguageSwitcherProps) {
     <ToggleGroup.Root
       type="single"
       value={i18n.resolvedLanguage}
-      onValueChange={(value) => {
-        // Radix sends "" when the active item is clicked again; keep the current locale.
+      onValueChange={(next) => {
+        // Radix sends "" when the active item is clicked again. That is still a choice: the
+        // language shown may only have been detected from the browser, and an unsaved one
+        // loses to the account's language after signing in.
+        const value = next === "" ? i18n.resolvedLanguage : next;
         if (!isSupportedLocale(value)) return;
+        if (next === "") {
+          // Already on screen: record the choice and tell the screen (Perfil saves it on the
+          // account); there is nothing to undo locally.
+          if (readExplicitLocale() !== value) saveExplicitLocale(value);
+          onSelect?.(value, () => undefined);
+          return;
+        }
         const previous = i18n.resolvedLanguage;
         const previousExplicit = readExplicitLocale();
         saveExplicitLocale(value);

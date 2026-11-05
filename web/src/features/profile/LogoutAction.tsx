@@ -16,10 +16,11 @@ export function LogoutAction() {
 
   return (
     <>
+      {/* Leaving is neutral, not destructive: the navy outline, apart from the green links. */}
       <Button
-        variant="ghost"
+        variant="secondary"
         fullWidth="never"
-        className="-ml-1 self-start"
+        className="self-start"
         onClick={() => {
           setOpen(true);
         }}

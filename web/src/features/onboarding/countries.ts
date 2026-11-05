@@ -75,9 +75,15 @@ export const fundSources = [
 ] as const;
 
 // Country names in the client's language, sorted for a picker.
-export function countryOptions(intlLocale: string): { value: string; label: string }[] {
+// `hidden`: product markets that are not live yet. They stay off the list ("nothing of BR in
+// the interface today", decisions.md, 5); other countries lead to the waitlist.
+export function countryOptions(
+  intlLocale: string,
+  hidden: readonly string[],
+): { value: string; label: string }[] {
   const names = new Intl.DisplayNames([intlLocale], { type: "region" });
   return countryCodes
+    .filter((code) => !hidden.includes(code))
     .map((code) => ({ value: code, label: names.of(code) ?? code }))
     .sort((a, b) => a.label.localeCompare(b.label, intlLocale));
 }

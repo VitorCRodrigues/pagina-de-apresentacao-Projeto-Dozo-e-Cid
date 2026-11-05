@@ -68,8 +68,10 @@ describe("onboarding step 8, review and submit", () => {
     const user = userEvent.setup();
     const { router } = renderApp({ path: "/onboarding/revision", scenario: "draft" });
     await user.click(await screen.findByRole("button", { name: "Editar País" }, { timeout: 4000 }));
-    await user.click(await screen.findByRole("combobox", { name: "País de residencia" }));
-    await user.click(await screen.findByRole("option", { name: "Chile" }));
+    await user.selectOptions(
+      await screen.findByRole("combobox", { name: "País de residencia" }),
+      "Chile",
+    );
 
     expect(
       await screen.findByRole("heading", { name: "Todavía no abrimos cuentas en Chile" }),

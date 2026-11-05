@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import type { Questionnaire, TermsAcceptance, TermsDocument } from "@/api/proposed-types";
 import { isAtLeastAge } from "@/lib/age";
 import { isValidCuit, normalizeCuit } from "@/lib/cuit";
@@ -9,6 +9,7 @@ import { fundSources, occupations, provinceCodes } from "./countries";
 
 export type ErrorCode =
   | "required"
+  | "pickOne"
   | "invalidName"
   | "nameTwoWords"
   | "invalidDate"
@@ -25,7 +26,8 @@ export type ErrorCode =
 
 const err = (code: ErrorCode) => ({ error: code });
 const required = z.string(err("required")).trim().min(1, err("required"));
-const isoCountry = z.string(err("required")).regex(/^[A-Z]{2}$/, err("required"));
+// Fields picked from a list (a select, a radio group): "pickOne", not "required" (D14).
+const isoCountry = z.string(err("pickOne")).regex(/^[A-Z]{2}$/, err("pickOne"));
 
 export const residenceSchema = z.object({ country: isoCountry, nationality: isoCountry });
 
@@ -85,16 +87,16 @@ export const addressSchema = z.object({
   street: required,
   unit: z.string().trim().optional(),
   city: required,
-  province: z.enum(provinceCodes, err("required")),
+  province: z.enum(provinceCodes, err("pickOne")),
   // CPA (C1043AAZ) or the older 4-digit code.
   postalCode: required.regex(/^(?:[A-Za-z]\d{4}[A-Za-z]{3}|\d{4})$/, err("invalidPostalCode")),
 });
 
 export const fundsSchema = z
   .object({
-    occupation: z.enum(occupations, err("required")),
-    sourceOfFunds: z.enum(fundSources, err("required")),
-    isPep: z.boolean(err("required")),
+    occupation: z.enum(occupations, err("pickOne")),
+    sourceOfFunds: z.enum(fundSources, err("pickOne")),
+    isPep: z.boolean(err("pickOne")),
     pepRole: z.string().trim().optional(),
   })
   .superRefine(({ isPep, pepRole }, ctx) => {
@@ -157,12 +159,12 @@ export function questionnaireAnswersSchema(questionnaire: Questionnaire) {
         const values = new Set(question.options.map((option) => option.value));
         const schema =
           question.kind === "single"
-            ? z.string(err("required")).refine((value) => values.has(value), err("required"))
+            ? z.string(err("pickOne")).refine((value) => values.has(value), err("pickOne"))
             : z
-                .array(z.string(), err("required"))
+                .array(z.string(), err("pickOne"))
                 .refine(
                   (picked) => picked.length > 0 && picked.every((value) => values.has(value)),
-                  err("required"),
+                  err("pickOne"),
                 );
         return [question.id, schema];
       }),

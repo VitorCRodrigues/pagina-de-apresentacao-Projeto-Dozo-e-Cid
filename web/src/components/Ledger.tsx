@@ -14,10 +14,11 @@ interface LedgerRowProps {
 
 export function LedgerRow({ label, children }: LedgerRowProps) {
   return (
-    <div className="flex items-baseline justify-between gap-4 border-t border-gray-200 py-3 first:border-t-0">
-      {/* The label never wraps; a long text value may. Money keeps itself on one line. */}
+    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-gray-200 py-3 first:border-t-0">
+      {/* The label never wraps. A value that does not fit beside it moves to the next line,
+          whole and right-aligned; only a value longer than the row wraps inside itself. */}
       <dt className="type-body shrink-0 text-graphite-900">{label}</dt>
-      <dd className="type-value min-w-0 text-right text-graphite-900">{children}</dd>
+      <dd className="type-value ml-auto min-w-0 text-right text-graphite-900">{children}</dd>
     </div>
   );
 }

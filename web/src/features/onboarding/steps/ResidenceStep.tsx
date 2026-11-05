@@ -27,11 +27,18 @@ export function ResidenceStep() {
   });
 
   const intlLocale = toIntlLocale(asLocale(i18n.language));
-  const options = useMemo(() => countryOptions(intlLocale), [intlLocale]);
+  // Residence decides where we can open the account, so markets not live yet stay off it.
+  // Nationality is who the client is: every country.
+  const options = useMemo(() => {
+    const live: readonly string[] = config.liveMarkets;
+    const notLive = Object.keys(config.railsByCountry).filter((market) => !live.includes(market));
+    return countryOptions(intlLocale, notLive);
+  }, [intlLocale, config.liveMarkets, config.railsByCountry]);
+  const nationalities = useMemo(() => countryOptions(intlLocale, []), [intlLocale]);
 
   const country = useWatch({ control: form.control, name: "country" });
   const live = !country || (config.liveMarkets as readonly string[]).includes(country);
-  const countryName = options.find((option) => option.value === country)?.label ?? country;
+  const countryName = nationalities.find((option) => option.value === country)?.label ?? country;
   const { errors } = form.formState;
 
   return (
@@ -68,7 +75,7 @@ export function ResidenceStep() {
           control={form.control}
           name="nationality"
           render={({ field }) => (
-            <Select options={options} value={field.value} onValueChange={field.onChange} />
+            <Select options={nationalities} value={field.value} onValueChange={field.onChange} />
           )}
         />
       </Field>

@@ -37,6 +37,26 @@ describe("DocumentUpload", () => {
     );
   });
 
+  it("offers the camera and the files, side by side (D8)", () => {
+    render(<DocumentUpload item={item} upload={vi.fn()} />);
+    const photo = screen.getByLabelText("Sacar una foto");
+    expect(photo).toHaveAttribute("capture", "environment");
+    expect(photo).toHaveAttribute("accept", "image/jpeg,image/png");
+    // The file picker opens the gallery and the files: no capture.
+    expect(screen.getByLabelText("Elegir archivo")).not.toHaveAttribute("capture");
+  });
+
+  it("a photo from the camera goes through the same checks and is sent", async () => {
+    const upload = vi.fn(() => new Promise<void>(() => undefined));
+    const user = userEvent.setup();
+    render(<DocumentUpload item={item} upload={upload} />);
+    const photo = file("IMG_0001.jpg", "image/jpeg", 300_000);
+    await user.upload(screen.getByLabelText("Sacar una foto"), photo);
+    expect(screen.getByRole("img", { name: "Vista previa de IMG_0001.jpg" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Enviar documento" }));
+    expect(upload).toHaveBeenCalledWith(photo, expect.any(Function));
+  });
+
   it.each([
     [
       "a 25 MB file",

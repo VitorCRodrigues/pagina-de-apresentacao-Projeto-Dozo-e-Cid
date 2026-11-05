@@ -70,7 +70,9 @@ export function PlanReview({ draft, planId, locale, onBack, onSaved }: PlanRevie
           <span className="type-body">{t("plan.summary.dayValue", { day: draft.dayOfMonth })}</span>
         </LedgerRow>
         <LedgerRow label={t("plan.summary.rail")}>
-          <span className="type-body">{td(`deposit.rail.names.${draft.rail}`)}</span>
+          <span className="type-body whitespace-nowrap">
+            {td(`deposit.rail.names.${draft.rail}`)}
+          </span>
         </LedgerRow>
       </Ledger>
 

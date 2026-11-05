@@ -1,6 +1,10 @@
 // TODO(decisão): accepted types and size for documents Interactive Brokers asks for.
 export const ACCEPTED_TYPES = ["image/jpeg", "image/png", "application/pdf"] as const;
 export const ACCEPT_ATTRIBUTE = ACCEPTED_TYPES.join(",");
+// The camera input takes images only; the photo then goes through the same checks.
+export const PHOTO_ACCEPT_ATTRIBUTE = ACCEPTED_TYPES.filter((type) =>
+  type.startsWith("image/"),
+).join(",");
 export const MAX_BYTES = 10 * 1024 * 1024;
 
 export type DocumentProblem = "wrongType" | "tooBig" | "empty";

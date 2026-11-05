@@ -6,11 +6,20 @@ export default defineMain({
   stories: ["../src/**/*.stories.@(ts|tsx)"],
   addons: ["msw-storybook-addon"],
   core: { disableTelemetry: true },
-  viteFinal(config, { configType }) {
-    // The app config serves the MSW worker only in dev; a static Storybook needs it emitted too.
-    if (configType === "PRODUCTION") {
-      config.plugins = [...(config.plugins ?? []), msw({ mode: "worker-only" })];
-    }
+  viteFinal(config) {
+    // Stories keep MSW's service worker (short sessions): served in dev, emitted in a static build.
+    // The app itself mocks inside the page (src/mocks/browser.ts) and serves no worker.
+    // The app's CSP meta (vite.config.ts) is for the app: Storybook's iframe runs inline scripts.
+    const plugins = (config.plugins ?? []).filter(
+      (plugin) =>
+        !(
+          plugin &&
+          typeof plugin === "object" &&
+          "name" in plugin &&
+          plugin.name === "opendollars-csp"
+        ),
+    );
+    config.plugins = [...plugins, msw({ mode: "worker-only" })];
     return config;
   },
 });

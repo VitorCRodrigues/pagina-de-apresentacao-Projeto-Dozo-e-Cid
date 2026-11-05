@@ -1,10 +1,14 @@
+import { ChevronLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 import { useConfig } from "@/api/hooks/config";
 import { buttonClass } from "@/components/component-styles";
+import { Icon } from "@/components/Icon";
 import { ErrorState, LoadingState } from "@/components/PageState";
 import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
 import { SUPPORT_EMAIL } from "@/lib/support";
+import { paths } from "@/routes";
 import { FaqList } from "./FaqList";
 
 // T13: frequently asked questions and the support channel. Lives inside Perfil (decision 13).
@@ -20,7 +24,17 @@ export function HelpScreen() {
 
   return (
     <section className="flex flex-col gap-10 py-2">
-      <h1 className="type-title text-navy-900">{t("help.title")}</h1>
+      {/* Help is a child of Perfil: the way back comes first, above the title. */}
+      <div className="flex flex-col items-start gap-2">
+        <Link
+          to={paths.profile}
+          className="type-label -ml-1 inline-flex min-h-11 items-center gap-1 px-1 text-green-700 hover:underline"
+        >
+          <Icon icon={ChevronLeft} size={16} />
+          {t("help.back")}
+        </Link>
+        <h1 className="type-title text-navy-900">{t("help.title")}</h1>
+      </div>
       <section aria-labelledby="help-faq" className="flex flex-col gap-3">
         <h2 id="help-faq" className="type-heading text-navy-900">
           {t("help.faqTitle")}

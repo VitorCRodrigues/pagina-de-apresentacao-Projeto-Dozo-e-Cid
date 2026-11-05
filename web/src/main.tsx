@@ -5,10 +5,12 @@ import { i18nReady } from "@/i18n";
 import "@/styles/index.css";
 
 async function enableMocking() {
-  // The DEV guard lets Vite drop the mocks (and msw) from the production bundle.
-  if (!import.meta.env.DEV) return;
-  const { worker } = await import("@/mocks/browser");
-  await worker.start({ onUnhandledFrame: "bypass" });
+  // Vite replaces both with constants, so a production build drops the mocks (and msw).
+  // "measure" is the Lighthouse build (vite.config.ts), never deployed.
+  if (!import.meta.env.DEV && import.meta.env.MODE !== "measure") return;
+  const { removeOldMockWorker, startMocking } = await import("@/mocks/browser");
+  await removeOldMockWorker();
+  startMocking();
 }
 
 const root = document.getElementById("root");

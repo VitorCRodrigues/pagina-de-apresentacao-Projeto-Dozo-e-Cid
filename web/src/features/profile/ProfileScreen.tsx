@@ -2,12 +2,13 @@ import { ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import { useConfig } from "@/api/hooks/config";
-import { useMe, useSuitability } from "@/api/hooks/account";
+import { useAccount, useMe, useSuitability } from "@/api/hooks/account";
 import type { Locale } from "@/api/types";
 import { Banner } from "@/components/Banner";
 import { buttonClass } from "@/components/component-styles";
 import { Icon } from "@/components/Icon";
 import { LoadingState } from "@/components/PageState";
+import { AccountBlockNote } from "@/features/account/AccountBlockNote";
 import { cx } from "@/lib/cx";
 import { formatDate } from "@/lib/dates";
 import { asLocale } from "@/lib/locale";
@@ -30,6 +31,7 @@ export function ProfileScreen() {
   const { t, i18n } = useTranslation("profile");
   const locale = asLocale(i18n.language);
   const { data: me } = useMe();
+  const account = useAccount();
   const { state } = useLocation() as { state: ProfileLocationState | null };
 
   if (!me) return <LoadingState />;
@@ -37,6 +39,7 @@ export function ProfileScreen() {
   return (
     <section className="flex flex-col gap-10 py-2">
       <h1 className="type-title text-navy-900">{t("profile.title")}</h1>
+      {account.data && <AccountBlockNote account={account.data} />}
       {state?.suitabilitySaved && <Banner title={t("profile.suitability.saved")} quiet />}
       <PersonalData me={me} locale={locale} />
       <InvestingSection locale={locale} />

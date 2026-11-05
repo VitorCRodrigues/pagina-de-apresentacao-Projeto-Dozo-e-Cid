@@ -51,7 +51,7 @@ export function AccountStatusScreen() {
   }, [status, me, queryClient]);
 
   if (account.isError) return <ErrorState onRetry={() => void account.refetch()} />;
-  if (!account.data) return <LoadingState />;
+  if (!account.data) return <LoadingState shape="timeline" />;
   return <AccountStatusView account={account.data} />;
 }
 

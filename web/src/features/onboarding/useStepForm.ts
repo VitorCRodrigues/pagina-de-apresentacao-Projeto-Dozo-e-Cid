@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm, type DefaultValues, type FieldValues } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
-import type { z } from "zod";
+import type { z } from "@/lib/zod";
 import { useSaveOnboardingStep } from "@/api/hooks/onboarding";
 import type { OnboardingStep } from "@/api/proposed-types";
 import { paths } from "@/routes";

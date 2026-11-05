@@ -34,13 +34,22 @@ export function RadioCardGroup({
 interface RadioCardProps {
   value: string;
   title: ReactNode;
+  // Why to pick this option, in one plain line under the title (rails: T5 and T6).
+  reason?: ReactNode;
   description?: ReactNode;
   // Why this option is recommended, as a line of text inside it (no corner badge).
   recommendation?: ReactNode;
   disabled?: boolean;
 }
 
-export function RadioCard({ value, title, description, recommendation, disabled }: RadioCardProps) {
+export function RadioCard({
+  value,
+  title,
+  reason,
+  description,
+  recommendation,
+  disabled,
+}: RadioCardProps) {
   return (
     <RadioGroup.Item
       value={value}
@@ -63,6 +72,11 @@ export function RadioCard({ value, title, description, recommendation, disabled 
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="type-label text-graphite-900 group-disabled:text-gray-500">{title}</span>
+        {reason && (
+          <span className="type-caption text-graphite-900 group-disabled:text-gray-500">
+            {reason}
+          </span>
+        )}
         {description && <span className="type-caption text-gray-600">{description}</span>}
         {recommendation && (
           <span className="type-caption font-semibold text-green-700">{recommendation}</span>

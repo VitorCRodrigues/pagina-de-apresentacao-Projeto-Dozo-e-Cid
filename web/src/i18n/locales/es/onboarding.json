@@ -19,6 +19,7 @@
     },
     "errors": {
       "required": "Completá este dato.",
+      "pickOne": "Elegí una de las opciones.",
       "invalidName": "Usá solo letras, espacios, apóstrofos o guiones, como en tu DNI.",
       "nameTwoWords": "Escribí tu nombre y tu apellido, como en tu DNI.",
       "invalidDate": "Revisá la fecha.",

@@ -1,27 +1,24 @@
 import { type ReactNode, useId } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import { blockMessageKeys } from "@/api/error-messages";
 import { useAccount } from "@/api/hooks/account";
 import { useConfig } from "@/api/hooks/config";
 import { useDeposits } from "@/api/hooks/deposits";
 import { usePlans } from "@/api/hooks/plans";
 import { usePortfolio } from "@/api/hooks/portfolio";
-import type { Account, Locale, Portfolio } from "@/api/types";
+import type { Locale, Portfolio } from "@/api/types";
 import { Banner } from "@/components/Banner";
 import { buttonClass } from "@/components/component-styles";
 import { Money } from "@/components/Money";
 import { ErrorState, InlineError, InlineLoading } from "@/components/PageState";
-import { Skeleton } from "@/components/Skeleton";
+import { AccountBlockNote } from "@/features/account/AccountBlockNote";
 import { DepositRow } from "@/features/deposits/DepositRow";
 import { inProgressStates, newestFirst } from "@/features/deposits/history";
-import { accountBlock } from "@/features/deposits/rules";
-import { BalanceCard } from "@/features/portfolio/BalanceCard";
+import { BalanceCard, BalanceCardSkeleton } from "@/features/portfolio/BalanceCard";
 import { buckets, bucketsTotalCents, centsOf } from "@/features/portfolio/balances";
 import { formatDate, formatDateTime } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { asLocale } from "@/lib/locale";
-import { SUPPORT_EMAIL } from "@/lib/support";
 import { paths } from "@/routes";
 import { currentPlan } from "@/features/plans/plan-rules";
 import { formatWindowDate, resolveInvestmentWindow } from "./investment-window";
@@ -65,30 +62,9 @@ function AccountNotes() {
   if (!account) return null;
   return (
     <>
-      <BlockNote account={account} />
+      <AccountBlockNote account={account} />
       <PendingStrip count={account.pending.length} />
     </>
-  );
-}
-
-// Decision 14: a restricted account keeps the navigation; the home screen says why deposits stop.
-function BlockNote({ account }: { account: Account }) {
-  const { t } = useTranslation("portfolio");
-  const block = accountBlock(account);
-  if (!block) return null;
-  const keys = blockMessageKeys(block.reason);
-  return (
-    <Banner
-      tone="warning"
-      title={t(keys.message)}
-      {...(block.action === "support" && {
-        action: (
-          <a href={`mailto:${SUPPORT_EMAIL}`} className={buttonClass("ghost", "never")}>
-            {t(keys.action)}
-          </a>
-        ),
-      })}
-    />
   );
 }
 
@@ -115,9 +91,9 @@ function Total({ locale }: { locale: Locale }) {
   if (portfolio.isError) return <ErrorState onRetry={() => void portfolio.refetch()} />;
   if (!portfolio.data) {
     return (
-      <div role="status" className="flex flex-col gap-3">
+      <div role="status">
         <span className="sr-only">{t("common.loading")}</span>
-        <Skeleton className="h-36 w-full rounded-card" />
+        <BalanceCardSkeleton split />
       </div>
     );
   }

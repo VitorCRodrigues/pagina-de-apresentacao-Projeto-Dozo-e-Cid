@@ -67,6 +67,7 @@
     "preferences": "Preferencias"
   },
   "help": {
+    "back": "Volver al perfil",
     "title": "Ayuda",
     "faqTitle": "Preguntas frecuentes",
     "supportTitle": "Soporte",

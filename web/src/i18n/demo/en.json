@@ -62,7 +62,8 @@
   },
   "select": {
     "label": "Deposit day",
-    "day": "Day {{day}} of each month"
+    "day": "Day {{day}} of each month",
+    "error": "Choose a day."
   },
   "checkbox": {
     "terms": "I accept the advisory agreement",

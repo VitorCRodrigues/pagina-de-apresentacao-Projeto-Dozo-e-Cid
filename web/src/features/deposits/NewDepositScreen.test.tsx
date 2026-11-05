@@ -106,6 +106,18 @@ describe("new deposit (T6)", () => {
     expect(confirm).toBeEnabled();
   });
 
+  it("says in one line why to choose each rail (T6)", async () => {
+    const user = userEvent.setup();
+    await open();
+    await toRail(user);
+    expect(screen.getByRole("radio", { name: /USDC desde una exchange/ })).toHaveTextContent(
+      "Desde tu cuenta en una exchange, en USDC.",
+    );
+    expect(screen.getByRole("radio", { name: /Transferencia bancaria SWIFT/ })).toHaveTextContent(
+      "Desde tu banco, en dólares, sin pasar por una exchange.",
+    );
+  });
+
   it("comes with the recommended rail selected and hides Brazilian rails", async () => {
     serveQuote(inFiveMinutes());
     const user = userEvent.setup();
@@ -130,6 +142,34 @@ describe("new deposit (T6)", () => {
       expect(screen.getByRole("button", { name: "Confirmar aporte" })).toBeEnabled();
     });
     expect(screen.queryByText("La cotización venció")).toBeNull();
+  });
+
+  it("on a slow network, a second click on Generar nueva cotización sends no second request", async () => {
+    serveQuote(new Date(Date.now() - 1000).toISOString());
+    const user = userEvent.setup();
+    await open();
+    await toPreview(user);
+
+    let requests = 0;
+    server.use(
+      http.post("/api/v1/deposits/quote", async () => {
+        requests += 1;
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        return HttpResponse.json({
+          id: "q-slow",
+          amountCents: 50000,
+          options: [option("ar_usdc", true)],
+          expiresAt: inFiveMinutes(),
+        });
+      }),
+    );
+    const renew = screen.getByRole("button", { name: "Generar nueva cotización" });
+    await user.click(renew);
+    await user.click(renew);
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Confirmar aporte" })).toBeEnabled();
+    });
+    expect(requests).toBe(1);
   });
 
   it("runs the countdown on the server's clock when the phone's is off", async () => {

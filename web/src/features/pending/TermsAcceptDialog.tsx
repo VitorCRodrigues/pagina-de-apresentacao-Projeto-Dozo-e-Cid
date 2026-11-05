@@ -7,6 +7,8 @@ import { Button } from "@/components/Button";
 import { Checkbox } from "@/components/Checkbox";
 import { Dialog } from "@/components/Dialog";
 import { Skeleton } from "@/components/Skeleton";
+import { formatVersion } from "@/lib/dates";
+import { asLocale } from "@/lib/locale";
 
 interface TermsAcceptDialogProps {
   // Without one (an item from account.pending), the first document not yet accepted.
@@ -19,7 +21,7 @@ interface TermsAcceptDialogProps {
 // unticked box, then "Aceptar". It saves { id, version, acceptedAt } like onboarding step 7,
 // with acceptedAt the moment the box was ticked.
 export function TermsAcceptDialog({ termsId, open, onOpenChange }: TermsAcceptDialogProps) {
-  const { t } = useTranslation("pending");
+  const { t, i18n } = useTranslation("pending");
   const terms = useTermsDocuments();
   const accept = useAcceptTerms();
   const [viewed, setViewed] = useState(false);
@@ -86,7 +88,9 @@ export function TermsAcceptDialog({ termsId, open, onOpenChange }: TermsAcceptDi
             }}
             className="type-label self-start text-green-700 underline underline-offset-4"
           >
-            {t("pending.terms.read", { version: doc.version })}
+            {t("pending.terms.read", {
+              version: formatVersion(doc.version, asLocale(i18n.language)),
+            })}
           </a>
           {!viewed && <p className="type-caption text-gray-600">{t("pending.terms.readFirst")}</p>}
           <Checkbox

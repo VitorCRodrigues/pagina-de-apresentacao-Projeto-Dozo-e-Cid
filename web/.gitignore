@@ -18,3 +18,5 @@ playwright/.cache
 
 # Playwright MCP snapshots and screenshots
 .playwright-mcp/
+dist-measure
+lighthouse-reports

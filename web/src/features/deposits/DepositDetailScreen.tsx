@@ -38,7 +38,7 @@ export function DepositDetailScreen() {
     );
   }
   if (deposit.isError) return <ErrorState onRetry={() => void deposit.refetch()} />;
-  if (!deposit.data) return <LoadingState />;
+  if (!deposit.data) return <LoadingState shape="timeline" />;
   return <DepositDetailView deposit={deposit.data} checkedAt={deposit.dataUpdatedAt} />;
 }
 

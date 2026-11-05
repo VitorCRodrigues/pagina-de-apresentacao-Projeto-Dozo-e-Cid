@@ -39,7 +39,7 @@ export function OnboardingLayout() {
 
   if (me && me.accountStatus !== "draft") return <Navigate to={paths.accountStatus} replace />;
   if (onboarding.error) return <ErrorState onRetry={() => void onboarding.refetch()} />;
-  if (!me || !config.data || !onboarding.data) return <LoadingState />;
+  if (!me || !config.data || !onboarding.data) return <LoadingState shape="form" />;
 
   return (
     <OnboardingContext value={{ draft: onboarding.data, me, config: config.data }}>

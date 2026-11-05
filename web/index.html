@@ -10,7 +10,13 @@
     <title>OpenDollars</title>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- First paint before the app's code arrives (slow 3G: several seconds). React replaces
+         it with the first screen. The brand name only: the language is not known yet. -->
+    <div id="root">
+      <div class="flex min-h-dvh items-center justify-center bg-cream-50">
+        <p class="type-title text-navy-900">OpenDollars</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

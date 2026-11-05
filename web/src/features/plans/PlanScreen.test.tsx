@@ -47,13 +47,26 @@ async function toReview(user: ReturnType<typeof userEvent.setup>, amount: string
   await user.clear(field);
   await user.type(field, amount);
   if (day) {
-    await user.click(screen.getByRole("combobox", { name: "Día del mes" }));
-    await user.click(await screen.findByRole("option", { name: day }));
+    await user.selectOptions(screen.getByRole("combobox", { name: "Día del mes" }), day);
   }
   await user.click(screen.getByRole("button", { name: "Continuar" }));
 }
 
 describe("monthly plan (T5)", () => {
+  it("says in one line why to choose each rail (T5)", async () => {
+    await open("empty");
+    expect(
+      await screen.findByRole("radio", { name: /USDC desde una exchange/ }, { timeout: 4000 }),
+    ).toHaveTextContent("Desde tu cuenta en una exchange, en USDC.");
+  });
+
+  it("Cancelar plan is a destructive outline, never a green link like the navigation", async () => {
+    await open();
+    const cancel = await screen.findByRole("button", { name: "Cancelar plan" });
+    expect(cancel).toHaveClass("border-brick-700", "text-brick-700");
+    expect(cancel).not.toHaveClass("text-green-700");
+  });
+
   afterEach(() => {
     server.events.removeAllListeners();
   });

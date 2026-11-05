@@ -33,6 +33,7 @@
     },
     "accountNumber": "Número da conta",
     "upload": {
+      "photo": "Tirar uma foto",
       "choose": "Escolher arquivo",
       "change": "Escolher outro arquivo",
       "accepted": "JPG, PNG ou PDF, até 10 MB.",

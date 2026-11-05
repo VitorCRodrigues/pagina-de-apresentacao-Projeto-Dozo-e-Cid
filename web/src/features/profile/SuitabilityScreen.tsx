@@ -42,7 +42,7 @@ export function SuitabilityScreen() {
       />
     );
   } else if (!questionnaire.data || saved.isPending) {
-    body = <LoadingState />;
+    body = <LoadingState shape="form" />;
   } else if (!questionnaire.data.questions.every(canRender)) {
     body = <ErrorState onRetry={() => void questionnaire.refetch()} />;
   } else {

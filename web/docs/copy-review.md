@@ -2,7 +2,7 @@
 
 Gerado por `npm run copy:review` a partir de `src/i18n/locales` e dos textos editoriais do mock (`src/mocks/fixtures.ts`). Não edite à mão: comente em `copy-review.csv`, que tem o mesmo conteúdo, e os ajustes voltam para os arquivos de idioma.
 
-Total: 542 textos. Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
+Total: 549 textos. Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
 
 ## 1. Depende da confirmação do registro RIA antes do piloto
 
@@ -20,10 +20,14 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 
 ## 2. Marcados com TODO(compliance) no código
 
-117 textos.
+121 textos.
 
 | Chave | Tela | ES | PT | EN | Status jurídico | Observação |
 | --- | --- | --- | --- | --- | --- | --- |
+| `deposit.rail.why.ar_usdc` | T6 Novo aporte | Desde tu cuenta en una exchange, en USDC. | Da sua conta numa exchange, em USDC. | From your account at an exchange, in USDC. | pendente | Por que escolher cada trilho: sem promessa de prazo ou custo. |
+| `deposit.rail.why.ar_swift` | T6 Novo aporte | Desde tu banco, en dólares, sin pasar por una exchange. | Do seu banco, em dólares, sem passar por uma exchange. | From your bank, in dollars, without an exchange. | pendente | Por que escolher cada trilho: sem promessa de prazo ou custo. |
+| `deposit.rail.why.br_efx` | T6 Novo aporte | Pagás en reales con Pix y el socio de cambio envía los dólares. | Você paga em reais com Pix e o parceiro de câmbio envia os dólares. | You pay in reais with Pix and the exchange partner sends the dollars. | pendente | Por que escolher cada trilho: sem promessa de prazo ou custo. |
+| `deposit.rail.why.br_fxbank` | T6 Novo aporte | Para montos grandes: un banco de cambio convierte y envía los dólares. | Para valores maiores: um banco de câmbio converte e envia os dólares. | For larger amounts: a foreign exchange bank converts and sends the dollars. | pendente | Por que escolher cada trilho: sem promessa de prazo ou custo. |
 | `deposit.detail.returned` | T8 Detalhe do aporte | Devolvimos este depósito | Devolvemos este depósito | We returned this deposit | pendente | A política de devolução depende do contrato com o parceiro. |
 | `deposit.detail.refund` | T8 Detalhe do aporte | El dinero vuelve a la cuenta de origen. El plazo y los costos de la devolución dependen del medio de envío. | O dinheiro volta para a conta de origem. O prazo e os custos da devolução dependem do meio de envio. | The money goes back to the source account. Timing and costs of the return depend on the transfer method. | pendente | A política de devolução depende do contrato com o parceiro. |
 | `deposit.instructions.exactAmountNote` | T7 Instruções de depósito | Enviá exactamente este valor. Un valor distinto puede demorar tu aporte. | Envie exatamente este valor. Um valor diferente pode atrasar seu aporte. | Send exactly this amount. A different amount may delay your deposit. | pendente | Consequências de enviar um valor diferente. |
@@ -144,7 +148,7 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 
 ## 3. Demais textos
 
-418 textos.
+421 textos.
 
 | Chave | Tela | ES | PT | EN | Status jurídico | Observação |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -172,6 +176,7 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 | `account.actions.createPlan` | T3 Status da conta | Crear plan mensual | Criar plano mensal | Create monthly plan | pendente |  |
 | `account.actions.contact` | T3 Status da conta | Escribir a soporte | Falar com o suporte | Contact support | pendente |  |
 | `account.accountNumber` | T3 Status da conta | Número de cuenta | Número da conta | Account number | pendente |  |
+| `account.upload.photo` | T3 Status da conta | Sacar una foto | Tirar uma foto | Take a photo | pendente |  |
 | `account.upload.choose` | T3 Status da conta | Elegir archivo | Escolher arquivo | Choose file | pendente |  |
 | `account.upload.change` | T3 Status da conta | Elegir otro archivo | Escolher outro arquivo | Choose another file | pendente |  |
 | `account.upload.accepted` | T3 Status da conta | JPG, PNG o PDF, hasta 10 MB. | JPG, PNG ou PDF, até 10 MB. | JPG, PNG or PDF, up to 10 MB. | pendente |  |
@@ -288,6 +293,7 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 | `onboarding.actions.submit` | T2 Onboarding | Enviar solicitud | Enviar solicitação | Submit application | pendente |  |
 | `onboarding.actions.joinWaitlist` | T2 Onboarding | Anotarme en la lista | Entrar na lista | Join the list | pendente |  |
 | `onboarding.errors.required` | T2 Onboarding | Completá este dato. | Preencha este campo. | Fill in this field. | pendente |  |
+| `onboarding.errors.pickOne` | T2 Onboarding | Elegí una de las opciones. | Escolha uma das opções. | Choose one of the options. | pendente |  |
 | `onboarding.errors.invalidName` | T2 Onboarding | Usá solo letras, espacios, apóstrofos o guiones, como en tu DNI. | Use só letras, espaços, apóstrofos ou hífens, como no seu documento. | Use letters, spaces, apostrophes or hyphens only, as on your ID. | pendente |  |
 | `onboarding.errors.nameTwoWords` | T2 Onboarding | Escribí tu nombre y tu apellido, como en tu DNI. | Digite seu nome e sobrenome, como no seu documento. | Write your first and last name, as on your ID. | pendente |  |
 | `onboarding.errors.invalidDate` | T2 Onboarding | Revisá la fecha. | Confira a data. | Check the date. | pendente |  |
@@ -484,6 +490,7 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 | `profile.suitability.missing_one` | T12 Perfil de investidor | Falta {{count}} respuesta. | Falta {{count}} resposta. | {{count}} answer missing. | pendente |  |
 | `profile.suitability.missing_other` | T12 Perfil de investidor | Faltan {{count}} respuestas. | Faltam {{count}} respostas. | {{count}} answers missing. | pendente |  |
 | `profile.preferences` | T12 Perfil | Preferencias | Preferências | Preferences | pendente |  |
+| `help.back` | T13 Ajuda | Volver al perfil | Voltar ao perfil | Back to profile | pendente |  |
 | `help.title` | T13 Ajuda | Ayuda | Ajuda | Help | pendente |  |
 | `help.faqTitle` | T13 Ajuda | Preguntas frecuentes | Perguntas frequentes | Frequently asked questions | pendente |  |
 | `help.supportTitle` | T13 Ajuda | Soporte | Suporte | Support | pendente |  |

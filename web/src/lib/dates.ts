@@ -40,3 +40,16 @@ export function formatTime(iso: string, locale: Locale, { timeZone }: DateOption
     ...(timeZone && { timeZone }),
   }).format(new Date(iso));
 }
+
+// Terms versions come from the API as a month ("2026-11"): shown as that month in the client's
+// language ("noviembre de 2026"), never raw. Any other label is shown as it comes.
+export function formatVersion(version: string, locale: Locale): string {
+  const month = /^(\d{4})-(\d{2})$/.exec(version);
+  if (!month) return version;
+  const date = new Date(Date.UTC(Number(month[1]), Number(month[2]) - 1, 1));
+  return new Intl.DateTimeFormat(toIntlLocale(locale), {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}

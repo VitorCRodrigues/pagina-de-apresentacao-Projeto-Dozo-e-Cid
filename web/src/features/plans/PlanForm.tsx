@@ -110,7 +110,12 @@ export function PlanForm({ config, rails, locale, initial, onBack, onSubmit }: P
               onValueChange={field.onChange}
             >
               {rails.map((rail) => (
-                <RadioCard key={rail} value={rail} title={td(`deposit.rail.names.${rail}`)} />
+                <RadioCard
+                  key={rail}
+                  value={rail}
+                  title={td(`deposit.rail.names.${rail}`)}
+                  reason={td(`deposit.rail.why.${rail}`)}
+                />
               ))}
             </RadioCardGroup>
             {error("rail") && <p className="type-caption text-brick-700">{error("rail")}</p>}

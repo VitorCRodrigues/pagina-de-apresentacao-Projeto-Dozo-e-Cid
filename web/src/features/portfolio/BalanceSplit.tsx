@@ -7,10 +7,12 @@ import { formatMoney, formatPercent } from "@/lib/money";
 import { type Bucket, buckets, bucketShares, bucketsTotalCents, centsOf } from "./balances";
 
 // Neutral tones only: the split says where the money is, never whether it gained or lost.
+// In transit is a dashed outline, not a pale fill: a bar that is all in transit must not
+// read as an empty track (D11).
 const swatch: Record<Bucket, string> = {
   invested: "bg-navy-900",
   ibkrCash: "bg-gray-500",
-  inFlight: "bg-gray-200 ring-1 ring-inset ring-gray-500",
+  inFlight: "border border-dashed border-gray-500",
 };
 
 // T9: invested, cash and in transit, each with its share of the total, and fees on the side.
@@ -27,7 +29,7 @@ export function BalanceSplit({ portfolio, locale }: { portfolio: Portfolio; loca
       </h2>
       {hasMoney && (
         // The ledger below carries the same numbers as text; the bar is a picture of them.
-        <div aria-hidden={true} className="flex h-1.5 gap-px overflow-hidden rounded-full">
+        <div aria-hidden={true} className="flex h-2 gap-px overflow-hidden rounded-full">
           {buckets
             .filter((bucket) => shares[bucket] > 0)
             .map((bucket) => (

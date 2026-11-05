@@ -12,8 +12,7 @@ async function open() {
 }
 
 async function choose(user: ReturnType<typeof userEvent.setup>, field: string, option: string) {
-  await user.click(screen.getByRole("combobox", { name: field }));
-  await user.click(await screen.findByRole("option", { name: option }));
+  await user.selectOptions(screen.getByRole("combobox", { name: field }), option);
 }
 
 describe("onboarding step 5, source of funds and PEP", () => {

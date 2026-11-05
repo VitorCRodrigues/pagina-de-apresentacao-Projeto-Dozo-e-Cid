@@ -89,7 +89,8 @@ export function NewDepositScreen() {
       />
     );
   }
-  if (!me || !config.data || !account.data || fromPlan.loading) return <LoadingState />;
+  if (!me || !config.data || !account.data || fromPlan.loading)
+    return <LoadingState shape="form" />;
   return <DepositFlow me={me} config={config.data} account={account.data} plan={fromPlan.plan} />;
 }
 
@@ -355,6 +356,8 @@ function RailStep({ options, rail, locale, onChange, onBack, onNext }: RailStepP
             key={option.rail}
             value={option.rail}
             title={t(`deposit.rail.names.${option.rail}`)}
+            // TODO(compliance): deposit.rail.why.* (also in T5) pending legal review.
+            reason={t(`deposit.rail.why.${option.rail}`)}
             description={t("deposit.rail.summary", {
               cost: formatMoney(option.totalCostCents, locale),
               percent: formatPercent(

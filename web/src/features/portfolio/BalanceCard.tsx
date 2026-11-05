@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { Locale, Portfolio } from "@/api/types";
 import { Card } from "@/components/Card";
 import { Money } from "@/components/Money";
+import { Skeleton } from "@/components/Skeleton";
 import { formatMoney } from "@/lib/money";
 import { reportIssue } from "@/lib/report";
 import { bucketsTotalCents } from "./balances";
@@ -48,6 +49,37 @@ export function BalanceCard({ portfolio, locale, note, children }: BalanceCardPr
       </div>
       {children}
       <p className="type-caption text-cream-50">{note}</p>
+    </Card>
+  );
+}
+
+// The card before the portfolio arrives: the same type styles, so each line already has its
+// final height and the sections below do not move when the figures come in (CLS). `split`: the
+// three statement lines Início shows inside the card.
+export function BalanceCardSkeleton({ split = false }: { split?: boolean }) {
+  const bar = "inline-block align-middle bg-navy-800";
+  return (
+    <Card tone="inverse" className="flex flex-col gap-4" data-skeleton="balance">
+      <div className="flex flex-col gap-1">
+        <div className="type-label">
+          <Skeleton className={`${bar} h-3 w-12`} />
+        </div>
+        <div className="type-value-display">
+          <Skeleton className={`${bar} h-9 w-48`} />
+        </div>
+      </div>
+      {split && (
+        <ul className="type-caption border-y border-navy-800">
+          {[0, 1, 2].map((line) => (
+            <li key={line} className="border-t border-navy-800 py-1.5 first:border-t-0">
+              <Skeleton className={`${bar} h-3 w-full`} />
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="type-caption">
+        <Skeleton className={`${bar} h-3 w-2/3`} />
+      </div>
     </Card>
   );
 }

@@ -66,6 +66,7 @@ function DocumentAction({ item }: { item: Notification }) {
       {/* The sheet names the action; DocumentUpload names the document. */}
       <Sheet open={open} onOpenChange={setOpen} title={t("pending.actions.document")}>
         <DocumentUpload
+          as="div"
           item={item}
           upload={async (file, onProgress) => {
             await upload.mutateAsync({ pendingItemId: item.id, file, onProgress });

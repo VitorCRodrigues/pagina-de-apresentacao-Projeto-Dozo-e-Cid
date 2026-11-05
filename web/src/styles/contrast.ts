@@ -16,6 +16,7 @@ export const contrastPairs: readonly ContrastPair[] = [
   { fg: "gray-600", bg: "gray-50", min: 4.5, use: "Countdown, running" },
   { fg: "gray-500", bg: "cream-50", min: 3, use: "Input border (non-text)" },
   { fg: "gray-500", bg: "paper", min: 3, use: "Input border on cards (non-text)" },
+  { fg: "gray-500", bg: "cream-50", min: 3, use: "Stepper, steps still to come (non-text)" },
   { fg: "green-700", bg: "cream-50", min: 4.5, use: "Links, done, invested" },
   { fg: "green-700", bg: "paper", min: 4.5, use: "Links on cards" },
   { fg: "amber-700", bg: "cream-50", min: 4.5, use: "Warning note title" },

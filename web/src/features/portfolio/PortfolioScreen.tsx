@@ -8,7 +8,7 @@ import type { ProposedConfig } from "@/api/proposed-types";
 import type { Locale, Portfolio } from "@/api/types";
 import { buttonClass } from "@/components/component-styles";
 import { Icon } from "@/components/Icon";
-import { EmptyState, ErrorState, InlineError, LoadingState } from "@/components/PageState";
+import { EmptyState, ErrorState, InlineError } from "@/components/PageState";
 import { RiskNote } from "@/components/RiskNote";
 import { Skeleton } from "@/components/Skeleton";
 import { inProgressStates } from "@/features/deposits/history";
@@ -16,7 +16,7 @@ import { formatWindowDate, resolveInvestmentWindow } from "@/features/home/inves
 import { formatDateTime } from "@/lib/dates";
 import { asLocale } from "@/lib/locale";
 import { paths } from "@/routes";
-import { BalanceCard } from "./BalanceCard";
+import { BalanceCard, BalanceCardSkeleton } from "./BalanceCard";
 import { bucketsTotalCents } from "./balances";
 import { BalanceSplit } from "./BalanceSplit";
 import { PositionList } from "./PositionList";
@@ -31,7 +31,12 @@ export function PortfolioScreen() {
   if (portfolio.isError) {
     body = <ErrorState onRetry={() => void portfolio.refetch()} />;
   } else if (!portfolio.data) {
-    body = <LoadingState />;
+    body = (
+      <div role="status">
+        <span className="sr-only">{t("common.loading")}</span>
+        <BalanceCardSkeleton />
+      </div>
+    );
   } else if (
     bucketsTotalCents(portfolio.data.buckets) === 0 &&
     portfolio.data.positions.length === 0

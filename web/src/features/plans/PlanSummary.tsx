@@ -60,7 +60,9 @@ export function PlanSummary({ plan, locale, readOnly, onEdit }: PlanSummaryProps
           <span className="type-body">{t("plan.summary.dayValue", { day: plan.dayOfMonth })}</span>
         </LedgerRow>
         <LedgerRow label={t("plan.summary.rail")}>
-          <span className="type-body">{td(`deposit.rail.names.${plan.rail}`)}</span>
+          <span className="type-body whitespace-nowrap">
+            {td(`deposit.rail.names.${plan.rail}`)}
+          </span>
         </LedgerRow>
         {plan.status === "active" && plan.nextRunAt && (
           <LedgerRow label={t("plan.summary.next")}>
@@ -88,32 +90,33 @@ export function PlanSummary({ plan, locale, readOnly, onEdit }: PlanSummaryProps
               {t("plan.actions.edit")}
             </Button>
           )}
-          <div className="-ml-1 flex flex-wrap gap-x-6">
-            {actions.includes("pause") && (
-              <Button
-                variant="ghost"
-                fullWidth="never"
-                disabled={update.isPending}
-                onClick={() => {
-                  move("pause");
-                }}
-              >
-                {t("plan.actions.pause")}
-              </Button>
-            )}
-            {actions.includes("cancel") && (
-              <Button
-                variant="ghost"
-                fullWidth="never"
-                disabled={update.isPending}
-                onClick={() => {
-                  setConfirmCancel(true);
-                }}
-              >
-                {t("plan.actions.cancel")}
-              </Button>
-            )}
-          </div>
+          {actions.includes("pause") && (
+            <Button
+              variant="ghost"
+              fullWidth="never"
+              className="-ml-1"
+              disabled={update.isPending}
+              onClick={() => {
+                move("pause");
+              }}
+            >
+              {t("plan.actions.pause")}
+            </Button>
+          )}
+          {/* Destructive, so last and set apart: not beside a link of another height (D9). */}
+          {actions.includes("cancel") && (
+            <Button
+              variant="destructive-outline"
+              fullWidth="never"
+              className="mt-3"
+              disabled={update.isPending}
+              onClick={() => {
+                setConfirmCancel(true);
+              }}
+            >
+              {t("plan.actions.cancel")}
+            </Button>
+          )}
         </div>
       )}
 

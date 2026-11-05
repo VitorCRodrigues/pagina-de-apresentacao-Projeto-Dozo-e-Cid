@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
@@ -24,10 +24,10 @@ describe("onboarding steps 1 to 3", () => {
     const user = userEvent.setup();
     renderApp({ path: "/onboarding/residencia", scenario: "draft" });
 
-    await user.click(
+    await user.selectOptions(
       await screen.findByRole("combobox", { name: "País de residencia" }, { timeout: 4000 }),
+      "Uruguay",
     );
-    await user.click(await screen.findByRole("option", { name: "Uruguay" }));
 
     expect(
       await screen.findByRole("heading", { name: "Todavía no abrimos cuentas en Uruguay" }),
@@ -38,6 +38,28 @@ describe("onboarding steps 1 to 3", () => {
     await waitFor(() => {
       expect(posted).toEqual([{ email: "lucia.fernandez@example.com", country: "UY" }]);
     });
+  });
+
+  it("Brasil is not offered while BR is not in liveMarkets (decision 5)", async () => {
+    renderApp({ path: "/onboarding/residencia", scenario: "draft" });
+    const residence = await screen.findByRole(
+      "combobox",
+      { name: "País de residencia" },
+      { timeout: 4000 },
+    );
+    expect(within(residence).getByRole("option", { name: "Argentina" })).toBeInTheDocument();
+    expect(within(residence).getByRole("option", { name: "Chile" })).toBeInTheDocument();
+    expect(within(residence).queryByRole("option", { name: "Brasil" })).toBeNull();
+  });
+
+  it("still offers Brasil as nationality: who the client is, not where we operate", async () => {
+    renderApp({ path: "/onboarding/residencia", scenario: "draft" });
+    const nationality = await screen.findByRole(
+      "combobox",
+      { name: "Nacionalidad" },
+      { timeout: 4000 },
+    );
+    expect(within(nationality).getByRole("option", { name: "Brasil" })).toBeInTheDocument();
   });
 
   it("says where the account is opened and who advises", async () => {

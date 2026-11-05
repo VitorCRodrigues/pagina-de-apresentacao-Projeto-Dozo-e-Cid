@@ -2,8 +2,9 @@ import { X } from "lucide-react";
 import { Dialog as RadixDialog } from "radix-ui";
 import { useTranslation } from "react-i18next";
 import { cx } from "@/lib/cx";
-import { focusPanel, overlayBackdrop, rootProps, type OverlayProps } from "./component-styles";
+import { overlayBackdrop, rootProps, type OverlayProps } from "./component-styles";
 import { Icon } from "./Icon";
+import { useOverlayFocus } from "./overlay-focus";
 
 export function CloseButton() {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ export function CloseButton() {
 
 export function Dialog(props: OverlayProps) {
   const { title, description, footer, children } = props;
+  const focus = useOverlayFocus();
 
   return (
     <RadixDialog.Root {...rootProps(props)}>
@@ -26,7 +28,7 @@ export function Dialog(props: OverlayProps) {
         <RadixDialog.Overlay className={overlayBackdrop} />
         <RadixDialog.Content
           {...(description ? {} : { "aria-describedby": undefined })}
-          onOpenAutoFocus={focusPanel}
+          {...focus}
           className={cx(
             "outline-none",
             "fixed top-1/2 left-1/2 z-50 w-[calc(100%-2.5rem)] max-w-md -translate-x-1/2 -translate-y-1/2",

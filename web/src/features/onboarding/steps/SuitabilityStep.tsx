@@ -14,7 +14,7 @@ import { useStepForm } from "../useStepForm";
 // deploy (PRD T2); nothing about them is fixed here.
 export function SuitabilityStep() {
   const questionnaire = useQuestionnaire();
-  if (questionnaire.isPending) return <LoadingState />;
+  if (questionnaire.isPending) return <LoadingState shape="form" />;
   if (questionnaire.isError || !questionnaire.data.questions.every(canRender)) {
     return <ErrorState onRetry={() => void questionnaire.refetch()} />;
   }

@@ -1,6 +1,6 @@
 // Events for error monitoring. The event is a fixed code and the key a non-personal tag (such as
 // a reconciliation date): never amounts, names or ids (CLAUDE.md), so it is safe to send.
-export type IssueEvent = "portfolio_total_mismatch";
+export type IssueEvent = "portfolio_total_mismatch" | "session_timeout_unavailable";
 
 const reported = new Set<string>();
 

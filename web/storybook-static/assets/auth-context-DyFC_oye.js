@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./react-DlPsW1c0.js";function n(){let e=(0,r.useContext)(i);if(!e)throw Error(`useAuth must be used inside <AuthProvider>`);return e}var r,i;function a(){return(a=e((()=>{r=t(),i=(0,r.createContext)(null)})))()}export{a as n,n as r,i as t};

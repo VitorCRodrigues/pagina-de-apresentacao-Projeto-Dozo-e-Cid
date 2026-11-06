@@ -1,0 +1,1 @@
+import{m as e}from"./Button-CtY6n83S.js";import{h as t,t as n}from"./routes-CEQL1lvK.js";import{c as r,m as i}from"./index-vD3YI3yT.js";var a=e();function o(){let e=t();return(0,a.jsx)(i,{children:(0,a.jsx)(r,{onHome:()=>void e(n.entry)})})}export{o as NotFoundScreen};

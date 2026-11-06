@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{n as t,r as n}from"./iframe-BcdU2vCd.js";import{n as r,t as i}from"./LanguageSwitcher-_GwYCIMd.js";var a,o,s;function c(){return(c=e((()=>{t(),r(),a=n.meta({title:`Components/LanguageSwitcher`,component:i}),o=a.story({}),s=[`Default`]})))()}c();export{o as Default,s as __namedExportsOrder};

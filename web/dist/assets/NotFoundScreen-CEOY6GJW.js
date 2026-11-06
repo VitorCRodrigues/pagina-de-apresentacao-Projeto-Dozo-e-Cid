@@ -1,0 +1,1 @@
+import{m as e}from"./Button-tzRawzxj.js";import{h as t,t as n}from"./routes-ChV_aKhd.js";import{c as r,m as i}from"./index-CTPZ8iVj.js";var a=e();function o(){let e=t();return(0,a.jsx)(i,{children:(0,a.jsx)(r,{onHome:()=>void e(n.entry)})})}export{o as NotFoundScreen};

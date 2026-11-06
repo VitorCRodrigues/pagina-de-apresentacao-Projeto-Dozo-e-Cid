@@ -1,0 +1,1 @@
+var e=`soporte@opendollars.com`;export{e as t};

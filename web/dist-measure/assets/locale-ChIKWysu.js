@@ -1,0 +1,1 @@
+var e={es:`es-AR`,pt:`pt-BR`,en:`en-US`};function t(t){return e[t]}function n(e){let t=e?.split(`-`)[0];return t===`pt`||t===`en`?t:`es`}export{t as n,n as t};

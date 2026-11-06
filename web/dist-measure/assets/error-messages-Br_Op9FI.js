@@ -1,0 +1,1 @@
+import{N as e}from"./index-vD3YI3yT.js";function t(t){return e(t)?`errors.${t.code}`:`errors.internal`}function n(e){return{message:`blockReason.${e}.message`,action:`blockReason.${e}.action`}}export{t as n,n as t};

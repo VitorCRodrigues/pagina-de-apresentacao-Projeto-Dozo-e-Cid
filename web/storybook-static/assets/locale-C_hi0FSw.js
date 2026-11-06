@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";function t(e){return r[e]}function n(e){let t=e?.split(`-`)[0];return t===`pt`||t===`en`?t:`es`}var r;function i(){return(i=e((()=>{r={es:`es-AR`,pt:`pt-BR`,en:`en-US`}})))()}export{i as n,t as r,n as t};

@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{F as t,M as n,N as r,P as i,c as a,n as o,t as s}from"./query-keys-D7kDl2Ty.js";function c(){let e=r();return t({queryKey:o.config,queryFn:()=>a(e),staleTime:3e5})}function l(){return(l=e((()=>{i(),n(),s()})))()}export{c as n,l as t};

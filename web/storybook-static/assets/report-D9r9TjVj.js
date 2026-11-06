@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";function t(e,t=``){let r=`${e}:${t}`;n.has(r)||n.add(r)}var n;function r(){return(r=e((()=>{n=new Set})))()}export{t as n,r as t};

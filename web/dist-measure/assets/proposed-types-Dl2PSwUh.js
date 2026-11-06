@@ -1,0 +1,1 @@
+var e=[`validation_failed`,`quote_expired`,`below_minimum`,`account_not_open`,`account_restricted`,`compliance_hold`,`market_not_live`,`idempotency_conflict`,`not_found`,`session_expired`,`maintenance`,`rate_limited`,`internal`],t=[`residence`,`personal`,`address`,`suitability`,`funds`,`identity`,`terms`,`review`];export{t as n,e as t};

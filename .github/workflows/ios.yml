@@ -1,0 +1,126 @@
+name: iOS
+
+# Phase 0 of the native iOS app (ios/). The UI only builds here: there is no Mac in the team.
+on:
+  push:
+    branches: [app-swift]
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-windows:
+    name: Core tests on Windows
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      # Same Swift as the WSL toolchain used locally.
+      - uses: compnerd/gha-setup-swift@v0.5.1
+        with:
+          source: swift.org
+          swift-version: swift-6.4.2-release
+          swift-build: 6.4.2-RELEASE
+
+      - name: Swift version
+        run: swift --version
+
+      - name: swift test
+        working-directory: ios/OpenDollarsCore
+        run: swift test
+
+  ios:
+    name: Build, test and screenshots (iOS)
+    # App Store Connect requires Xcode 26 or later with the iOS 26 SDK since 2026-04-28.
+    # macos-26 ships Xcode 26.6 (runner-images, macos-26 readme).
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: Xcode version
+        run: xcodebuild -version && swift --version
+
+      - name: Core tests on macOS
+        working-directory: ios/OpenDollarsCore
+        run: swift test
+
+      - name: Install XcodeGen
+        run: brew install xcodegen && xcodegen --version
+
+      - name: Generate the Xcode project
+        working-directory: ios
+        run: xcodegen generate
+
+      - name: Create simulators (iPhone 15, iPhone SE)
+        id: sims
+        run: bash ios/scripts/ci-create-simulators.sh
+
+      - name: Build for testing
+        run: |
+          set -o pipefail
+          xcodebuild build-for-testing \
+            -project ios/OpenDollars.xcodeproj \
+            -scheme OpenDollars \
+            -destination "id=${{ steps.sims.outputs.iphone15 }}" \
+            -derivedDataPath build/DerivedData \
+            | xcbeautify
+
+      - name: UI tests and screenshots, iPhone 15 (es-AR)
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project ios/OpenDollars.xcodeproj \
+            -scheme OpenDollars \
+            -destination "id=${{ steps.sims.outputs.iphone15 }}" \
+            -derivedDataPath build/DerivedData \
+            -testLanguage es -testRegion AR \
+            -resultBundlePath build/results/iPhone15.xcresult \
+            | xcbeautify
+
+      - name: UI tests and screenshots, iPhone SE (es-AR)
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project ios/OpenDollars.xcodeproj \
+            -scheme OpenDollars \
+            -destination "id=${{ steps.sims.outputs.iphonese }}" \
+            -derivedDataPath build/DerivedData \
+            -testLanguage es -testRegion AR \
+            -resultBundlePath build/results/iPhoneSE.xcresult \
+            | xcbeautify
+
+      - name: Export screenshots
+        if: always()
+        run: |
+          for result in build/results/*.xcresult; do
+            [ -e "$result" ] || continue
+            python3 -I ios/scripts/ci-export-screenshots.py "$result" "build/screenshots/$(basename "$result" .xcresult)"
+          done
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: screenshots-es-AR
+          path: build/screenshots
+          if-no-files-found: warn
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: xcresult
+          path: build/results
+          if-no-files-found: warn

@@ -1,0 +1,7 @@
+# Shell scripts run on macOS and in WSL: always LF, whatever the Windows checkout setting.
+*.sh text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.swift text eol=lf
+*.xcstrings text eol=lf
+*.ttf binary

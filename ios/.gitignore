@@ -1,0 +1,23 @@
+# SwiftPM
+.build/
+.swiftpm/
+Package.resolved
+
+# XcodeGen output (generated from project.yml)
+*.xcodeproj/
+*.xcworkspace/
+OpenDollars/Info.plist
+
+# Xcode
+DerivedData/
+xcuserdata/
+*.xcresult/
+build/
+
+# Screenshots exported locally from CI artifacts
+screenshots/
+
+.DS_Store
+
+# Python
+__pycache__/

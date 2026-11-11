@@ -97,3 +97,21 @@ Quem decide: **Jurídico** (pareceres e textos), **Dozo** (backend e contrato de
 ## Fora do código: depende do registro RIA
 
 Nenhum texto diz "registrada" nem cita a SEC, mas sete pressupõem o status de assessora de investimentos. Estão na seção 1 de `copy-review.md`, com status "depende da confirmação do registro RIA antes do piloto". Quem confirma: Jurídico.
+
+## Fora do código: testes instáveis por tempo limite
+
+Em 2026-11-11, depois de `npm ci` em máquina carregada, `npm test` falhou em testes diferentes a cada rodada (9, depois 6). Rodando um arquivo por vez, quase tudo passou, e cada arquivo passa sozinho. As falhas são `waitFor`/`findBy*` estourando 1 s ou o teste estourando 5 s, não erro de lógica. O que falta: medir os testes lentos e decidir entre aumentar `testTimeout`/`asyncUtilTimeout` no `vitest.config.ts`, limitar os workers ou acelerar os testes.
+
+| Arquivo | Teste que estourou o tempo |
+|---|---|
+| `src/features/onboarding/resume.test.tsx` | sends a submitted application from /onboarding to the account status (falhou nas três rodadas) |
+| `src/features/plans/PlanScreen.test.tsx` | says in one line why to choose each rail (T5) |
+| `src/features/profile/ProfileScreen.test.tsx` | a restricted account explains the restriction, as Início and Plan do (decision 14) |
+| `src/features/profile/SuitabilityScreen.test.tsx` | brings the saved answers, and saves new ones with the questionnaire's version |
+| `src/features/deposits/NewDepositScreen.test.tsx` | ibkr_restricted replaces the form with its message and action; a double click sends one POST with one key and opens the deposit |
+| `src/features/deposits/DepositHistory.test.tsx` | an item opens the deposit detail (T8) |
+| `src/features/deposits/DepositDetailScreen.test.tsx` | keeps a client whose account is not open away from the deposit entirely |
+| `src/features/account/AccountStatusScreen.test.tsx` | draft: one way back to the application |
+| `src/features/onboarding/steps/review.test.tsx` | submits once, even on a double click, and lands on the account status |
+| `src/api/mutation-errors.test.tsx` | account_restricted |
+| `src/router.test.tsx` | shows the maintenance screen when the API is down for maintenance |

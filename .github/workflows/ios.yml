@@ -22,7 +22,10 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4.2.2
+      # Only ios/: faster, and immune to long paths elsewhere in the repo (Windows MAX_PATH).
+      - uses: actions/checkout@v7.0.1
+        with:
+          sparse-checkout: ios
 
       # Same Swift as the WSL toolchain used locally.
       - uses: compnerd/gha-setup-swift@v0.5.1
@@ -47,7 +50,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v7.0.1
 
       - name: Xcode version
         run: xcodebuild -version && swift --version
@@ -73,7 +76,7 @@ jobs:
           xcodebuild build-for-testing \
             -project ios/OpenDollars.xcodeproj \
             -scheme OpenDollars \
-            -destination "id=${{ steps.sims.outputs.iphone15 }}" \
+            -destination "platform=iOS Simulator,arch=arm64,id=${{ steps.sims.outputs.iphone15 }}" \
             -derivedDataPath build/DerivedData \
             | xcbeautify
 
@@ -83,7 +86,7 @@ jobs:
           xcodebuild test-without-building \
             -project ios/OpenDollars.xcodeproj \
             -scheme OpenDollars \
-            -destination "id=${{ steps.sims.outputs.iphone15 }}" \
+            -destination "platform=iOS Simulator,arch=arm64,id=${{ steps.sims.outputs.iphone15 }}" \
             -derivedDataPath build/DerivedData \
             -testLanguage es -testRegion AR \
             -resultBundlePath build/results/iPhone15.xcresult \
@@ -95,7 +98,7 @@ jobs:
           xcodebuild test-without-building \
             -project ios/OpenDollars.xcodeproj \
             -scheme OpenDollars \
-            -destination "id=${{ steps.sims.outputs.iphonese }}" \
+            -destination "platform=iOS Simulator,arch=arm64,id=${{ steps.sims.outputs.iphonese }}" \
             -derivedDataPath build/DerivedData \
             -testLanguage es -testRegion AR \
             -resultBundlePath build/results/iPhoneSE.xcresult \
@@ -111,7 +114,7 @@ jobs:
 
       - name: Upload screenshots
         if: always()
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: screenshots-es-AR
           path: build/screenshots
@@ -119,7 +122,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: xcresult
           path: build/results

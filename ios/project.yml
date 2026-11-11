@@ -53,6 +53,10 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.opendollars.app
         TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        # TODO(decisão): no app icon in phase 0; the official vector logo is pending. XcodeGen
+        # defaults this to "AppIcon", which fails the build without an icon set. Required before
+        # any TestFlight or App Store build.
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
 
   OpenDollarsUITests:
     type: bundle.ui-testing

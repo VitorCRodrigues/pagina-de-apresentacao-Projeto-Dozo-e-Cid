@@ -647,6 +647,52 @@
         }
       }
     },
+    "blockReason.quote_expired.action": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedir una cotización nueva"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedir uma nova cotação"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request a new quote"
+          }
+        }
+      }
+    },
+    "blockReason.quote_expired.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La cotización venció."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cotação expirou."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The quote expired."
+          }
+        }
+      }
+    },
     "comingSoon.body": {
       "comment": "iOS only. TODO(compliance): neutral text pending review.",
       "extractionState": "manual",
@@ -718,6 +764,29 @@
         }
       }
     },
+    "common.optional": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "opcional"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "opcional"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "optional"
+          }
+        }
+      }
+    },
     "common.retry": {
       "extractionState": "manual",
       "localizations": {
@@ -760,6 +829,290 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your account is opened at Interactive Brokers, in your name. OpenDollars is your investment adviser."
+          }
+        }
+      }
+    },
+    "deposit.amount.belowMinimum": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El mínimo es %@: con menos, los costos fijos se llevan una parte demasiado grande."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O mínimo é %@: com menos, os custos fixos levam uma parte grande demais."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The minimum is %@: with less, fixed costs take too large a share."
+          }
+        }
+      }
+    },
+    "deposit.amount.help": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El mínimo es %@. Debajo de ese monto, los costos fijos de envío pesan demasiado sobre lo que invertís."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O mínimo é %@. Abaixo desse valor, os custos fixos de envio pesam demais sobre o que você investe."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The minimum is %@. Below it, fixed transfer costs take too large a share of what you invest."
+          }
+        }
+      }
+    },
+    "deposit.amount.invalidAmount": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribí un valor en dólares, por ejemplo 500 o 1.250,50."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite um valor em dólares, por exemplo 500 ou 1.250,50."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter an amount in dollars, for example 500 or 1,250.50."
+          }
+        }
+      }
+    },
+    "deposit.amount.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valor en dólares"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valor em dólares"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount in dollars"
+          }
+        }
+      }
+    },
+    "devCatalog.buttons": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Botones"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Botões"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buttons"
+          }
+        }
+      }
+    },
+    "devCatalog.colors": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colores"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cores"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colours"
+          }
+        }
+      }
+    },
+    "devCatalog.fields": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campos"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campos"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fields"
+          }
+        }
+      }
+    },
+    "devCatalog.ledger": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Líneas de extracto"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linhas de extrato"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Statement lines"
+          }
+        }
+      }
+    },
+    "devCatalog.notices": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avisos"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avisos"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notices"
+          }
+        }
+      }
+    },
+    "devCatalog.states": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estados"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estados"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "States"
+          }
+        }
+      }
+    },
+    "devCatalog.title": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catálogo de componentes"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catálogo de componentes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Component catalog"
+          }
+        }
+      }
+    },
+    "devCatalog.type": {
+      "comment": "iOS only. TODO(compliance): neutral text pending review.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipografía"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipografia"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
           }
         }
       }
@@ -1398,6 +1751,29 @@
         }
       }
     },
+    "portfolio.asOf": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los valores se actualizan una vez por día a partir de Interactive Brokers."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os valores são atualizados uma vez por dia a partir da Interactive Brokers."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Values are updated once a day from Interactive Brokers."
+          }
+        }
+      }
+    },
     "portfolio.bucketsShort.ibkrCash": {
       "extractionState": "manual",
       "localizations": {
@@ -1463,6 +1839,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Invested"
+          }
+        }
+      }
+    },
+    "portfolio.empty.action": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hacer un aporte"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fazer um aporte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make a deposit"
           }
         }
       }

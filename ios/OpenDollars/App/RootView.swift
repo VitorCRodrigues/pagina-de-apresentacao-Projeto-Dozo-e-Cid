@@ -28,13 +28,13 @@ struct RootView: View {
     private var content: some View {
         switch model.phase {
         case .launching:
-            LoadingStateView()
+            StatePage { LoadingState(shape: .statement) }
         case .signedOut(let reason):
-            SignedOutView(reason: reason) { Task { await model.signInAgain() } }
+            StatePage { SignedOutView(reason: reason) { Task { await model.signInAgain() } } }
         case .failed(let error) where error.code == .maintenance:
-            MaintenanceView(until: error.until)
+            StatePage { MaintenanceView(until: error.until) }
         case .failed(let error):
-            ErrorStateView(error: error) { Task { await model.loadSession() } }
+            StatePage { ErrorState(error: error, titleSize: .title) { Task { await model.loadSession() } } }
         case .ready(let me):
             switch Landing.for(me.accountStatus) {
             case .tabs:

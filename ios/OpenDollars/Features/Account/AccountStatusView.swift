@@ -11,9 +11,9 @@ struct AccountStatusView: View {
         Group {
             switch model.account {
             case .idle, .loading:
-                LoadingStateView()
+                StatePage { LoadingState(shape: .timeline) }
             case .failed(let error):
-                ErrorStateView(error: error) { Task { await model.loadAccount() } }
+                StatePage { ErrorState(error: error, titleSize: .title) { Task { await model.loadAccount() } } }
             case .loaded(let account):
                 ScrollView {
                     AccountStatusContent(account: account)
@@ -35,14 +35,14 @@ private struct AccountStatusContent: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.sectionSpacing) {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: ODMetric.space3) {
                 Text(L10n.text(AccountStatusCopy.titleKey(account.status)))
-                    .font(ODFont.title)
+                    .odText(.title)
                     .foregroundStyle(ODColor.navy900)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("account.title")
                 Text(L10n.text(AccountStatusCopy.bodyKey(account.status)))
-                    .font(ODFont.body)
+                    .odText(.body)
                     .foregroundStyle(ODColor.gray600)
             }
 
@@ -52,33 +52,31 @@ private struct AccountStatusContent: View {
 
             // TODO(decisão): document upload (camera, files) arrives with the onboarding phase.
             if account.status == .action_required, !documents.isEmpty {
-                Card {
-                    Text(L10n.text("account.documents"))
-                        .font(ODFont.label)
-                        .foregroundStyle(ODColor.gray600)
-                    ForEach(documents) { item in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(item.title).font(ODFont.body).foregroundStyle(ODColor.graphite900)
-                            Text(item.description).font(ODFont.caption).foregroundStyle(ODColor.gray600)
+                VStack(alignment: .leading, spacing: ODMetric.space3) {
+                    SectionHeader(title: L10n.text("account.documents"))
+                    Ledger {
+                        ForEach(documents) { item in
+                            LedgerItem {
+                                VStack(alignment: .leading, spacing: ODMetric.space1) {
+                                    Text(item.title).odText(.body).foregroundStyle(ODColor.graphite900)
+                                    Text(item.description).odText(.caption).foregroundStyle(ODColor.gray600)
+                                }
+                                .accessibilityElement(children: .combine)
+                            }
                         }
                     }
                 }
             }
 
             if account.status == .open, let masked = account.ibkrAccountMasked {
-                Card {
-                    HStack {
-                        Text(L10n.text("account.accountNumber")).font(ODFont.body)
-                        Spacer()
-                        Text(masked).font(ODFont.value)
-                    }
-                    .foregroundStyle(ODColor.graphite900)
+                Ledger {
+                    LedgerRow(label: L10n.text("account.accountNumber")) { Text(masked) }
                 }
             }
 
             if AccountStatusCopy.offersSupport(account.status) {
                 Link(L10n.text("account.actions.contact"), destination: AppConstants.supportURL)
-                    .buttonStyle(SecondaryButtonStyle())
+                    .buttonStyle(.odSecondary)
             }
 
             CustodyNote()
@@ -91,24 +89,21 @@ private struct OpeningTimeline: View {
     let steps: [AccountTimeline.Step]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(L10n.text("account.timeline.label"))
-                .font(ODFont.label)
-                .foregroundStyle(ODColor.gray600)
-                .accessibilityAddTraits(.isHeader)
+        VStack(alignment: .leading, spacing: ODMetric.space4) {
+            SectionHeader(title: L10n.text("account.timeline.label"))
             ForEach(steps) { step in
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: symbol(step.status))
                         .foregroundStyle(color(step.status))
-                        .font(.system(size: 20))
+                        .font(.title3)
                         .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(L10n.text("account.timeline.\(step.id.rawValue)"))
-                            .font(step.status == .current ? ODFont.label : ODFont.body)
+                            .odText(step.status == .current ? .label : .body)
                             .foregroundStyle(step.status == .upcoming ? ODColor.gray600 : ODColor.graphite900)
                         if step.needsDocuments {
                             Text(L10n.text("account.timeline.actionNote"))
-                                .font(ODFont.caption)
+                                .odText(.caption)
                                 .foregroundStyle(ODColor.amber700)
                         }
                     }

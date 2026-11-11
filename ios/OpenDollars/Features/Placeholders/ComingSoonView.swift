@@ -5,16 +5,16 @@ struct ComingSoonView: View {
     let titleKey: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: ODMetric.space3) {
             Text(L10n.text(titleKey))
-                .font(ODFont.title)
+                .odText(.title)
                 .foregroundStyle(ODColor.navy900)
                 .accessibilityAddTraits(.isHeader)
             Text(L10n.text("comingSoon.title"))
-                .font(ODFont.label)
+                .odText(.label)
                 .foregroundStyle(ODColor.gray600)
             Text(L10n.text("comingSoon.body"))
-                .font(ODFont.body)
+                .odText(.body)
                 .foregroundStyle(ODColor.gray600)
             Spacer()
         }
@@ -36,7 +36,7 @@ struct ProfilePlaceholderView: View {
             Button(L10n.text("session.timeout.signOut")) {
                 Task { await model.signOut() }
             }
-            .buttonStyle(SecondaryButtonStyle())
+            .buttonStyle(.odSecondary)
             .padding(.horizontal, ODMetric.gutter)
             Spacer()
         }

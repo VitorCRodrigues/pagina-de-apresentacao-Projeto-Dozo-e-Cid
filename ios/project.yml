@@ -42,7 +42,9 @@ targets:
         UIAppFonts: [InterVariable.ttf]
         UILaunchScreen:
           UIColorName: LaunchBackground
-        # The brand has a light palette only (web/src/styles/tokens.css has no dark theme).
+        # The brand has a light palette only (web/src/styles/tokens.css has no dark theme). Locked
+        # to light so the keyboard, pickers, sheets and bars never turn dark over the cream page.
+        # TODO(decisão) 8: a dark theme, if ever, together with the web (docs/decisions.md).
         UIUserInterfaceStyle: Light
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         UIApplicationSceneManifest:

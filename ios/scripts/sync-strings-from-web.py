@@ -24,6 +24,9 @@ WEB_KEYS = [
     ("translation", "app.name"),
     ("translation", "common.retry"),
     ("translation", "common.loading"),
+    ("translation", "common.optional"),
+    ("translation", "blockReason.quote_expired.message"),
+    ("translation", "blockReason.quote_expired.action"),
     ("translation", "custody.note"),
     *[("translation", f"nav.{k}") for k in ("label", "home", "deposit", "portfolio", "pending", "profile")],
     ("translation", "states.loading"),
@@ -58,6 +61,9 @@ WEB_KEYS = [
     *[("portfolio", f"portfolio.bucketsShort.{k}") for k in ("invested", "ibkrCash", "inFlight")],
     ("portfolio", "portfolio.empty.title"),
     ("portfolio", "portfolio.empty.body"),
+    ("portfolio", "portfolio.empty.action"),
+    ("portfolio", "portfolio.asOf"),
+    *[("deposit", f"deposit.amount.{k}") for k in ("label", "help", "belowMinimum", "invalidAmount")],
 ]
 
 # Keys only the iOS app needs. TODO(compliance): neutral text, pending review (PRD section 10).
@@ -73,6 +79,15 @@ IOS_ONLY = {
         "pt": "Para ver os detalhes, atualize o app ou fale com o suporte.",
         "en": "To see the details, update the app or contact support.",
     },
+    # Design system catalog (DEBUG builds only, `-catalog`): section titles. Never shipped to clients.
+    "devCatalog.title": {"es": "Catálogo de componentes", "pt": "Catálogo de componentes", "en": "Component catalog"},
+    "devCatalog.colors": {"es": "Colores", "pt": "Cores", "en": "Colours"},
+    "devCatalog.type": {"es": "Tipografía", "pt": "Tipografia", "en": "Type"},
+    "devCatalog.buttons": {"es": "Botones", "pt": "Botões", "en": "Buttons"},
+    "devCatalog.fields": {"es": "Campos", "pt": "Campos", "en": "Fields"},
+    "devCatalog.ledger": {"es": "Líneas de extracto", "pt": "Linhas de extrato", "en": "Statement lines"},
+    "devCatalog.notices": {"es": "Avisos", "pt": "Avisos", "en": "Notices"},
+    "devCatalog.states": {"es": "Estados", "pt": "Estados", "en": "States"},
     # Phase 0 skeleton: tabs whose screens arrive in later phases. Never shipped to clients.
     "comingSoon.title": {"es": "Próximamente", "pt": "Em breve", "en": "Coming soon"},
     "comingSoon.body": {

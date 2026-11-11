@@ -94,6 +94,7 @@ public enum ColorPairs {
         pair(.graphite900, .cream50, .text, "Body text"),
         pair(.graphite900, .paper, .text, "Body text on paper"),
         pair(.navy900, .cream50, .text, "Titles, secondary button"),
+        pair(.navy900, .gray50, .text, "Secondary button, pressed"),
         pair(.gray600, .cream50, .text, "Secondary text, placeholder"),
         pair(.gray600, .paper, .text, "Secondary text on a field"),
         pair(.gray600, .gray50, .text, "Countdown, running"),

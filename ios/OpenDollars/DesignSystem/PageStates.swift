@@ -1,43 +1,93 @@
 import OpenDollarsCore
 import SwiftUI
 
-// The states every screen has (web: PageState): loading, error, maintenance, signed out.
+// The states every screen has (web/src/components/PageState.tsx): typographic, like a statement
+// section. A graphite rule, the title, one sentence, one action. No icon, no spinner; the loading
+// placeholder takes the shape of what is loading and does not pulse.
 
-struct LoadingStateView: View {
+enum StateTitleSize: Sendable {
+    /// The state is the whole page (session expired, maintenance): its title is the page's.
+    case title
+    /// A state inside a screen that already has a title.
+    case heading
+}
+
+struct StateLayout<Action: View>: View {
+    let title: String
+    var message: String?
+    var titleSize: StateTitleSize = .heading
+    @ViewBuilder var action: Action
+
     var body: some View {
-        VStack(spacing: 12) {
-            ProgressView().tint(ODColor.navy900)
-            Text(L10n.text("states.loading"))
-                .font(ODFont.caption)
-                .foregroundStyle(ODColor.gray600)
+        VStack(alignment: .leading, spacing: ODMetric.space3) {
+            Rule(color: ODColor.graphite900)
+                .padding(.bottom, ODMetric.space2)
+            Text(title)
+                .odText(titleSize == .title ? .title : .heading)
+                .foregroundStyle(ODColor.navy900)
+                .accessibilityAddTraits(.isHeader)
+            if let message {
+                Text(message)
+                    .odText(.body)
+                    .foregroundStyle(ODColor.gray600)
+            }
+            action
+                .padding(.top, ODMetric.space3)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(ODColor.cream50)
-        .accessibilityElement(children: .combine)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
-struct ErrorStateView: View {
-    let error: APIError
+/// Nothing here yet. Always inside a screen with its own title.
+struct EmptyState<Action: View>: View {
+    let title: String
+    var message: String?
+    @ViewBuilder var action: Action
+
+    var body: some View {
+        StateLayout(title: title, message: message, titleSize: .heading) { action }
+            .accessibilityIdentifier("state.empty")
+    }
+}
+
+extension EmptyState where Action == EmptyView {
+    init(title: String, message: String? = nil) {
+        self.init(title: title, message: message) { EmptyView() }
+    }
+}
+
+/// The screen could not load. The message is translated by error code, never by the API's
+/// message (decision 12). `titleSize: .title` when the error is all there is on screen.
+struct ErrorState: View {
+    var error: APIError?
+    var titleSize: StateTitleSize = .heading
     let retry: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(L10n.text("states.error.title"))
-                .font(ODFont.title)
-                .foregroundStyle(ODColor.navy900)
-                .accessibilityAddTraits(.isHeader)
-            // Translated by code, never by message (decision 12).
-            Text(L10n.text(error.code.copyKey))
-                .font(ODFont.body)
-                .foregroundStyle(ODColor.gray600)
-            Button(L10n.text("common.retry"), action: retry)
-                .buttonStyle(PrimaryButtonStyle())
+        StateLayout(
+            title: L10n.text("states.error.title"),
+            message: L10n.text(error?.code.copyKey ?? "states.error.body"),
+            titleSize: titleSize
+        ) {
+            Button(L10n.text("common.retry"), action: retry).buttonStyle(.odPrimary)
         }
-        .padding(ODMetric.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .background(ODColor.cream50)
         .accessibilityIdentifier("state.error")
+    }
+}
+
+/// One part of a screen failed while the rest stays useful.
+struct InlineError: View {
+    let retry: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: ODMetric.space2) {
+            Text(L10n.text("states.error.title"))
+                .odText(.body)
+                .foregroundStyle(ODColor.graphite900)
+            Button(L10n.text("common.retry"), action: retry)
+                .buttonStyle(.odGhost)
+                .padding(.leading, -ODMetric.space1)
+        }
     }
 }
 
@@ -45,24 +95,14 @@ struct MaintenanceView: View {
     let until: Date?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(L10n.text("states.maintenance.title"))
-                .font(ODFont.title)
-                .foregroundStyle(ODColor.navy900)
-                .accessibilityAddTraits(.isHeader)
-            Text(L10n.text("states.maintenance.body"))
-                .font(ODFont.body)
-                .foregroundStyle(ODColor.gray600)
-            if let until {
-                Text(L10n.format("states.maintenance.until", until.formatted(date: .omitted, time: .shortened)))
-                    .font(ODFont.body)
-                    .foregroundStyle(ODColor.graphite900)
-            }
-        }
-        .padding(ODMetric.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .background(ODColor.cream50)
-        .accessibilityIdentifier("state.maintenance")
+        StateLayout(title: L10n.text("states.maintenance.title"), message: message, titleSize: .title) { EmptyView() }
+            .accessibilityIdentifier("state.maintenance")
+    }
+
+    private var message: String {
+        let body = L10n.text("states.maintenance.body")
+        guard let until else { return body }
+        return body + " " + L10n.format("states.maintenance.until", until.formatted(date: .omitted, time: .shortened))
     }
 }
 
@@ -75,22 +115,134 @@ struct SignedOutView: View {
     private var explains: Bool { reason == .inactivity || reason == .sessionExpired }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(L10n.text(explains ? "states.sessionExpired.title" : "app.name"))
-                .font(ODFont.title)
-                .foregroundStyle(ODColor.navy900)
-                .accessibilityAddTraits(.isHeader)
-            if explains {
-                Text(L10n.text("states.sessionExpired.body"))
-                    .font(ODFont.body)
-                    .foregroundStyle(ODColor.gray600)
-            }
-            Button(L10n.text("states.sessionExpired.action"), action: signIn)
-                .buttonStyle(PrimaryButtonStyle())
+        StateLayout(
+            title: L10n.text(explains ? "states.sessionExpired.title" : "app.name"),
+            message: explains ? L10n.text("states.sessionExpired.body") : nil,
+            titleSize: .title
+        ) {
+            Button(L10n.text("states.sessionExpired.action"), action: signIn).buttonStyle(.odPrimary)
         }
-        .padding(ODMetric.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .background(ODColor.cream50)
         .accessibilityIdentifier("state.signedOut")
     }
 }
+
+// MARK: Loading
+
+/// A static placeholder block. Decorative: the loading state announces itself.
+struct Skeleton: View {
+    var width: CGFloat?
+    var height: CGFloat = 16
+    var color: Color = ODColor.gray100
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: ODMetric.radiusControl)
+            .fill(color)
+            .frame(width: width, height: height)
+            .frame(maxWidth: width == nil ? .infinity : nil, alignment: .leading)
+            .accessibilityHidden(true)
+    }
+}
+
+enum LoadingShape: Sendable { case statement, form, timeline }
+
+/// The placeholder takes the shape of the screen that is loading, so content does not jump when
+/// it arrives. `statement`: sections of lines between hairlines; `form`: a field and its action;
+/// `timeline`: a heading and steps.
+struct LoadingState: View {
+    var shape: LoadingShape = .statement
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: ODMetric.space8) {
+            switch shape {
+            case .statement:
+                ForEach(0..<2, id: \.self) { _ in
+                    VStack(alignment: .leading, spacing: ODMetric.space3) {
+                        Skeleton(width: 160, height: 24)
+                        VStack(spacing: 0) {
+                            ForEach(0..<3, id: \.self) { _ in
+                                VStack(spacing: 0) {
+                                    Rule()
+                                    HStack(spacing: ODMetric.space4) {
+                                        Skeleton(height: 16)
+                                        Spacer(minLength: ODMetric.space8)
+                                        Skeleton(width: 80, height: 16)
+                                    }
+                                    .padding(.vertical, ODMetric.space4)
+                                }
+                            }
+                            Rule()
+                        }
+                    }
+                }
+            case .form:
+                VStack(alignment: .leading, spacing: ODMetric.space3) {
+                    Skeleton(height: 32).padding(.trailing, 80)
+                    Skeleton(width: 128, height: 16).padding(.top, ODMetric.space4)
+                    Skeleton(height: 48)
+                    Skeleton(height: 16).padding(.trailing, 112)
+                }
+            case .timeline:
+                VStack(alignment: .leading, spacing: ODMetric.space6) {
+                    Skeleton(height: 32).padding(.trailing, 112)
+                    ForEach(0..<4, id: \.self) { _ in
+                        HStack(alignment: .top, spacing: ODMetric.space4) {
+                            Circle().fill(ODColor.gray100).frame(width: 20, height: 20)
+                            VStack(alignment: .leading, spacing: 6) {
+                                Skeleton(height: 16).padding(.trailing, 96)
+                                Skeleton(width: 96, height: 12)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.vertical, ODMetric.space2)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(L10n.text("states.loading"))
+        .accessibilityIdentifier("state.loading")
+    }
+}
+
+/// One part of a screen still loading while the rest is already there.
+struct InlineLoading: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: ODMetric.space2) {
+            Skeleton(height: 20).padding(.trailing, 120)
+            Skeleton(width: 110, height: 16)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(L10n.text("common.loading"))
+    }
+}
+
+/// A full-screen state (launch, signed out, maintenance, a failed session): the page's margins,
+/// scrolling so large Dynamic Type never clips it.
+struct StatePage<Content: View>: View {
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        ScrollView {
+            content
+                .padding(.horizontal, ODMetric.gutter)
+                .padding(.vertical, ODMetric.space10)
+        }
+        .background(ODColor.cream50)
+    }
+}
+
+/// Samples shared by the previews and the catalog.
+struct StateSamples: View {
+    var body: some View {
+        EmptyState(title: L10n.text("portfolio.empty.title"), message: L10n.text("portfolio.empty.body")) {
+            Button(L10n.text("portfolio.empty.action")) {}.buttonStyle(.odPrimary)
+        }
+        ErrorState {}
+        InlineError {}
+        InlineLoading()
+        LoadingState(shape: .statement)
+    }
+}
+
+#Preview("ES") { PreviewSurface { StateSamples() } }
+#Preview("ES · AX3") { PreviewSurface(dynamicTypeSize: .accessibility3) { StateSamples() } }
+#Preview("ES · signedOut") { StatePage { SignedOutView(reason: .inactivity) {} } }

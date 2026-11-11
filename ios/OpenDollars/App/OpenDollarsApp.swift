@@ -7,12 +7,26 @@ struct OpenDollarsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(model)
-                .task { await model.start() }
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains(DesignCatalogView.launchArgument) {
+                // The design system catalog, for review and screenshots: no session, no data.
+                DesignCatalogView()
+            } else {
+                root
+            }
+            #else
+            root
+            #endif
         }
-        .onChange(of: scenePhase) { _, newPhase in
-            Task { await model.scenePhaseChanged(newPhase) }
-        }
+    }
+
+    /// The session app. The scene phase is watched here, so the catalog never touches the session.
+    private var root: some View {
+        RootView()
+            .environment(model)
+            .task { await model.start() }
+            .onChange(of: scenePhase) { _, newPhase in
+                Task { await model.scenePhaseChanged(newPhase) }
+            }
     }
 }

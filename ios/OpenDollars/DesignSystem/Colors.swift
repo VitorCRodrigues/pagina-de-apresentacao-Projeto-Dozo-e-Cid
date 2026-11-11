@@ -1,55 +1,62 @@
+import OpenDollarsCore
 import SwiftUI
 
-/// Design tokens: the only place where raw colour values live (CLAUDE.md). Same values as
-/// web/src/styles/tokens.css, whose contrast is checked for WCAG AA on cream-50 and paper.
+/// Design tokens: the only colours a view may use (CLAUDE.md). Values come from the core's
+/// ColorToken, the same as web/src/styles/tokens.css; approved pairings and their WCAG AA
+/// minimums are in ColorPairs and checked by ContrastTests.
+///
+/// Green and brick mark status (done, link, invested; error, returned), never a gain or a loss.
+/// No screen colours a figure by whether it went up or down.
 enum ODColor {
     // Brand
-    static let navy900 = Color(hex: 0x0B1F3A)
-    static let green700 = Color(hex: 0x1F6F54)
-    /// Only the "Total" label on navy; never text on cream, never a button.
-    static let gold500 = Color(hex: 0xC9A227)
-    static let cream50 = Color(hex: 0xF7F4EE)
-    static let graphite900 = Color(hex: 0x1C1C1C)
+    /// Titles, primary button, the balance block, focus.
+    static let navy900 = Color(token: ColorToken.navy900)
+    /// Links, done, invested. Never "up".
+    static let green700 = Color(token: ColorToken.green700)
+    /// Only the "Total" label on navy. Never text on cream, never a button (decisions 10, 19).
+    static let gold500 = Color(token: ColorToken.gold500)
+    /// The page.
+    static let cream50 = Color(token: ColorToken.cream50)
+    /// Body text and the section rule of page states.
+    static let graphite900 = Color(token: ColorToken.graphite900)
 
     // Brand, derived
-    static let navy800 = Color(hex: 0x162C4D)
-    static let navy50 = Color(hex: 0xE6EAF0)
-    /// Cards: a statement sheet on the cream desk.
-    static let paper = Color(hex: 0xFCFBF8)
-    static let white = Color(hex: 0xFFFFFF)
+    /// Primary button pressed; hairlines inside the balance block.
+    static let navy800 = Color(token: ColorToken.navy800)
+    /// Text selection.
+    static let navy50 = Color(token: ColorToken.navy50)
+    /// Fill of text fields.
+    static let paper = Color(token: ColorToken.paper)
+    /// Text of the destructive button.
+    static let white = Color(token: ColorToken.white)
 
     // Warm greys
-    static let gray50 = Color(hex: 0xF1EDE5)
-    static let gray100 = Color(hex: 0xE9E4DA)
-    /// Hairlines and card borders (decorative).
-    static let gray200 = Color(hex: 0xDDD6CA)
-    static let gray500 = Color(hex: 0x8A8276)
-    /// Secondary text (4.5:1 on cream).
-    static let gray600 = Color(hex: 0x6A6258)
+    /// Pressed fill of the secondary button.
+    static let gray50 = Color(token: ColorToken.gray50)
+    /// Skeleton, disabled fill.
+    static let gray100 = Color(token: ColorToken.gray100)
+    /// Hairlines between statement lines (decorative).
+    static let gray200 = Color(token: ColorToken.gray200)
+    /// Field borders (3:1), disabled text.
+    static let gray500 = Color(token: ColorToken.gray500)
+    /// Secondary text, placeholders (4.5:1 on cream).
+    static let gray600 = Color(token: ColorToken.gray600)
 
     // Status
-    static let amber700 = Color(hex: 0x8A5A00)
-    static let amber50 = Color(hex: 0xF5EAD2)
-    static let brick700 = Color(hex: 0xA23B2A)
-    static let brick50 = Color(hex: 0xF5E2DC)
-}
+    /// Warning: quote expiring, late deposit.
+    static let amber700 = Color(token: ColorToken.amber700)
+    static let amber50 = Color(token: ColorToken.amber50)
+    /// Error, returned.
+    static let brick700 = Color(token: ColorToken.brick700)
+    static let brick50 = Color(token: ColorToken.brick50)
 
-/// Radii and spacing (web: 8 px for controls, 12 px for cards and sheets).
-enum ODMetric {
-    static let radiusControl: CGFloat = 8
-    static let radiusCard: CGFloat = 12
-    /// Side gutter at the 375 pt reference width.
-    static let gutter: CGFloat = 20
-    static let sectionSpacing: CGFloat = 28
+    /// Any token by name, for the catalog's swatches.
+    static func of(_ token: ColorToken) -> Color { Color(token: token) }
 }
 
 extension Color {
-    fileprivate init(hex: UInt32) {
-        self.init(
-            .sRGB,
-            red: Double((hex >> 16) & 0xFF) / 255,
-            green: Double((hex >> 8) & 0xFF) / 255,
-            blue: Double(hex & 0xFF) / 255,
-            opacity: 1)
+    fileprivate init(token: ColorToken) {
+        let c = token.components
+        self.init(.sRGB, red: c.red, green: c.green, blue: c.blue, opacity: 1)
     }
 }

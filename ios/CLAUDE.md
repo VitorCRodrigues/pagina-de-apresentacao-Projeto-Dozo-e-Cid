@@ -46,7 +46,8 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 ## Design
 
 - Estética "private banking digital": fundo creme, marinho, muito respiro. Um foco e uma ação primária por tela.
-- Cores só pelos tokens de OpenDollars/DesignSystem (mesmos valores de ../web/src/styles/tokens.css). Nunca cor solta numa view.
+- Cores só pelos tokens de OpenDollars/DesignSystem (ODColor, que lê OpenDollarsCore/Presentation/ColorTokens.swift, com os mesmos valores de ../web/src/styles/tokens.css). Nunca cor solta numa view. Par novo de texto e fundo entra em ColorPairs, com teste de contraste.
+- Linguagem de extrato: Ledger, SectionHeader, Notice e estados tipográficos; sem cartões. Texto sempre com .odText(_:). Catálogo: DesignCatalogView (DEBUG, argumento -catalog).
 - Uma família só: Inter variável (InterVariable.ttf, eixos wght e opsz). Títulos de destaque e saldo total com opsz 32 (Inter Display). Valores em coluna com algarismos tabulares.
 - Saldo total: creme sobre marinho; centavos na mesma linha de base, menores e mais leves. Dourado só no rótulo "Total".
 - Proibido: gradientes, neon, emoji, ícones de moeda/foguete, linguagem de hype ou de cripto, gráfico de rentabilidade diária.

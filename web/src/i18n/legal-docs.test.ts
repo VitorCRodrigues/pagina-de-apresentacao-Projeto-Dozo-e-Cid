@@ -36,7 +36,7 @@ describe("documents for the legal review", () => {
   });
 
   it("copy-review starts with the RIA items, each one marked", () => {
-    const [header, first] = doc("copy-review.csv").split("\r\n");
+    const [header, first] = doc("copy-review.csv").split(/\r?\n/);
     expect(header).toContain("Status jurídico");
     expect(first).toContain("depende da confirmação do registro RIA antes do piloto");
   });

@@ -1,1 +1,3 @@
 * text=auto eol=lf
+# scripts/copy-review.mjs writes CSV with CRLF (RFC 4180, opens cleanly in Excel).
+docs/*.csv text eol=crlf

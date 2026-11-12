@@ -9,22 +9,23 @@ struct AccountStatusView: View {
 
     var body: some View {
         Group {
-            switch model.account {
+            switch model.session.account {
             case .idle, .loading:
                 StatePage { LoadingState(shape: .timeline) }
             case .failed(let error):
-                StatePage { ErrorState(error: error, titleSize: .title) { Task { await model.loadAccount() } } }
+                StatePage { ErrorState(error: error, titleSize: .title) { Task { await model.session.loadAccount() } } }
             case .loaded(let account):
                 ScrollView {
                     AccountStatusContent(account: account)
                         .padding(ODMetric.gutter)
                 }
+                .odStatusBarBackground()
             }
         }
         .background(ODColor.cream50)
         .toolbar(.hidden, for: .navigationBar)
-        .task { await model.loadAccount() }
-        .refreshable { await model.loadAccount() }
+        .task { await model.session.loadAccount() }
+        .refreshable { await model.session.loadAccount() }
     }
 }
 

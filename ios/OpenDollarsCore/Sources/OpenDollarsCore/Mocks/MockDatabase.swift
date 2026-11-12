@@ -1,3 +1,7 @@
+// Mocks exist only in DEBUG builds (TODO(fase 11)): a Release build has no simulated provider
+// or in-memory API, and the app refuses to build without the real ones (AppModel.live).
+#if DEBUG
+
 import Foundation
 
 // The mock's data per scenario, ported from web/src/mocks/db.ts (phase 0 scope: config, me,
@@ -300,3 +304,5 @@ enum MockBuilder {
         return db
     }
 }
+
+#endif

@@ -106,18 +106,15 @@ struct MaintenanceView: View {
     }
 }
 
+/// "Your session ended": only for an exit the client did not choose (SignOutReason
+/// .needsExplanation); the client's own sign-out goes straight to the entry screen.
 struct SignedOutView: View {
-    let reason: SignOutReason?
     let signIn: () -> Void
-
-    /// Inactivity and an expired session get the "your session ended" explanation; the client's
-    /// own sign-out does not need one.
-    private var explains: Bool { reason == .inactivity || reason == .sessionExpired }
 
     var body: some View {
         StateLayout(
-            title: explains ? Strings.statesSessionExpiredTitle : Strings.appName,
-            message: explains ? Strings.statesSessionExpiredBody : nil,
+            title: Strings.statesSessionExpiredTitle,
+            message: Strings.statesSessionExpiredBody,
             titleSize: .title
         ) {
             Button(Strings.statesSessionExpiredAction, action: signIn).buttonStyle(.odPrimary)
@@ -227,6 +224,7 @@ struct StatePage<Content: View>: View {
                 .padding(.vertical, ODMetric.space10)
         }
         .background(ODColor.cream50)
+        .odStatusBarBackground()
     }
 }
 
@@ -245,4 +243,4 @@ struct StateSamples: View {
 
 #Preview("ES") { PreviewSurface { StateSamples() } }
 #Preview("ES · AX3") { PreviewSurface(dynamicTypeSize: .accessibility3) { StateSamples() } }
-#Preview("ES · signedOut") { StatePage { SignedOutView(reason: .inactivity) {} } }
+#Preview("ES · signedOut") { StatePage { SignedOutView {} } }

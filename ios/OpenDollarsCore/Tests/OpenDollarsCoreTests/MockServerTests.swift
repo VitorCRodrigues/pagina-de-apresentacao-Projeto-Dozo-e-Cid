@@ -33,7 +33,7 @@ private func call(
     body: String? = nil, key: String? = nil, lang: AppLocale = .es, token: Bool = true
 ) async throws -> Reply {
     var headers = ["Accept-Language": lang.rawValue]
-    if token { headers["Authorization"] = "Bearer test" }
+    if token { headers["Authorization"] = "Bearer sim-lucia-test" }
     if let key { headers["Idempotency-Key"] = key }
     if body != nil { headers["Content-Type"] = "application/json" }
     let response = try await server.send(HTTPRequest(

@@ -1,3 +1,7 @@
+// Mocks exist only in DEBUG builds (TODO(fase 11)): a Release build has no simulated provider
+// or in-memory API, and the app refuses to build without the real ones (AppModel.live).
+#if DEBUG
+
 import Foundation
 
 /// The API in memory, for development, previews, UI tests and screenshots. Follows
@@ -5,9 +9,9 @@ import Foundation
 /// /portfolio, the deposit routes (quote, create with idempotency 201/200/409, list with filter and
 /// cursor, detail, sent notice) and the error envelope. Any other route answers 404 not_found.
 /// Every reply carries a Date header, like a real server. Each simulated client has its own data:
-/// a request is served from the database of whoever owns its bearer token (SimulatedAuthProvider),
-/// Lucía for any other token. The scenario shapes Lucía's data; Rafael's is always the
-/// not-yet-live Brazilian client.
+/// a request is served from the database of whoever owns its bearer token (SimulatedAuthProvider).
+/// No token, or one the simulated provider did not issue, gets 401 session_expired. The scenario
+/// shapes Lucía's data; Rafael's is always the not-yet-live Brazilian client.
 public actor MockServer: HTTPTransport {
     private var databases: [SimulatedIdentity: MockDatabase]
     /// The database of the request being served. Set after the last await of `send`, so two
@@ -38,7 +42,8 @@ public actor MockServer: HTTPTransport {
         let query = Self.parseQuery(pieces.count > 1 ? String(pieces[1]) : "")
         let lang = AppLocale(languageTag: request.headers["Accept-Language"])
         let bearer = request.headers["Authorization"].flatMap { $0.hasPrefix("Bearer ") ? String($0.dropFirst(7)) : nil }
-        let client = bearer.flatMap(SimulatedAuthProvider.identity(ofAccessToken:)) ?? .lucia
+        let identity = bearer.flatMap(SimulatedAuthProvider.identity(ofAccessToken:))
+        let client = identity ?? .lucia
 
         if let latency = databases[client]?.latency, latency > .zero { try await sleep(latency) }
         // No await from here on: this request owns `db` until it returns.
@@ -52,7 +57,7 @@ public actor MockServer: HTTPTransport {
         // The config is public: the app needs it before sign-in (api-gaps.md, item 9).
         if method == .GET, segments == ["config"] { return json(200, db.config) }
 
-        guard request.headers["Authorization"]?.hasPrefix("Bearer ") == true else {
+        guard identity != nil else {
             return error(401, "session_expired", "Missing or expired bearer token")
         }
 
@@ -249,3 +254,5 @@ public actor MockServer: HTTPTransport {
         String(UUID().uuidString.lowercased().prefix(8))
     }
 }
+
+#endif

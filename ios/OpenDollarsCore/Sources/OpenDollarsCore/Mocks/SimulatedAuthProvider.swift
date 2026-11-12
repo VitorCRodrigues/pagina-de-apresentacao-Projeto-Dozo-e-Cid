@@ -1,3 +1,7 @@
+// Mocks exist only in DEBUG builds (TODO(fase 11)): a Release build has no simulated provider
+// or in-memory API, and the app refuses to build without the real ones (AppModel.live).
+#if DEBUG
+
 import Foundation
 
 /// The two clients of the mock data: Lucía (Argentina, the default) and Rafael (Brazil, not live).
@@ -69,3 +73,5 @@ public struct SimulatedAuthProvider: AuthProvider {
         return SimulatedIdentity(rawValue: String(name))
     }
 }
+
+#endif

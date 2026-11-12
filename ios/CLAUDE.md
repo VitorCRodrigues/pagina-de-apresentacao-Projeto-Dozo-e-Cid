@@ -69,6 +69,7 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 - Regra de apresentação que dá para testar (roteamento, linha do tempo, chaves de texto) vai para OpenDollarsCore/Presentation, com teste.
 - Windows nativo: verificado pelo job core-windows do workflow .github/workflows/ios.yml.
 - App e UI tests: só compilam no GitHub Actions (job ios, macOS).
+- Mocks (MockServer, SimulatedAuthProvider, página simulada) existem só em DEBUG. Um build de Release para com #error até existirem o provedor OIDC real e a origem da API (fase 11, decisão 5).
 - Testes antes do código. Swift Testing (import Testing) no core; XCTest só nos UI tests.
 
 ## Definição de pronto

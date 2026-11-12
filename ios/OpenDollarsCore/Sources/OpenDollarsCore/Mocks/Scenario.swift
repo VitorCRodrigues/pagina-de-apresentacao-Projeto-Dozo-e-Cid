@@ -1,3 +1,7 @@
+// Mocks exist only in DEBUG builds (TODO(fase 11)): a Release build has no simulated provider
+// or in-memory API, and the app refuses to build without the real ones (AppModel.live).
+#if DEBUG
+
 /// A mock data set, picked with the launch argument `-scenario <id>` (the web's `?scenario=<id>`).
 /// One per AccountStatus, DepositState and BlockReason, plus network conditions. The ids, and
 /// their order, are the web's (web/src/mocks/scenarios.ts), so a bug report names the same scenario
@@ -38,3 +42,5 @@ public enum Scenario: String, Sendable, Hashable, CaseIterable {
         self = scenario
     }
 }
+
+#endif

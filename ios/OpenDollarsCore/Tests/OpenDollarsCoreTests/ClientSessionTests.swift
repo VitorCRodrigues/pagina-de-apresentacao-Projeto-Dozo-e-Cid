@@ -23,6 +23,7 @@ actor GatedTransport: HTTPTransport {
     private var waiting: [CheckedContinuation<Void, Never>] = []
     private var revoked = false
     private(set) var requests: [HTTPRequest] = []
+    private(set) var statuses: [Int] = []
 
     init(_ server: MockServer) { self.server = server }
 
@@ -45,9 +46,12 @@ actor GatedTransport: HTTPTransport {
             await withCheckedContinuation { waiting.append($0) }
         }
         if revoked, request.headers["Authorization"] != nil {
+            statuses.append(401)
             return HTTPResponse(status: 401, body: Data(#"{"error":{"code":"session_expired","message":"Revoked"}}"#.utf8))
         }
-        return try await server.send(request)
+        let response = try await server.send(request)
+        statuses.append(response.status)
+        return response
     }
 }
 
@@ -57,6 +61,7 @@ final class Harness {
     let store: MemoryTokenStore
     let transport: GatedTransport
     let session: SessionManager
+    let client: APIClient
     let model: ClientSession
     private(set) var wipes = 0
 
@@ -69,8 +74,9 @@ final class Harness {
         let queue = OutcomeQueue(outcomes)
         let auth = SimulatedAuthProvider(delay: .zero) { await queue.next() }
         session = SessionManager(store: store, auth: auth, now: { clock.now }, uptime: { clock.uptime })
-        let client = APIClient(transport: transport, tokens: session, locale: { .es }, now: { clock.now })
-        model = ClientSession(session: session, client: client, isFirstLaunch: isFirstLaunch)
+        client = APIClient(transport: transport, tokens: session, locale: { .es }, now: { clock.now })
+        // The watch runs, but never ticks during a test: the tests check inactivity themselves.
+        model = ClientSession(session: session, client: client, isFirstLaunch: isFirstLaunch, inactivityCheckInterval: .seconds(3600))
         model.addWipeHandler { [unowned self] in self.wipes += 1 }
     }
 
@@ -132,8 +138,12 @@ final class Harness {
         #expect(try await me(bearer: "sim-rafael-1").name == "Rafael Souza")
     }
 
-    @Test func anyOtherTokenIsTheDefaultClient() async throws {
-        #expect(try await me(bearer: "mock-1").name == "Lucía Fernández")
+    @Test func refusesATokenTheSimulatedProviderDidNotIssue() async throws {
+        let server = MockServer(sleep: { _ in })
+        for headers in [["Authorization": "Bearer mock-1"], ["Authorization": "Bearer sim-nobody-1"], [:]] {
+            let response = try await server.send(HTTPRequest(method: .GET, path: OpenDollarsCore.apiBasePath + "/me", headers: headers))
+            #expect(response.status == 401, "\(headers)")
+        }
     }
 }
 
@@ -171,6 +181,22 @@ final class Harness {
     @Test func aStoredActivityInTheFutureIsNotRestored() async {
         let clock = TestClock()
         let store = MemoryTokenStore(StoredSession(refreshToken: "r", lastActivity: clock.now.addingTimeInterval(3600)))
+        let session = SessionManager(store: store, auth: FakeAuth(), now: { clock.now }, uptime: { clock.uptime })
+        #expect(await session.restore(isFirstLaunch: false) == false)
+        #expect(store.current == nil)
+    }
+
+    // NTP or carrier time sync can move the clock back a little: up to two minutes is tolerated.
+    @Test func aSmallStepBackOfTheClockKeepsTheSession() async {
+        let clock = TestClock()
+        let store = MemoryTokenStore(StoredSession(refreshToken: "r", lastActivity: clock.now.addingTimeInterval(90)))
+        let session = SessionManager(store: store, auth: FakeAuth(), now: { clock.now }, uptime: { clock.uptime })
+        #expect(await session.restore(isFirstLaunch: false))
+    }
+
+    @Test func aStepBackBeyondTheToleranceDropsTheSession() async {
+        let clock = TestClock()
+        let store = MemoryTokenStore(StoredSession(refreshToken: "r", lastActivity: clock.now.addingTimeInterval(3 * 60)))
         let session = SessionManager(store: store, auth: FakeAuth(), now: { clock.now }, uptime: { clock.uptime })
         #expect(await session.restore(isFirstLaunch: false) == false)
         #expect(store.current == nil)
@@ -433,6 +459,11 @@ final class Harness {
         await harness.model.signOut()
         await harness.settle()
 
+        // A request after the exit carries no token, and the server refuses it.
+        await #expect(throws: APIError.self) { try await harness.client.getAccount() }
+        #expect(await harness.transport.statuses.last == 401)
+        #expect(harness.model.phase == .signedOut(.userRequested))
+
         // Rafael signs in on the same device.
         let requestsBefore = await harness.transport.requests.count
         await harness.model.signIn()
@@ -473,30 +504,105 @@ final class Harness {
 
 // MARK: - Privacy cover and coming back
 
-@MainActor
-@Suite struct PrivacyCoverTests {
-    @Test func coversTheScreenAsSoonAsTheAppIsNotActive() async {
-        let harness = Harness()
-        await harness.model.start()
-        await harness.model.signIn()
-        #expect(harness.model.isCovered == false)
-        await harness.model.sceneChanged(.inactive)
-        #expect(harness.model.isCovered)
-        await harness.model.sceneChanged(.background)
-        #expect(harness.model.isCovered)
+// The app shows the cover itself, synchronously, the moment the scene stops being active (a
+// window above alerts and sheets), and records leaves and returns in the core in that same
+// synchronous step. The core says when the cover may come off: the scene is active and the
+// inactivity check of the latest return has finished. Only that check is async.
+extension Harness {
+    func leave(toBackground: Bool = false) async {
+        model.sceneLeft()
+        if toBackground { await model.sceneEnteredBackground() }
     }
 
-    @Test func uncoversOnlyAfterCheckingInactivity() async {
+    func comeBack() async {
+        let comingBack = model.sceneBecameActive()
+        await model.finishReturn(comingBack)
+    }
+}
+
+@MainActor
+@Suite struct PrivacyCoverTests {
+    @Test func atLaunchNothingIsPending() async {
+        let harness = Harness()
+        await harness.model.start()
+        #expect(harness.model.mayUncover)
+    }
+
+    @Test func leavingKeepsTheCoverAtOnce() async {
         let harness = Harness()
         await harness.model.start()
         await harness.model.signIn()
-        await harness.model.sceneChanged(.background)
-        await harness.model.sceneChanged(.active)
-        #expect(harness.model.isCovered == false)
+        harness.model.sceneLeft()
+        #expect(harness.model.mayUncover == false)
+    }
+
+    @Test func comingBackUncoversOnlyAfterTheInactivityCheck() async {
+        let harness = Harness()
+        await harness.model.start()
+        await harness.model.signIn()
+        await harness.leave(toBackground: true)
+        let comingBack = harness.model.sceneBecameActive()
+        #expect(harness.model.mayUncover == false)
+        await harness.model.finishReturn(comingBack)
+        #expect(harness.model.mayUncover)
         guard case .ready = harness.model.phase else {
             Issue.record("a short trip to the background ended the session")
             return
         }
+    }
+
+    // The client leaves again before the return's check even started (didActivate queued its
+    // check, then willDeactivate arrived): that return can never lift the cover.
+    @Test func aLeaveBeforeTheReturnCheckStartsWins() async {
+        let harness = Harness()
+        await harness.model.start()
+        await harness.model.signIn()
+        await harness.leave(toBackground: true)
+        let comingBack = harness.model.sceneBecameActive()
+        harness.model.sceneLeft()
+        await harness.model.finishReturn(comingBack)
+        #expect(harness.model.mayUncover == false)
+    }
+
+    // The client leaves again while the return's check is running.
+    @Test func aLeaveDuringTheReturnCheckWins() async {
+        let harness = Harness()
+        await harness.model.start()
+        await harness.model.signIn()
+        await harness.leave(toBackground: true)
+        let comingBack = harness.model.sceneBecameActive()
+        let checking = Task { await harness.model.finishReturn(comingBack) }
+        await Task.yield()
+        harness.model.sceneLeft()
+        await checking.value
+        #expect(harness.model.mayUncover == false)
+        await harness.comeBack()
+        #expect(harness.model.mayUncover)
+    }
+
+    // Storing the last activity for the background can finish after the client is back: it is
+    // not a leave, so it cannot keep the cover on an active app.
+    @Test func aLateBackgroundSaveDoesNotLeaveAgain() async {
+        let harness = Harness()
+        await harness.model.start()
+        await harness.model.signIn()
+        harness.model.sceneLeft()
+        let comingBack = harness.model.sceneBecameActive()
+        await harness.model.sceneEnteredBackground()
+        await harness.model.finishReturn(comingBack)
+        #expect(harness.model.mayUncover)
+    }
+
+    // The cover follows every change of mayUncover, not one look at the end of a check.
+    @Test func reportsEveryChangeOfMayUncover() async {
+        let harness = Harness()
+        var seen: [Bool] = []
+        harness.model.onMayUncoverChange = { seen.append($0) }
+        await harness.model.start()
+        await harness.model.signIn()
+        await harness.leave(toBackground: true)
+        await harness.comeBack()
+        #expect(seen == [false, true])
     }
 
     // Back after 15 minutes: the balance never shows again, the entry screen does.
@@ -505,13 +611,13 @@ final class Harness {
         await harness.model.start()
         await harness.model.signIn()
         await harness.model.loadHome()
-        await harness.model.sceneChanged(.background)
+        await harness.leave(toBackground: true)
         harness.clock.advance(16 * 60)
-        await harness.model.sceneChanged(.active)
+        await harness.comeBack()
         await harness.settle()
         #expect(harness.model.phase == .signedOut(.inactivity))
         #expect(harness.model.portfolio == .idle)
-        #expect(harness.model.isCovered == false)
+        #expect(harness.model.mayUncover)
     }
 
     @Test func goingToTheBackgroundStoresTheLastActivity() async throws {
@@ -522,7 +628,39 @@ final class Harness {
         harness.clock.advance(30)
         harness.model.recordActivity()
         await harness.settle()
-        await harness.model.sceneChanged(.background)
+        await harness.leave(toBackground: true)
         #expect(try #require(harness.store.current?.lastActivity) > signedInAt)
+    }
+}
+
+// MARK: - The inactivity watch
+
+@MainActor
+@Suite struct InactivityWatchTests {
+    @Test func watchesOnlyWhileSignedIn() async {
+        let harness = Harness()
+        await harness.model.start()
+        #expect(harness.model.isWatchingInactivity == false)
+        await harness.model.signIn()
+        #expect(harness.model.isWatchingInactivity)
+        await harness.model.signOut()
+        await harness.settle()
+        #expect(harness.model.isWatchingInactivity == false)
+    }
+
+    @Test func aRestoredSessionIsWatched() async {
+        let clock = TestClock()
+        let harness = Harness(stored: StoredSession(refreshToken: "sim-refresh-lucia-1", lastActivity: clock.now))
+        await harness.model.start()
+        #expect(harness.model.isWatchingInactivity)
+    }
+}
+
+@Suite struct SignOutReasonTests {
+    // Only an exit the client did not choose gets the "your session ended" screen.
+    @Test func explainsOnlyTheExitsTheClientDidNotChoose() {
+        #expect(SignOutReason.inactivity.needsExplanation)
+        #expect(SignOutReason.sessionExpired.needsExplanation)
+        #expect(SignOutReason.userRequested.needsExplanation == false)
     }
 }

@@ -33,6 +33,19 @@ enum ODMetric {
     static let rule: CGFloat = 2
 }
 
+extension View {
+    /// Scrolled content passes under the status bar: this paints the top safe area cream, as the
+    /// web's header sits on the page at the top (AppShell), so the clock and the battery always
+    /// sit on cream (TODO(decisão) 23). A zero-height inset whose background extends into the safe area.
+    func odStatusBarBackground() -> some View {
+        safeAreaInset(edge: .top, spacing: 0) {
+            Color.clear
+                .frame(height: 0)
+                .background(ODColor.cream50)
+        }
+    }
+}
+
 /// A horizontal rule. Decorative: hidden from VoiceOver.
 struct Rule: View {
     var color: Color = ODColor.gray200

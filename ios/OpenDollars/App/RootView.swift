@@ -1,13 +1,13 @@
 import OpenDollarsCore
 import SwiftUI
 
-/// Picks the screen for the session state, watches for inactivity, and covers the screen with the
-/// brand whenever the app is not active (the app switcher's snapshot never shows a balance).
+/// Picks the screen for the session state and watches for inactivity. The privacy cover is not
+/// here: PrivacyShield puts it in a window above everything, sheets and alerts included.
 struct RootView: View {
     @Environment(AppModel.self) private var model
 
     var body: some View {
-        @Bindable var signInPage = model.signInPage
+        let session = model.session
         content
             // Texts are read through L10n, which SwiftUI does not observe, and screens may hold
             // state of the client: a new language or any exit rebuilds the whole tree.
@@ -15,51 +15,45 @@ struct RootView: View {
             .environment(\.locale, L10n.foundationLocale)
             .background(ODColor.cream50.ignoresSafeArea())
             // Any tap counts as activity for the 15-minute rule.
-            .simultaneousGesture(TapGesture().onEnded { model.recordActivity() })
+            .simultaneousGesture(TapGesture().onEnded { session.recordActivity() })
             .alert(
                 Strings.sessionTimeoutTitle,
                 isPresented: Binding(
-                    get: { model.inactivityDeadline != nil },
-                    set: { shown in if !shown { model.staySignedIn() } }),
+                    get: { session.inactivityDeadline != nil },
+                    set: { shown in if !shown { Task { await session.staySignedIn() } } }),
                 actions: {
-                    Button(Strings.sessionTimeoutStay) { model.staySignedIn() }
+                    Button(Strings.sessionTimeoutStay) { Task { await session.staySignedIn() } }
                     Button(Strings.sessionTimeoutSignOut, role: .destructive) {
-                        Task { await model.signOut() }
+                        Task { await session.signOut() }
                     }
                 },
                 message: { Text(Strings.sessionTimeoutBody) })
-            .sheet(isPresented: $signInPage.isPresented, onDismiss: { model.signInPage.dismissed() }) {
-                SimulatedSignInSheet()
-            }
-            .overlay {
-                if model.isCovered || showsScreenshotCover {
-                    PrivacyCover()
-                }
-            }
+            .modifier(SimulatedProviderSheet())
+            .onChange(of: session.phase) { _, phase in pinCoverForScreenshot(phase) }
     }
 
-    /// `-privacyCover` (DEBUG): shows the cover once signed in, for its screenshot; XCUITest cannot
-    /// read the app switcher's snapshot itself.
-    private var showsScreenshotCover: Bool {
+    /// `-privacyCover` (DEBUG): once signed in, the cover stays up for its screenshot; XCUITest
+    /// cannot read the app switcher's snapshot itself.
+    private func pinCoverForScreenshot(_ phase: ClientSession.Phase) {
         #if DEBUG
-        guard ProcessInfo.processInfo.arguments.contains("-privacyCover"), case .ready = model.phase else { return false }
-        return true
-        #else
-        return false
+        if case .ready = phase, ProcessInfo.processInfo.arguments.contains("-privacyCover") {
+            model.shield?.pinForScreenshot()
+        }
         #endif
     }
 
     @ViewBuilder
     private var content: some View {
-        switch model.phase {
+        let session = model.session
+        switch session.phase {
         case .launching:
             StatePage { LoadingState(shape: .statement) }
-        case .signedOut(let reason) where reason == .inactivity || reason == .sessionExpired:
+        case .signedOut(let reason?) where reason.needsExplanation:
             // An exit the client did not choose: say why, then sign in again.
             StatePage {
                 VStack(alignment: .leading, spacing: ODMetric.space6) {
-                    SignedOutView(reason: reason) { Task { await model.signIn() } }
-                    if model.signInFailed { Notice(tone: .error, title: Strings.entrySignInError) }
+                    SignedOutView { Task { await session.signIn() } }
+                    if session.signInFailed { Notice(tone: .error, title: Strings.entrySignInError) }
                 }
             }
         case .signedOut:
@@ -67,7 +61,7 @@ struct RootView: View {
         case .failed(let error) where error.code == .maintenance:
             StatePage { MaintenanceView(until: error.until) }
         case .failed(let error):
-            StatePage { ErrorState(error: error, titleSize: .title) { Task { await model.loadSession() } } }
+            StatePage { ErrorState(error: error, titleSize: .title) { Task { await session.loadSession() } } }
         case .ready(let me):
             switch Landing.for(me.accountStatus) {
             case .tabs:
@@ -101,8 +95,27 @@ struct MainTabView: View {
     }
 }
 
-/// The simulated provider's page (TODO(fase 11): the real provider's page in
-/// ASWebAuthenticationSession). The names are fixture data.
+/// The simulated provider's page as a sheet (DEBUG; TODO(fase 11): the real provider's page in
+/// ASWebAuthenticationSession). The sheet belongs to one sign-in request: swiping it away
+/// cancels that request and no other.
+private struct SimulatedProviderSheet: ViewModifier {
+    @Environment(AppModel.self) private var model
+
+    func body(content: Content) -> some View {
+        #if DEBUG
+        let page = model.signInPage
+        content.sheet(item: Binding(get: { page.request }, set: { page.sheetChanged(to: $0) })) { request in
+            SimulatedSignInSheet()
+                .onAppear { page.sheetAppeared(request.id) }
+        }
+        #else
+        content
+        #endif
+    }
+}
+
+#if DEBUG
+/// The names are fixture data.
 private struct SimulatedSignInSheet: View {
     @Environment(AppModel.self) private var model
 
@@ -131,3 +144,4 @@ private struct SimulatedSignInSheet: View {
         .presentationDetents([.medium, .large])
     }
 }
+#endif

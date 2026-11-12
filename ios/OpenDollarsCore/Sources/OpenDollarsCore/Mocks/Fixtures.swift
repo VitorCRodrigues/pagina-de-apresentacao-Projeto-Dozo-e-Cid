@@ -1,3 +1,7 @@
+// Mocks exist only in DEBUG builds (TODO(fase 11)): a Release build has no simulated provider
+// or in-memory API, and the app refuses to build without the real ones (AppModel.live).
+#if DEBUG
+
 import Foundation
 
 // Sample data for the mock, the same as web/src/mocks/fixtures.ts. Fictitious people; real
@@ -119,3 +123,5 @@ enum Fixtures {
             bankName: "Citibank N.A., New York", swiftBic: "CITIUS33", reference: reference, scope: .deposit))
     }
 }
+
+#endif

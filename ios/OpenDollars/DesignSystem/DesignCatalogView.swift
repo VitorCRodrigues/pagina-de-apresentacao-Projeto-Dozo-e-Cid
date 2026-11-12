@@ -37,6 +37,7 @@ struct DesignCatalogView: View {
             .padding(ODMetric.gutter)
         }
         .background(ODColor.cream50)
+        .odStatusBarBackground()
     }
 
     private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {

@@ -35,10 +35,6 @@ public final class ClientSession {
         case ready(Me)
     }
 
-    /// SwiftUI's ScenePhase, without SwiftUI.
-    public enum ScenePhase: Sendable {
-        case active, inactive, background
-    }
 
     public private(set) var phase: Phase = .launching
     public private(set) var config: AppConfig?
@@ -50,10 +46,18 @@ public final class ClientSession {
     public private(set) var signInFailed = false
     /// Set inside the last minute before the inactivity sign-out (the warning).
     public private(set) var inactivityDeadline: Date?
-    /// Covers the screen with the brand whenever the app is not active, so the app switcher's
-    /// snapshot never shows a balance (TODO(decisão) 19). Back to active, it stays until the
-    /// inactivity check ran: a session that expired meanwhile never shows its data again.
-    public private(set) var isCovered = false
+    /// The app covers the screen itself, synchronously, the moment the scene stops being active
+    /// (TODO(decisão) 19). The cover may come off only when the scene is active again and the
+    /// inactivity check that the return started has finished: a session that expired meanwhile
+    /// never shows its data again, and a check that ends after the client left again does not
+    /// lift the cover.
+    public var mayUncover: Bool { sceneIsActive && !awaitingInactivityCheck }
+    public private(set) var sceneIsActive = true
+    public private(set) var awaitingInactivityCheck = false
+    /// The latest return, as sceneBecameActive numbered it: only its check may finish it.
+    public struct Return: Sendable, Equatable {
+        fileprivate let change: Int
+    }
     /// Bumped by every exit. The app keys its screen tree on it, so no view keeps state of the
     /// previous client, and a request started before the exit cannot write its answer back.
     public private(set) var generation = 0
@@ -68,18 +72,29 @@ public final class ClientSession {
     @ObservationIgnored public var onEvent: (@MainActor (ClientSessionEvent) -> Void)?
     /// Called before the screens see the change, so the app can switch the text language first.
     @ObservationIgnored public var onAccountLocaleChange: (@MainActor (AppLocale?) -> Void)?
+    /// Called on every change of mayUncover, so the cover follows the state instead of looking
+    /// once at the end of a check.
+    @ObservationIgnored public var onMayUncoverChange: (@MainActor (Bool) -> Void)?
     @ObservationIgnored private let session: SessionManager
     @ObservationIgnored private let client: APIClient
     @ObservationIgnored private let isFirstLaunch: Bool
     @ObservationIgnored private var started = false
     @ObservationIgnored private var wipeHandlers: [@MainActor () -> Void] = []
     @ObservationIgnored private var inactivityWatch: Task<Void, Never>?
+    @ObservationIgnored private let inactivityCheckInterval: Duration
+    /// Bumped by every scene change: a check started by an older change cannot lift the cover.
+    @ObservationIgnored private var sceneChanges = 0
 
-    public init(session: SessionManager, client: APIClient, isFirstLaunch: Bool) {
+    /// `inactivityCheckInterval`: how often the inactivity watch checks while signed in.
+    public init(session: SessionManager, client: APIClient, isFirstLaunch: Bool, inactivityCheckInterval: Duration = .seconds(5)) {
         self.session = session
         self.client = client
         self.isFirstLaunch = isFirstLaunch
+        self.inactivityCheckInterval = inactivityCheckInterval
     }
+
+    /// The watch runs only while signed in: it starts with the session and stops at any exit.
+    public var isWatchingInactivity: Bool { inactivityWatch != nil }
 
     /// Runs on every exit, after the session's own data was cleared and before the entry screen.
     public func addWipeHandler(_ handler: @escaping @MainActor () -> Void) {
@@ -96,6 +111,7 @@ public final class ClientSession {
             await self?.didSignOut(reason)
         }
         if await session.restore(isFirstLaunch: isFirstLaunch) {
+            startInactivityWatch()
             await loadSession()
         } else {
             phase = .signedOut(nil)
@@ -116,6 +132,7 @@ public final class ClientSession {
             signInFailed = true
             return
         }
+        startInactivityWatch()
         await loadSession()
     }
 
@@ -127,6 +144,8 @@ public final class ClientSession {
 
     /// The session already cleared its tokens and the Keychain; this clears the rest.
     private func didSignOut(_ reason: SignOutReason) {
+        inactivityWatch?.cancel()
+        inactivityWatch = nil
         generation += 1
         config = nil
         account = .idle
@@ -136,7 +155,6 @@ public final class ClientSession {
         signInFailed = false
         depositKeys.reset()
         for handler in wipeHandlers { handler() }
-        isCovered = false
         phase = .signedOut(reason)
         onEvent?(.signedOut(reason))
     }
@@ -161,29 +179,52 @@ public final class ClientSession {
         }
     }
 
-    /// Checks inactivity on a timer while the app runs; scene changes check it too.
-    public func startInactivityWatch(every interval: Duration = .seconds(5)) {
+    /// Checks inactivity on a timer while signed in; scene changes check it too.
+    private func startInactivityWatch() {
         inactivityWatch?.cancel()
+        let interval = inactivityCheckInterval
         inactivityWatch = Task { [weak self] in
             while !Task.isCancelled {
                 try? await Task.sleep(for: interval)
-                await self?.checkInactivity()
+                guard !Task.isCancelled, let self else { return }
+                await self.checkInactivity()
             }
         }
     }
 
-    public func sceneChanged(_ scenePhase: ScenePhase) async {
-        switch scenePhase {
-        case .inactive:
-            isCovered = true
-        case .background:
-            isCovered = true
-            await session.persistActivity()
-        case .active:
-            isCovered = true
-            await checkInactivity()
-            isCovered = false
-        }
+    /// The scene stopped being active. Synchronous: the app calls it in the same step that puts
+    /// the cover up, so a return whose check is queued or running can no longer lift it.
+    public func sceneLeft() {
+        sceneChanges += 1
+        setScene(active: false, awaitingCheck: awaitingInactivityCheck)
+    }
+
+    /// The scene is active again. Synchronous, for the same reason: a leave that arrives before
+    /// the check even starts is newer than this return. Then call finishReturn with the result.
+    public func sceneBecameActive() -> Return {
+        sceneChanges += 1
+        setScene(active: true, awaitingCheck: true)
+        return Return(change: sceneChanges)
+    }
+
+    /// The return's inactivity check. It lifts the cover only if nothing happened since its return.
+    public func finishReturn(_ comingBack: Return) async {
+        await checkInactivity()
+        guard comingBack.change == sceneChanges else { return }
+        setScene(active: sceneIsActive, awaitingCheck: false)
+    }
+
+    /// The app went to the background (after sceneLeft): store the last activity for the next
+    /// launch. Not a leave by itself, so finishing late cannot keep the cover on an active app.
+    public func sceneEnteredBackground() async {
+        await session.persistActivity()
+    }
+
+    private func setScene(active: Bool, awaitingCheck: Bool) {
+        let before = mayUncover
+        sceneIsActive = active
+        awaitingInactivityCheck = awaitingCheck
+        if mayUncover != before { onMayUncoverChange?(mayUncover) }
     }
 
     // MARK: Data

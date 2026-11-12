@@ -2,8 +2,9 @@ import SwiftUI
 
 @main
 struct OpenDollarsApp: App {
+    /// Also creates the PrivacyShield (not for the catalog) before the scene connects; it follows
+    /// the scene's activation itself: SwiftUI's scenePhase reaches the screen a render pass late.
     @State private var model = AppModel.live()
-    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -20,13 +21,9 @@ struct OpenDollarsApp: App {
         }
     }
 
-    /// The session app. The scene phase is watched here, so the catalog never touches the session.
     private var root: some View {
         RootView()
             .environment(model)
             .task { await model.start() }
-            .onChange(of: scenePhase) { _, newPhase in
-                Task { await model.scenePhaseChanged(newPhase) }
-            }
     }
 }

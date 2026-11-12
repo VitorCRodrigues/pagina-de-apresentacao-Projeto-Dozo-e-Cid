@@ -15,15 +15,15 @@ struct HomeView: View {
                     .foregroundStyle(ODColor.navy900)
                     .accessibilityAddTraits(.isHeader)
 
-                if case .loaded(let account) = model.account {
+                if case .loaded(let account) = model.session.account {
                     AccountNotes(account: account)
                 }
 
-                switch model.portfolio {
+                switch model.session.portfolio {
                 case .idle, .loading:
                     BalanceBlockSkeleton()
                 case .failed(let error):
-                    ErrorState(error: error) { Task { await model.loadHome() } }
+                    ErrorState(error: error) { Task { await model.session.loadHome() } }
                 case .loaded(let portfolio):
                     BalanceBlock(portfolio: portfolio, locale: model.locale)
                 }
@@ -33,9 +33,10 @@ struct HomeView: View {
             .padding(ODMetric.gutter)
         }
         .background(ODColor.cream50)
+        .odStatusBarBackground()
         .toolbar(.hidden, for: .navigationBar)
-        .task { await model.loadHome() }
-        .refreshable { await model.loadHome() }
+        .task { await model.session.loadHome() }
+        .refreshable { await model.session.loadHome() }
     }
 }
 

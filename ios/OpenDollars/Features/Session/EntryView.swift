@@ -33,13 +33,13 @@ struct EntryView: View {
                 .padding(.vertical, 56)
 
                 VStack(alignment: .leading, spacing: ODMetric.space5) {
-                    if model.signInFailed {
+                    if model.session.signInFailed {
                         Notice(tone: .error, title: Strings.entrySignInError)
                             .accessibilityIdentifier("entry.signInError")
                     }
                     LanguagePicker(selection: model.locale) { model.chooseLocale($0) }
-                    Button(Strings.entrySignIn) { Task { await model.signIn() } }
-                        .odButtonStyle(.primary, loading: model.isSigningIn)
+                    Button(Strings.entrySignIn) { Task { await model.session.signIn() } }
+                        .odButtonStyle(.primary, loading: model.session.isSigningIn)
                         .accessibilityIdentifier("entry.signIn")
                     VStack(alignment: .leading, spacing: 0) {
                         Text(Strings.entryPilot)
@@ -57,5 +57,6 @@ struct EntryView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .background(ODColor.cream50)
+        .odStatusBarBackground()
     }
 }

@@ -34,7 +34,7 @@ struct ProfilePlaceholderView: View {
         VStack(alignment: .leading, spacing: ODMetric.sectionSpacing) {
             ComingSoonView(title: Strings.navProfile).frame(maxHeight: 200)
             Button(Strings.sessionTimeoutSignOut) {
-                Task { await model.signOut() }
+                Task { await model.session.signOut() }
             }
             .buttonStyle(.odSecondary)
             .accessibilityIdentifier("profile.signOut")

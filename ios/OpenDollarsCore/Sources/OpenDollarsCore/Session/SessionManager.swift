@@ -77,7 +77,8 @@ public actor SessionManager: SessionTokens {
     /// At launch: a stored session comes back through a silent refresh, unless this is the first
     /// launch after install (Keychain items survive uninstalling) or the client was idle for the
     /// whole timeout while the app was closed. Only the wall clock spans launches: a last activity
-    /// in the future means the date was moved back since, so that session does not return either.
+    /// further in the future than a network time sync could explain means the date was moved back
+    /// since, so that session does not return either.
     public func restore(isFirstLaunch: Bool) async -> Bool {
         if isFirstLaunch {
             try? store.delete()
@@ -85,7 +86,7 @@ public actor SessionManager: SessionTokens {
         }
         guard let stored = (try? store.load()) ?? nil else { return false }
         let idle = now().timeIntervalSince(stored.lastActivity)
-        guard idle >= 0, idle < policy.inactivityTimeout else {
+        guard idle >= -policy.clockStepBackTolerance, idle < policy.inactivityTimeout else {
             try? store.delete()
             return false
         }

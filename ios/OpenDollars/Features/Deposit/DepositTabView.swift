@@ -14,13 +14,13 @@ struct DepositTabView: View {
                     .foregroundStyle(ODColor.navy900)
                     .accessibilityAddTraits(.isHeader)
 
-                switch model.account {
+                switch model.session.account {
                 case .idle, .loading:
                     InlineLoading()
                 case .failed:
-                    InlineError { Task { await model.loadAccount() } }
+                    InlineError { Task { await model.session.loadAccount() } }
                 case .loaded:
-                    if let block = model.accountBlock {
+                    if let block = model.session.accountBlock {
                         AccountBlockNote(block: block)
                     } else {
                         // TODO(decisão): the new-deposit flow (T6 to T8) arrives in a later phase.
@@ -39,8 +39,9 @@ struct DepositTabView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .background(ODColor.cream50)
+        .odStatusBarBackground()
         .toolbar(.hidden, for: .navigationBar)
-        .task { await model.loadAccount() }
-        .refreshable { await model.loadAccount() }
+        .task { await model.session.loadAccount() }
+        .refreshable { await model.session.loadAccount() }
     }
 }

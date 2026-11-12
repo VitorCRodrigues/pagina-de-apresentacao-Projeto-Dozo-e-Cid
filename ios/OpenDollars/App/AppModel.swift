@@ -3,109 +3,102 @@ import Observation
 import OpenDollarsCore
 import SwiftUI
 
-/// Wires the core's ClientSession to SwiftUI: the screens read the client's data through it, and
-/// it adds what only the app can do (the text language, the simulated provider's page, logging,
-/// clearing URLCache and files). The rules and the client's data live in OpenDollarsCore.
+/// Wires the core's ClientSession to the app. Screens read the client's data from `session`
+/// directly; this adds only what the core cannot do: the text language, the privacy shield,
+/// logging, clearing URLCache and files, and (DEBUG) the simulated provider's page.
 @MainActor
 @Observable
 final class AppModel {
     let session: ClientSession
-    let signInPage: SimulatedSignInPage
     /// The app's language: a choice on this device > the account's > the system's
     /// (LocalePreference). Texts, Accept-Language and formatting follow it.
     private(set) var locale: AppLocale
 
+    /// Created with the model, before the scene connects, so it hears the very first scene change;
+    /// the design catalog (DEBUG, -catalog) has no session and gets none.
+    @ObservationIgnored let shield: PrivacyShield?
     @ObservationIgnored private let localeChoice: LocaleChoiceStore
     @ObservationIgnored private let systemLocale: AppLocale
+    #if DEBUG
+    let signInPage: SimulatedSignInPage
+    #endif
 
-    init(session: ClientSession, signInPage: SimulatedSignInPage, localeChoice: LocaleChoiceStore, systemLocale: AppLocale) {
+    private init(session: ClientSession, localeChoice: LocaleChoiceStore, systemLocale: AppLocale, coversScreen: Bool) {
         self.session = session
-        self.signInPage = signInPage
+        self.shield = coversScreen ? PrivacyShield(session: session) : nil
         self.localeChoice = localeChoice
         self.systemLocale = systemLocale
         self.locale = LocalePreference.resolve(explicit: localeChoice.read(), account: nil, system: systemLocale)
+        #if DEBUG
+        self.signInPage = SimulatedSignInPage()
+        #endif
         L10n.use(locale)
         session.onAccountLocaleChange = { [weak self] _ in self?.applyLocale() }
         session.onEvent = { event in
             switch event {
             case .requestFailed(let code, let status):
-                AppLog.api.error("request failed: \(code.rawValue, privacy: .public) (\(status, privacy: .public))")
+                // CLAUDE.md: values from the API are private; only the HTTP status is ours to show.
+                AppLog.api.error("request failed: \(code.rawValue, privacy: .private) (\(status, privacy: .public))")
             case .portfolioTotalMismatch:
                 // api-gaps.md, item 8: reported without values or personal data.
                 AppLog.api.error("portfolio_total_mismatch")
             case .signedOut(let reason):
+                // The app's own reason, not a value from the API.
                 AppLog.session.info("signed out: \(reason.rawValue, privacy: .public)")
             }
         }
         session.addWipeHandler { DeviceWipe.run() }
     }
 
-    /// Wiring for a real launch. `-scenario <id>` picks Lucía's mock data (default "open").
+    /// Wiring for a real launch.
     static func live() -> AppModel {
-        let arguments = ProcessInfo.processInfo.arguments
-        let scenario = Scenario(arguments: arguments) ?? .default
         // The localization iOS picked for this app: the system's languages, or the per-app
         // language set in Settings.
         let systemLocale = AppLocale(languageTag: Bundle.main.preferredLocalizations.first)
-        // TODO(decisão) 5: the in-memory mock and the simulated provider until the backend and the
-        // real OIDC provider exist (PRD section 12; the provider in phase 11).
-        let signInPage = SimulatedSignInPage()
-        let auth = SimulatedAuthProvider { await signInPage.ask() }
-        let sessionManager = SessionManager(store: KeychainRefreshTokenStore(), auth: auth)
-        let client = APIClient(transport: MockServer(scenario: scenario), tokens: sessionManager, locale: { L10n.locale })
 
-        // Not personal data: only whether this install launched before (Keychain items survive
-        // uninstalling, so a fresh install wipes them). UI tests start clean with -resetSession.
+        // TODO(fase 11): the real OIDC provider (ASWebAuthenticationSession with PKCE) and the API
+        // origin (PRD section 12). Until then only DEBUG builds exist: the simulated provider and
+        // the in-memory MockServer are compiled out of Release, and a Release build stops here,
+        // like the web's check-build.mjs refuses a production bundle with mocks (TODO(decisão) 5).
+        #if DEBUG
+        let bridge = SimulatedProviderBridge()
+        let sessionManager = SessionManager(store: KeychainRefreshTokenStore(), auth: SimulatedAuthProvider { await bridge.ask() })
+        // `-scenario <id>` picks Lucía's mock data (default "open").
+        let scenario = Scenario(arguments: ProcessInfo.processInfo.arguments) ?? .default
+        let client = APIClient(transport: MockServer(scenario: scenario), tokens: sessionManager, locale: { L10n.locale })
+        let coversScreen = !ProcessInfo.processInfo.arguments.contains(DesignCatalogView.launchArgument)
+        #else
+        #error("Release needs the real OIDC provider and API origin (TODO(fase 11)); the simulated provider and MockServer exist only in DEBUG builds.")
+        #endif
+
+        let session = ClientSession(session: sessionManager, client: client, isFirstLaunch: isFirstLaunch())
+        let model = AppModel(
+            session: session, localeChoice: LocaleChoiceStore(), systemLocale: systemLocale,
+            coversScreen: coversScreen)
+        #if DEBUG
+        bridge.page = model.signInPage
+        #endif
+        return model
+    }
+
+    /// Not personal data: only whether this install launched before (Keychain items survive
+    /// uninstalling, so a fresh install wipes them). UI tests start clean with -resetSession.
+    private static func isFirstLaunch() -> Bool {
         let defaults = UserDefaults.standard
         let launchedKey = "od.hasLaunchedBefore"
         var isFirstLaunch = !defaults.bool(forKey: launchedKey)
         #if DEBUG
-        if arguments.contains("-resetSession") { isFirstLaunch = true }
+        if ProcessInfo.processInfo.arguments.contains("-resetSession") { isFirstLaunch = true }
         #endif
         defaults.set(true, forKey: launchedKey)
-
-        let session = ClientSession(session: sessionManager, client: client, isFirstLaunch: isFirstLaunch)
-        return AppModel(session: session, signInPage: signInPage, localeChoice: LocaleChoiceStore(), systemLocale: systemLocale)
+        return isFirstLaunch
     }
 
-    // MARK: What the screens read
-
-    var phase: ClientSession.Phase { session.phase }
-    var account: Loadable<Account> { session.account }
-    var portfolio: Loadable<Portfolio> { session.portfolio }
-    var accountBlock: AccountBlock? { session.accountBlock }
-    var inactivityDeadline: Date? { session.inactivityDeadline }
-    var isSigningIn: Bool { session.isSigningIn }
-    var signInFailed: Bool { session.signInFailed }
-    var isCovered: Bool { session.isCovered }
     /// Changes on every exit and every language change: the screen tree is rebuilt, so no view
     /// keeps state of the previous client or texts of the previous language.
     var screenTreeID: String { "\(session.generation)-\(locale.rawValue)" }
 
-    // MARK: Session
-
-    func start() async {
-        await session.start()
-        session.startInactivityWatch()
-    }
-
-    func signIn() async { await session.signIn() }
-    func signOut() async { await session.signOut() }
-    func recordActivity() { session.recordActivity() }
-    func staySignedIn() { Task { await session.staySignedIn() } }
-
-    func scenePhaseChanged(_ scenePhase: ScenePhase) async {
-        switch scenePhase {
-        case .active: await session.sceneChanged(.active)
-        case .inactive: await session.sceneChanged(.inactive)
-        case .background: await session.sceneChanged(.background)
-        @unknown default: await session.sceneChanged(.inactive)
-        }
-    }
-
-    func loadSession() async { await session.loadSession() }
-    func loadHome() async { await session.loadHome() }
-    func loadAccount() async { await session.loadAccount() }
+    func start() async { await session.start() }
 
     // MARK: Language
 
@@ -140,28 +133,67 @@ enum DeviceWipe {
     }
 }
 
+#if DEBUG
+/// The simulated provider asks the page through this bridge, which exists before the page does.
+@MainActor
+final class SimulatedProviderBridge {
+    var page: SimulatedSignInPage?
+
+    func ask() async -> SimulatedAuthProvider.Outcome {
+        await page?.ask() ?? .failed
+    }
+}
+
 /// The simulated provider's sign-in page: a sheet where the developer picks who signs in, as a
-/// real provider's page would decide. TODO(fase 11): replaced by ASWebAuthenticationSession.
+/// real provider's page would decide. Each sign-in is its own request: closing a sheet answers
+/// only the request it showed, so a dismissal that lands late cannot cancel the next sign-in.
+/// TODO(fase 11): replaced by the real provider's page in ASWebAuthenticationSession.
 @MainActor
 @Observable
 final class SimulatedSignInPage {
-    var isPresented = false
-    @ObservationIgnored private var pending: CheckedContinuation<SimulatedAuthProvider.Outcome, Never>?
+    struct Request: Identifiable, Equatable {
+        let id: Int
+    }
+
+    /// The sheet shows while there is a request.
+    private(set) var request: Request?
+    /// The request whose sheet is on screen (set when it appears): a swipe closes that one.
+    @ObservationIgnored private var presentedID: Int?
+
+    @ObservationIgnored private var pending: (id: Int, continuation: CheckedContinuation<SimulatedAuthProvider.Outcome, Never>)?
+    @ObservationIgnored private var lastID = 0
 
     func ask() async -> SimulatedAuthProvider.Outcome {
-        answer(.cancelled) // a page left open by a previous attempt
+        if let pending { answer(.cancelled, to: pending.id) } // a page left open by a previous attempt
+        lastID += 1
+        let id = lastID
         return await withCheckedContinuation { continuation in
-            pending = continuation
-            isPresented = true
+            pending = (id, continuation)
+            request = Request(id: id)
         }
     }
 
-    func answer(_ outcome: SimulatedAuthProvider.Outcome) {
-        isPresented = false
-        pending?.resume(returning: outcome)
-        pending = nil
+    func sheetAppeared(_ id: Int) { presentedID = id }
+
+    /// The sheet's binding: SwiftUI writes nil when the client swipes the sheet away. That closes
+    /// the page on screen, so only its request is cancelled; a nil that lands after a newer
+    /// request replaced it cancels nothing.
+    func sheetChanged(to new: Request?) {
+        guard new == nil, let shown = presentedID else { return }
+        answer(.cancelled, to: shown)
     }
 
-    /// Swiping the sheet away is closing the provider's page.
-    func dismissed() { answer(.cancelled) }
+    /// A choice on the page that is showing.
+    func answer(_ outcome: SimulatedAuthProvider.Outcome) {
+        guard let current = request else { return }
+        answer(outcome, to: current.id)
+    }
+
+    private func answer(_ outcome: SimulatedAuthProvider.Outcome, to id: Int) {
+        guard let pending, pending.id == id else { return }
+        self.pending = nil
+        if request?.id == id { request = nil }
+        pending.continuation.resume(returning: outcome)
+    }
 }
+#endif

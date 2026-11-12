@@ -66,6 +66,9 @@ public enum SignOutReason: String, Sendable, Hashable {
     case inactivity
     /// The API answered 401 session_expired and a silent refresh did not help.
     case sessionExpired
+
+    /// An exit the client did not choose: the "your session ended" screen explains it.
+    public var needsExplanation: Bool { self != .userRequested }
 }
 
 public enum InactivityStatus: Sendable, Equatable {
@@ -81,11 +84,15 @@ public enum InactivityStatus: Sendable, Equatable {
 public struct SessionPolicy: Sendable, Equatable {
     public var inactivityTimeout: TimeInterval
     public var warningBefore: TimeInterval
+    /// How far the wall clock may have stepped back between launches (network time sync) and a
+    /// stored last activity "in the future" still counts as recent (TODO(decisão) 18).
+    public var clockStepBackTolerance: TimeInterval
 
     public static let standard = SessionPolicy(inactivityTimeout: 15 * 60, warningBefore: 60)
 
-    public init(inactivityTimeout: TimeInterval, warningBefore: TimeInterval) {
+    public init(inactivityTimeout: TimeInterval, warningBefore: TimeInterval, clockStepBackTolerance: TimeInterval = 2 * 60) {
         self.inactivityTimeout = inactivityTimeout
         self.warningBefore = warningBefore
+        self.clockStepBackTolerance = clockStepBackTolerance
     }
 }

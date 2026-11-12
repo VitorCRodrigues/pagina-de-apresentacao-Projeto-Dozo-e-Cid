@@ -73,6 +73,10 @@ jobs:
           node --test "ios/scripts/*.test.mjs"
           node ios/scripts/sync-strings.mjs --check
 
+      # The attachment names the export script makes must be accepted by upload-artifact.
+      - name: Screenshot export script tests
+        run: python3 -I -m unittest discover -s ios/scripts -p "test_*.py"
+
       - name: Install XcodeGen
         run: brew install xcodegen && xcodegen --version
 
@@ -106,7 +110,10 @@ jobs:
             -resultBundlePath build/results/iPhone15.xcresult \
             | xcbeautify
 
+      # Runs even when the iPhone 15 tests failed, so both sets of screenshots are uploaded; the
+      # job still fails.
       - name: UI tests and screenshots, iPhone SE (es-AR)
+        if: success() || failure()
         run: |
           set -o pipefail
           xcodebuild test-without-building \

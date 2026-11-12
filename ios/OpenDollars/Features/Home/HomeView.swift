@@ -106,17 +106,14 @@ private struct BalanceBlockSkeleton: View {
     }
 }
 
-/// A restricted account keeps the navigation, with a note and the way to support (decision 14);
+/// A blocked account keeps the navigation, with the block's note (decision 14, AccountBlock);
 /// pending items are counted.
 private struct AccountNotes: View {
     let account: Account
 
     var body: some View {
-        if account.status == .restricted {
-            Notice(tone: .warning, title: Strings.accountTitleRestricted, message: Strings.accountBodyRestricted) {
-                Link(Strings.accountActionsContact, destination: AppConstants.supportURL)
-                    .buttonStyle(.odGhost)
-            }
+        if let block = AccountBlock.of(account) {
+            AccountBlockNote(block: block)
         }
         if !account.pending.isEmpty {
             // TODO(decisão) 13: the link to Pendientes arrives with that tab (later phase).

@@ -338,7 +338,7 @@ private func quote(_ server: MockServer, amountCents: Int = 50000) async throws 
 @Suite struct MockEndToEndTests {
     @Test func createsADepositThroughTheClientWithOneKeyPerIntent() async throws {
         let clock = TestClock()
-        let session = SessionManager(store: MemoryTokenStore(), auth: MockAuthProvider(), now: { clock.now })
+        let session = SessionManager(store: MemoryTokenStore(), auth: SimulatedAuthProvider(delay: .zero) { .identity(.lucia) }, now: { clock.now })
         try await session.signInWithProvider()
         let client = APIClient(transport: server(clock: clock), tokens: session, locale: { .es }, now: { clock.now })
 
@@ -355,7 +355,7 @@ private func quote(_ server: MockServer, amountCents: Int = 50000) async throws 
     }
 
     @Test func theClientSeesTheMockErrorsByCode() async throws {
-        let session = SessionManager(store: MemoryTokenStore(), auth: MockAuthProvider())
+        let session = SessionManager(store: MemoryTokenStore(), auth: SimulatedAuthProvider(delay: .zero) { .identity(.lucia) })
         try await session.signInWithProvider()
         let client = APIClient(transport: server(.restricted), tokens: session, locale: { .es })
         do {

@@ -4,8 +4,14 @@ import Foundation
 /// web/docs/api-gaps.md, section 10, with the phase 0 scope: GET /config, /me, /account,
 /// /portfolio, the deposit routes (quote, create with idempotency 201/200/409, list with filter and
 /// cursor, detail, sent notice) and the error envelope. Any other route answers 404 not_found.
-/// Every reply carries a Date header, like a real server.
+/// Every reply carries a Date header, like a real server. Each simulated client has its own data:
+/// a request is served from the database of whoever owns its bearer token (SimulatedAuthProvider),
+/// Lucía for any other token. The scenario shapes Lucía's data; Rafael's is always the
+/// not-yet-live Brazilian client.
 public actor MockServer: HTTPTransport {
+    private var databases: [SimulatedIdentity: MockDatabase]
+    /// The database of the request being served. Set after the last await of `send`, so two
+    /// requests never mix their clients.
     private var db: MockDatabase
     private let now: @Sendable () -> Date
     private let sleep: @Sendable (Duration) async throws -> Void
@@ -17,7 +23,9 @@ public actor MockServer: HTTPTransport {
         now: @escaping @Sendable () -> Date = { Date() },
         sleep: @escaping @Sendable (Duration) async throws -> Void = { try await Task.sleep(for: $0) }
     ) {
-        self.db = MockBuilder.build(scenario, now: now())
+        let lucia = MockBuilder.build(scenario, now: now())
+        self.databases = [.lucia: lucia, .rafael: MockBuilder.build(.market_not_live, now: now())]
+        self.db = lucia
         self.now = now
         self.sleep = sleep
     }
@@ -29,8 +37,13 @@ public actor MockServer: HTTPTransport {
         let segments = pieces[0].split(separator: "/").map { String($0).removingPercentEncoding ?? String($0) }
         let query = Self.parseQuery(pieces.count > 1 ? String(pieces[1]) : "")
         let lang = AppLocale(languageTag: request.headers["Accept-Language"])
+        let bearer = request.headers["Authorization"].flatMap { $0.hasPrefix("Bearer ") ? String($0.dropFirst(7)) : nil }
+        let client = bearer.flatMap(SimulatedAuthProvider.identity(ofAccessToken:)) ?? .lucia
 
-        if db.latency > .zero { try await sleep(db.latency) }
+        if let latency = databases[client]?.latency, latency > .zero { try await sleep(latency) }
+        // No await from here on: this request owns `db` until it returns.
+        db = databases[client] ?? db
+        defer { databases[client] = db }
         if let failure = db.failure {
             return error(failure.status, failure.code.rawValue, "Mock \(failure.code.rawValue)", until: failure.until)
         }
@@ -235,19 +248,4 @@ public actor MockServer: HTTPTransport {
     private static func shortID() -> String {
         String(UUID().uuidString.lowercased().prefix(8))
     }
-}
-
-/// Stands in for the OIDC provider while there is none (TODO(decisão): pick the provider).
-public struct MockAuthProvider: AuthProvider {
-    public init() {}
-
-    public func signIn() async throws -> TokenPair {
-        TokenPair(accessToken: "mock-\(UUID().uuidString.lowercased())", refreshToken: "mock-refresh-\(UUID().uuidString.lowercased())")
-    }
-
-    public func refresh(refreshToken: String) async throws -> TokenPair {
-        try await signIn()
-    }
-
-    public func revoke(refreshToken: String) async {}
 }

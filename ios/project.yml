@@ -40,8 +40,8 @@ targets:
         CFBundleDevelopmentRegion: es
         CFBundleLocalizations: [es, pt, en]
         UIAppFonts: [InterVariable.ttf]
-        # TODO(decisão) 17: NSCameraUsageDescription and NSFaceIDUsageDescription come in with the
-        # features that ask for them; their texts are already in InfoPlist.xcstrings.
+        # TODO(decisão) 17: NSCameraUsageDescription comes in with the
+        # document upload; its text is already in InfoPlist.xcstrings. No Face ID in the pilot (22).
         UILaunchScreen:
           UIColorName: LaunchBackground
         # The brand has a light palette only (web/src/styles/tokens.css has no dark theme). Locked

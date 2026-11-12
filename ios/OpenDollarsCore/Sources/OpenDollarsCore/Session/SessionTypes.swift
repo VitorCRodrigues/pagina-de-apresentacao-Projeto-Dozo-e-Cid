@@ -3,7 +3,8 @@ import Foundation
 // TODO(decisão) 3 (ios/docs/decisions.md): access token only in memory; refresh token only in
 // the Keychain with ThisDeviceOnly; every exit (button, 15 min of inactivity, session expired)
 // clears everything.
-// TODO(decisão): pick the real OIDC provider (PRD section 12) and implement it behind AuthProvider.
+// TODO(fase 11): the real OIDC provider (PRD section 12) behind AuthProvider, with
+// ASWebAuthenticationSession and PKCE. Until then the app signs in with SimulatedAuthProvider.
 
 /// Tokens from the identity provider. Never logged: description and reflection hide them.
 public struct TokenPair: Sendable, Equatable, CustomStringConvertible, CustomReflectable {
@@ -42,8 +43,16 @@ public protocol RefreshTokenStore: Sendable {
     func delete() throws
 }
 
+/// Why a sign-in did not happen. The entry screen says nothing on `cancelled` (the client closed
+/// the provider's page) and shows its error note on `failed`.
+public enum AuthError: Error, Sendable, Equatable {
+    case cancelled
+    case failed
+}
+
 /// The identity provider (OIDC). The app only knows sign-in, refresh and revoke.
 public protocol AuthProvider: Sendable {
+    /// Throws AuthError.cancelled when the client closes the provider's page.
     func signIn() async throws -> TokenPair
     func refresh(refreshToken: String) async throws -> TokenPair
     /// Best effort (api-gaps.md, item 1: POST /auth/logout); failures are ignored.
@@ -67,7 +76,8 @@ public enum InactivityStatus: Sendable, Equatable {
 }
 
 /// PRD section 9 (security): the session ends after 15 minutes without interaction, with a
-/// warning before. Same values as the web (useIdleTimeout.ts).
+/// warning before. Same values as the web (useIdleTimeout.ts). After it the client signs in again;
+/// TODO(decisão) 22: Face ID unlock while the refresh token is valid, a possible later change.
 public struct SessionPolicy: Sendable, Equatable {
     public var inactivityTimeout: TimeInterval
     public var warningBefore: TimeInterval

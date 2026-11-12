@@ -24,30 +24,6 @@
           }
         }
       }
-    },
-    "NSFaceIDUsageDescription" : {
-      "comment" : "iOS only: ios/strings/ios-only.json (Info.plist)",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "We use Face ID to confirm it is you when you open the app."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usamos Face ID para confirmar que sos vos al abrir la app."
-          }
-        },
-        "pt" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usamos o Face ID para confirmar que é você ao abrir o app."
-          }
-        }
-      }
     }
   },
   "version" : "1.0"

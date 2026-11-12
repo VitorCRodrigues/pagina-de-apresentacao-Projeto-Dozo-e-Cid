@@ -37,6 +37,7 @@ struct ProfilePlaceholderView: View {
                 Task { await model.signOut() }
             }
             .buttonStyle(.odSecondary)
+            .accessibilityIdentifier("profile.signOut")
             .padding(.horizontal, ODMetric.gutter)
             Spacer()
         }

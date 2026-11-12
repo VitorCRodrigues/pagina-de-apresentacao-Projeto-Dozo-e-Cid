@@ -1225,6 +1225,54 @@
         }
       }
     },
+    "blockReason.unknown.action" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact support"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hablar con soporte"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falar com o suporte"
+          }
+        }
+      }
+    },
+    "blockReason.unknown.message" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deposits are not possible right now."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No es posible hacer aportes en este momento."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não é possível fazer aportes no momento."
+          }
+        }
+      }
+    },
     "common.close" : {
       "comment" : "web: translation.json",
       "extractionState" : "manual",
@@ -4407,6 +4455,78 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Em breve"
+          }
+        }
+      }
+    },
+    "dev.simulatedProvider.cancel" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        }
+      }
+    },
+    "dev.simulatedProvider.fail" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulate an error"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simular un error"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simular um erro"
+          }
+        }
+      }
+    },
+    "dev.simulatedProvider.title" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulated identity provider"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proveedor de identidad simulado"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provedor de identidade simulado"
           }
         }
       }

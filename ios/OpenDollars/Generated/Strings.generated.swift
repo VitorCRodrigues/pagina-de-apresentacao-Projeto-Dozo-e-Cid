@@ -157,6 +157,12 @@ enum Strings {
     /// La cotización venció.
     static var blockReasonQuoteExpiredMessage: String { L10n.text("blockReason.quote_expired.message") }
 
+    /// Hablar con soporte
+    static var blockReasonUnknownAction: String { L10n.text("blockReason.unknown.action") }
+
+    /// No es posible hacer aportes en este momento.
+    static var blockReasonUnknownMessage: String { L10n.text("blockReason.unknown.message") }
+
     /// Cerrar
     static var commonClose: String { L10n.text("common.close") }
 
@@ -546,6 +552,15 @@ enum Strings {
 
     /// Próximamente
     static var devComingSoonTitle: String { L10n.text("dev.comingSoon.title") }
+
+    /// Cancelar
+    static var devSimulatedProviderCancel: String { L10n.text("dev.simulatedProvider.cancel") }
+
+    /// Simular un error
+    static var devSimulatedProviderFail: String { L10n.text("dev.simulatedProvider.fail") }
+
+    /// Proveedor de identidad simulado
+    static var devSimulatedProviderTitle: String { L10n.text("dev.simulatedProvider.title") }
 
     /// Tu cuenta y tus inversiones quedan en Interactive Brokers, a tu nombre.
     static var entryCustody: String { L10n.text("entry.custody") }

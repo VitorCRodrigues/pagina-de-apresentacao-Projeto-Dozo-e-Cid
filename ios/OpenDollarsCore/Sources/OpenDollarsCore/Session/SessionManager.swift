@@ -9,27 +9,46 @@ public actor SessionManager: SessionTokens {
     private let store: any RefreshTokenStore
     private let auth: any AuthProvider
     private let now: @Sendable () -> Date
+    private let uptime: @Sendable () -> Duration
     private let policy: SessionPolicy
 
     private var signedIn = false
     private var accessTokenValue: String?
+    /// When the client last interacted, on the wall clock: stored for the next launch.
     private var lastActivity: Date
+    /// The same moment on the monotonic clock: idle time inside a run is measured here, so moving
+    /// the date in Settings cannot stretch the session (TODO(decisão) 18).
+    private var lastActivityUptime: Duration
     private var handlers: [SignOutHandler] = []
     private var refreshTask: Task<Bool, Never>?
     /// Bumped on every sign-out, so a refresh that finishes afterwards cannot revive the session.
     private var generation = 0
 
+    /// Time since this process started, on a clock that never goes back and counts sleep.
+    public static let processUptime: @Sendable () -> Duration = {
+        let start = ContinuousClock.now
+        return { ContinuousClock.now - start }
+    }()
+
     public init(
         store: any RefreshTokenStore,
         auth: any AuthProvider,
         policy: SessionPolicy = .standard,
-        now: @escaping @Sendable () -> Date = { Date() }
+        now: @escaping @Sendable () -> Date = { Date() },
+        uptime: @escaping @Sendable () -> Duration = SessionManager.processUptime
     ) {
         self.store = store
         self.auth = auth
         self.policy = policy
         self.now = now
+        self.uptime = uptime
         self.lastActivity = now()
+        self.lastActivityUptime = uptime()
+    }
+
+    private func markActivity() {
+        lastActivity = now()
+        lastActivityUptime = uptime()
     }
 
     public var isSignedIn: Bool { signedIn }
@@ -43,12 +62,11 @@ public actor SessionManager: SessionTokens {
     // MARK: Sign in and launch
 
     public func signIn(_ tokens: TokenPair) throws {
-        let at = now()
+        markActivity()
         if let refreshToken = tokens.refreshToken {
-            try store.save(StoredSession(refreshToken: refreshToken, lastActivity: at))
+            try store.save(StoredSession(refreshToken: refreshToken, lastActivity: lastActivity))
         }
         accessTokenValue = tokens.accessToken
-        lastActivity = at
         signedIn = true
     }
 
@@ -58,18 +76,20 @@ public actor SessionManager: SessionTokens {
 
     /// At launch: a stored session comes back through a silent refresh, unless this is the first
     /// launch after install (Keychain items survive uninstalling) or the client was idle for the
-    /// whole timeout while the app was closed.
+    /// whole timeout while the app was closed. Only the wall clock spans launches: a last activity
+    /// in the future means the date was moved back since, so that session does not return either.
     public func restore(isFirstLaunch: Bool) async -> Bool {
         if isFirstLaunch {
             try? store.delete()
             return false
         }
         guard let stored = (try? store.load()) ?? nil else { return false }
-        guard now().timeIntervalSince(stored.lastActivity) < policy.inactivityTimeout else {
+        let idle = now().timeIntervalSince(stored.lastActivity)
+        guard idle >= 0, idle < policy.inactivityTimeout else {
             try? store.delete()
             return false
         }
-        lastActivity = now()
+        markActivity()
         if await performRefresh(generation: generation) {
             signedIn = true
             return true
@@ -83,7 +103,7 @@ public actor SessionManager: SessionTokens {
     /// Any interaction of the client (the app forwards taps and scrolls).
     public func recordActivity() {
         guard signedIn else { return }
-        lastActivity = now()
+        markActivity()
     }
 
     /// The app calls this when it goes to the background, so a relaunch knows how long it was idle.
@@ -96,16 +116,22 @@ public actor SessionManager: SessionTokens {
     /// signs out with `.inactivity`.
     public func checkInactivity() async -> InactivityStatus {
         guard signedIn else { return .signedOut }
-        let deadline = lastActivity.addingTimeInterval(policy.inactivityTimeout)
-        let current = now()
-        if current >= deadline {
+        let idle = Self.seconds(uptime() - lastActivityUptime)
+        if idle >= policy.inactivityTimeout {
             await signOut(.inactivity)
             return .signedOut
         }
-        if current >= deadline.addingTimeInterval(-policy.warningBefore) {
+        // For the warning's countdown, on the wall clock the screen shows.
+        let deadline = now().addingTimeInterval(policy.inactivityTimeout - idle)
+        if idle >= policy.inactivityTimeout - policy.warningBefore {
             return .warning(deadline: deadline)
         }
         return .active(deadline: deadline)
+    }
+
+    private static func seconds(_ duration: Duration) -> TimeInterval {
+        let (seconds, attoseconds) = duration.components
+        return TimeInterval(seconds) + TimeInterval(attoseconds) / 1e18
     }
 
     // MARK: Sign out

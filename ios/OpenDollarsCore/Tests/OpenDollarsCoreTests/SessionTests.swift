@@ -4,15 +4,28 @@ import Testing
 
 // MARK: - Test doubles
 
+/// Two clocks, like the device: the wall clock (Date, which the client can change in Settings)
+/// and the monotonic uptime (ContinuousClock, which only moves forward, sleep included).
 final class TestClock: @unchecked Sendable {
     private let lock = NSLock()
     private var current: Date
+    private var elapsed: Duration = .zero
 
     init(_ start: Date = Date(timeIntervalSince1970: 1_794_344_400)) { current = start }
 
     var now: Date { lock.withLock { current } }
+    var uptime: Duration { lock.withLock { elapsed } }
 
-    func advance(_ seconds: TimeInterval) { lock.withLock { current = current.addingTimeInterval(seconds) } }
+    /// Time passes: both clocks move.
+    func advance(_ seconds: TimeInterval) {
+        lock.withLock {
+            current = current.addingTimeInterval(seconds)
+            elapsed += .milliseconds(Int64(seconds * 1000))
+        }
+    }
+
+    /// The client changes the date in Settings: only the wall clock moves.
+    func moveWallClock(_ seconds: TimeInterval) { lock.withLock { current = current.addingTimeInterval(seconds) } }
 }
 
 final class MemoryTokenStore: RefreshTokenStore, @unchecked Sendable {
@@ -74,7 +87,7 @@ actor ReasonLog {
 private func makeSession(
     store: MemoryTokenStore = MemoryTokenStore(), auth: FakeAuth = FakeAuth(), clock: TestClock = TestClock()
 ) -> SessionManager {
-    SessionManager(store: store, auth: auth, now: { clock.now })
+    SessionManager(store: store, auth: auth, now: { clock.now }, uptime: { clock.uptime })
 }
 
 // MARK: - Sign in and where tokens live

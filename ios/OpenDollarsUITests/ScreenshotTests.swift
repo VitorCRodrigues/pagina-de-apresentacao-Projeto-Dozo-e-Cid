@@ -1,39 +1,59 @@
 import XCTest
 
-/// Screenshots of the phase 0 screens, run in Spanish (the workflow passes -testLanguage es
+/// Screenshots of the screens so far, run in Spanish (the workflow passes -testLanguage es
 /// -testRegion AR) on each simulator of the workflow. Every image is kept as an XCTAttachment
 /// (lifetime .keepAlways); the workflow exports them from the .xcresult.
 final class ScreenshotTests: XCTestCase {
     func testHomeWithAnOpenAccount() {
-        shoot(scenario: "open", name: "01-inicio-open", waitFor: "home.total")
+        shootSignedIn(scenario: "open", name: "01-inicio-open", waitFor: "home.total")
     }
 
     func testAccountStatusWhileIBKRReviews() {
-        shoot(scenario: "ibkr_pending", name: "02-estado-ibkr_pending", waitFor: "account.title")
+        shootSignedIn(scenario: "ibkr_pending", name: "02-estado-ibkr_pending", waitFor: "account.title")
     }
 
     func testAccountStatusWithDocumentsRequested() {
-        shoot(scenario: "action_required", name: "03-estado-action_required", waitFor: "account.title")
+        shootSignedIn(scenario: "action_required", name: "03-estado-action_required", waitFor: "account.title")
     }
 
     func testHomeWithARestrictedAccount() {
-        shoot(scenario: "restricted", name: "04-inicio-restricted", waitFor: "home.total")
+        shootSignedIn(scenario: "restricted", name: "04-inicio-restricted", waitFor: "account.block")
     }
 
-    private func shoot(scenario: String, name: String, waitFor identifier: String) {
-        continueAfterFailure = false
-        let app = XCUIApplication()
-        app.launchArguments = ["-scenario", scenario]
-        app.launch()
+    func testEntryScreen() {
+        let app = launchSignedOut()
+        _ = waitFor(app, "entry.headline")
+        attachScreenshot(app, name: "05-entrada")
+        app.terminate()
+    }
 
-        let element = app.descendants(matching: .any)[identifier]
-        XCTAssertTrue(element.waitForExistence(timeout: 30), "\(identifier) did not appear for scenario \(scenario)")
+    /// What the app switcher shows: the brand, never the balance. XCUITest cannot read the system's
+    /// snapshot, so `-privacyCover` shows the cover the app puts up when it stops being active.
+    func testPrivacyCover() {
+        let app = launchSignedOut(flags: ["-privacyCover"])
+        signIn(app, as: "lucia")
+        _ = waitFor(app, "privacy.cover")
+        attachScreenshot(app, name: "06-capa")
+        app.terminate()
+    }
 
-        let device = ProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] ?? "device"
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = "\(name)-\(device.replacingOccurrences(of: " ", with: "_"))"
-        attachment.lifetime = .keepAlways
-        add(attachment)
+    /// Decision 14: a restricted account keeps the tabs, and Aportar shows the block instead of
+    /// anything that starts a deposit.
+    func testDepositTabOfARestrictedAccount() {
+        let app = launchSignedOut(scenario: "restricted")
+        signIn(app, as: "lucia")
+        _ = waitFor(app, "home.total")
+        app.tabBars.buttons.element(boundBy: 1).tap()
+        _ = waitFor(app, "account.block")
+        attachScreenshot(app, name: "07-aportar-restricted")
+        app.terminate()
+    }
+
+    private func shootSignedIn(scenario: String, name: String, waitFor identifier: String) {
+        let app = launchSignedOut(scenario: scenario)
+        signIn(app, as: "lucia")
+        _ = waitFor(app, identifier)
+        attachScreenshot(app, name: name)
         app.terminate()
     }
 }

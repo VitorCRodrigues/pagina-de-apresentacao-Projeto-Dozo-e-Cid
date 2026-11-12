@@ -2,7 +2,7 @@
 
 Gerado por `npm run copy:review` a partir de `src/i18n/locales` e dos textos editoriais do mock (`src/mocks/fixtures.ts`). Não edite à mão: comente em `copy-review.csv`, que tem o mesmo conteúdo, e os ajustes voltam para os arquivos de idioma.
 
-Total: 557 textos (8 só no app iOS). Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
+Total: 558 textos (9 só no app iOS). Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
 
 ## 1. Depende da confirmação do registro RIA antes do piloto
 
@@ -576,15 +576,16 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 
 ## 4. Só no app iOS
 
-8 textos que o app web não tem: permissões do sistema (`ios:InfoPlist.`), a tela antes do pedido de notificações e estados próprios do app. Vêm de `ios/strings/ios-only.json`; o app iOS usa os mesmos textos do web para todo o resto.
+9 textos que o app web não tem: permissões do sistema (`ios:InfoPlist.`), a tela antes do pedido de notificações e estados próprios do app. Vêm de `ios/strings/ios-only.json`; o app iOS usa os mesmos textos do web para todo o resto.
 
 | Chave | Tela | ES | PT | EN | Status jurídico | Observação |
 | --- | --- | --- | --- | --- | --- | --- |
 | `account.title.unknown` | iOS: T3 Status da conta | Estamos actualizando el estado de tu cuenta | Estamos atualizando o status da sua conta | We are updating your account status | pendente | Status de conta que esta versão do app não conhece (iOS, TODO(decisão) 1). |
 | `account.body.unknown` | iOS: T3 Status da conta | Para ver el detalle, actualizá la app o escribinos. | Para ver os detalhes, atualize o app ou fale com o suporte. | To see the details, update the app or contact support. | pendente | Status de conta que esta versão do app não conhece (iOS, TODO(decisão) 1). |
+| `blockReason.unknown.message` | iOS: T4 Início, T6 Aportar | No es posible hacer aportes en este momento. | Não é possível fazer aportes no momento. | Deposits are not possible right now. | pendente | Bloqueio de aporte com motivo que esta versão do app não conhece (iOS, TODO(decisão) 1). Mesma frase neutra de blockReason.compliance_hold: não revela o motivo. |
+| `blockReason.unknown.action` | iOS: T4 Início, T6 Aportar | Hablar con soporte | Falar com o suporte | Contact support | pendente | Mesma ação de blockReason.ibkr_restricted. |
 | `ios.notifications.prompt.title` | iOS: Antes do pedido de notificações do iOS | ¿Querés recibir avisos? | Quer receber avisos? | Do you want notifications? | pendente | Tela própria antes do alerta do sistema, cujo texto é fixo da Apple. Sem promessa de prazo. |
 | `ios.notifications.prompt.body` | iOS: Antes do pedido de notificações do iOS | Te avisamos cuando un aporte cambie de estado o cuando tengas algo pendiente en tu cuenta. | Avisamos quando um aporte mudar de status ou quando houver algo pendente na sua conta. | We let you know when a deposit changes status or when something in your account needs you. | pendente | Diz para que servem os avisos. Sem promessa de prazo. |
 | `ios.notifications.prompt.allow` | iOS: Antes do pedido de notificações do iOS | Activar avisos | Ativar avisos | Turn on notifications | pendente | Botão que abre o alerta do sistema. |
 | `ios.notifications.prompt.dismiss` | iOS: Antes do pedido de notificações do iOS | Omitir | Pular | Skip | pendente | Botão para seguir sem avisos. |
 | `ios:InfoPlist.NSCameraUsageDescription` | iOS: Permissão do sistema: câmera | Usamos la cámara para que puedas fotografiar los documentos que te pedimos para abrir tu cuenta. | Usamos a câmera para você fotografar os documentos que pedimos para abrir sua conta. | We use the camera so you can photograph the documents we ask for to open your account. | pendente | Mostrado pelo iOS ao pedir a câmera, para fotografar documentos pedidos na abertura da conta. |
-| `ios:InfoPlist.NSFaceIDUsageDescription` | iOS: Permissão do sistema: Face ID | Usamos Face ID para confirmar que sos vos al abrir la app. | Usamos o Face ID para confirmar que é você ao abrir o app. | We use Face ID to confirm it is you when you open the app. | pendente | Mostrado pelo iOS ao pedir o Face ID. |

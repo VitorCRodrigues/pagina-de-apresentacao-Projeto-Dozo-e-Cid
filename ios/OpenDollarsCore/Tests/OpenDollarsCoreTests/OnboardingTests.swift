@@ -249,6 +249,16 @@ private func lucia() -> PersonalForm {
         #expect(Landing.for(me(.submitted), liveMarkets: [.AR]) == .accountStatus)
         #expect(Landing.for(me(.unknown("x")), liveMarkets: [.AR]) == .accountStatus)
     }
+
+    /// `-screen account` (DEBUG, decision 35): the account status screen whatever the status, for
+    /// the screenshots, but the country still comes first.
+    @Test func theAccountScreenForScreenshotsShowsAnyStatusButNeverOutsideThePilot() {
+        for status in [AccountStatus.draft, .open, .restricted, .ibkr_pending] {
+            #expect(Landing.for(me(status), liveMarkets: [.AR], showingAccountStatus: true) == .accountStatus)
+        }
+        #expect(Landing.for(me(.open, .BR), liveMarkets: [.AR], showingAccountStatus: true) == .notAvailable)
+        #expect(Landing.for(me(.open), liveMarkets: [.AR], showingAccountStatus: false) == .tabs)
+    }
 }
 
 // MARK: - The mock's routes

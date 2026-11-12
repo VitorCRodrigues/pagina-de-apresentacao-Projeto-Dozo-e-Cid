@@ -80,6 +80,20 @@ extension APIClient {
         try await request(.GET, "/account/terms")
     }
 
+    /// T3: one document Interactive Brokers asked for, as multipart (`pendingItemId`, `file`;
+    /// api-gaps.md). The account comes back without that pending item. The file name sent is
+    /// generic, never the client's.
+    public func uploadDocument(
+        pendingItemId: String, document: PreparedDocument, progress: @escaping @Sendable (Double) -> Void
+    ) async throws -> Account {
+        var body = MultipartBody()
+        body.addField(name: "pendingItemId", value: pendingItemId)
+        body.addFile(name: "file", fileName: document.type.uploadFileName, contentType: document.type.mimeType, data: document.data)
+        // TODO(api) 2: the backend should honour this key, so a resend after a renewed token or a
+        // dropped answer does not record the document twice.
+        return try await upload("/account/documents", body: body, idempotencyKey: document.idempotencyKey, progress: progress)
+    }
+
     /// Only from draft; the account comes back submitted.
     public func submitOnboarding() async throws -> Account {
         try await request(.POST, "/onboarding/submit")

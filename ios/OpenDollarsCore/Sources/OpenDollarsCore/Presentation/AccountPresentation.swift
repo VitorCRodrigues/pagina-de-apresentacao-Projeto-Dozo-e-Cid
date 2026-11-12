@@ -25,8 +25,11 @@ public enum Landing: Sendable, Equatable {
 
     /// The country comes first: outside config.liveMarkets there is only the waitlist, whatever
     /// the account's status (PRD T1).
-    public static func `for`(_ me: Me, liveMarkets: [Country]) -> Landing {
-        liveMarkets.contains(me.country) ? .for(me.accountStatus) : .notAvailable
+    /// `showingAccountStatus` is the DEBUG `-screen account` (TODO(decisão) 35): the account
+    /// status screen whatever the status, for its screenshots; the country still comes first.
+    public static func `for`(_ me: Me, liveMarkets: [Country], showingAccountStatus: Bool = false) -> Landing {
+        guard liveMarkets.contains(me.country) else { return .notAvailable }
+        return showingAccountStatus ? .accountStatus : .for(me.accountStatus)
     }
 }
 
@@ -95,6 +98,61 @@ public enum AccountStatusCopy {
     public static func offersSupport(_ status: AccountStatus) -> Bool {
         switch status {
         case .rejected, .restricted, .unknown: true
+        default: false
+        }
+    }
+}
+
+/// What the account status screen (T3) shows for an account, for every status (web:
+/// AccountStatusScreen.tsx). There is no deposit action on it at all: before "open" money never
+/// moves (PRD section 5, failure B2), and at "open" the next step is the monthly plan.
+public struct AccountStatusScreen: Sendable, Equatable {
+    public enum Action: Sendable, Equatable {
+        /// draft: back to the onboarding (T2).
+        case continueOnboarding
+        /// open: the monthly plan (T5).
+        case createPlan
+        /// rejected, restricted, or a status this version does not know.
+        case contactSupport
+    }
+
+    public let titleKey: String
+    public let bodyKey: String
+    /// nil where the opening path does not apply.
+    public let timeline: [AccountTimeline.Step]?
+    /// The documents Interactive Brokers asks for: only kind "document", only in action_required.
+    public let documents: [PendingItem]
+    /// action_required with every document sent: "Recibimos todos los documentos."
+    public let showsAllSent: Bool
+    /// Only once the account is open.
+    public let accountNumber: String?
+    public let action: Action?
+
+    public init(_ account: Account) {
+        let status = account.status
+        titleKey = AccountStatusCopy.titleKey(status)
+        bodyKey = AccountStatusCopy.bodyKey(status)
+        timeline = AccountTimeline.steps(for: status)
+        let requested = status == .action_required ? account.pending.filter { $0.kind == .document } : []
+        documents = requested
+        showsAllSent = status == .action_required && requested.isEmpty
+        accountNumber = status == .open ? account.ibkrAccountMasked : nil
+        switch status {
+        case .draft: action = .continueOnboarding
+        case .open: action = .createPlan
+        default: action = AccountStatusCopy.offersSupport(status) ? .contactSupport : nil
+        }
+    }
+}
+
+/// While the account waits on us or on Interactive Brokers, the status screen checks back every
+/// minute, as the web does (useAccount poll: 60 s).
+public enum AccountPolling {
+    public static let interval: Duration = .seconds(60)
+
+    public static func isWaiting(_ status: AccountStatus) -> Bool {
+        switch status {
+        case .submitted, .kyc_review, .ibkr_pending, .action_required: true
         default: false
         }
     }

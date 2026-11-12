@@ -66,6 +66,9 @@ public final class ClientSession {
     /// The onboarding wizard with what the client typed and has not saved (T2). Dropped by every
     /// exit, so a second client never sees the first one's draft.
     public private(set) var onboarding: OnboardingFlow?
+    /// The documents being sent on the account status screen (T3), with the chosen files.
+    /// Replaced, files dropped, by every exit.
+    public private(set) var documents: DocumentUploads
 
     /// The block on deposits, once the account loaded (decision 14).
     public var accountBlock: AccountBlock? {
@@ -99,6 +102,16 @@ public final class ClientSession {
         self.isFirstLaunch = isFirstLaunch
         self.inactivityCheckInterval = inactivityCheckInterval
         self.now = now
+        self.documents = DocumentUploads(client: client, isCurrent: { false }, onSent: { _ in })
+        self.documents = makeDocuments()
+    }
+
+    private func makeDocuments() -> DocumentUploads {
+        let generation = generation
+        return DocumentUploads(
+            client: client,
+            isCurrent: { [weak self] in self?.generation == generation },
+            onSent: { [weak self] account in await self?.accountChanged(account) })
     }
 
     /// The watch runs only while signed in: it starts with the session and stops at any exit.
@@ -163,6 +176,8 @@ public final class ClientSession {
         signInFailed = false
         depositKeys.reset()
         onboarding = nil
+        documents.clear()
+        documents = makeDocuments()
         for handler in wipeHandlers { handler() }
         phase = .signedOut(reason)
         onEvent?(.signedOut(reason))
@@ -304,6 +319,55 @@ public final class ClientSession {
         } catch {
             guard generation == self.generation else { return }
             account = .failed(report(error))
+        }
+    }
+
+    /// T3 checking back while the account waits (AccountPolling): a failed check keeps what is on
+    /// screen. When the status moved, the client is reloaded and the routing follows it.
+    public func refreshAccount() async {
+        guard case .loaded = account else {
+            await loadAccount()
+            if case .loaded(let loaded) = account { await followStatus(loaded) }
+            return
+        }
+        let generation = generation
+        do {
+            let loaded = try await client.getAccount()
+            guard generation == self.generation else { return }
+            await accountChanged(loaded)
+        } catch is CancellationError {
+            // The screen's check ended (the client left, or the status changed): not a failure.
+            return
+        } catch {
+            guard generation == self.generation else { return }
+            _ = report(error)
+        }
+    }
+
+    /// A new account from the API (a check, a document sent).
+    private func accountChanged(_ loaded: Account) async {
+        account = .loaded(loaded)
+        await followStatus(loaded)
+    }
+
+    /// The account's status differs from the client's: reload GET /me without leaving the
+    /// screen, so Landing moves the client on (to the tabs once the account opens).
+    private func followStatus(_ loaded: Account) async {
+        guard case .ready(let me) = phase, me.accountStatus != loaded.status else { return }
+        let generation = generation
+        do {
+            // Not tied to the caller's task: the screen's check is keyed on the status on screen,
+            // so the account it just loaded cancels it, and the routing must still follow.
+            let client = client
+            let fresh = try await Task { try await client.getMe() }.value
+            guard generation == self.generation else { return }
+            setAccountLocale(fresh.locale)
+            phase = .ready(fresh)
+        } catch is CancellationError {
+            return
+        } catch {
+            guard generation == self.generation else { return }
+            _ = report(error)
         }
     }
 

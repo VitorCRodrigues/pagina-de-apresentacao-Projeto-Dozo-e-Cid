@@ -61,9 +61,10 @@ jobs:
         working-directory: ios/OpenDollarsCore
         run: swift test
 
-      - uses: actions/setup-node@v4
+      # v7 runs on the node24 runtime.
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: 22
+          node-version: 24
 
       # The string catalogs and Strings.generated.swift must match the web copy and
       # ios/strings/ios-only.json: a copy change without running the script fails here.

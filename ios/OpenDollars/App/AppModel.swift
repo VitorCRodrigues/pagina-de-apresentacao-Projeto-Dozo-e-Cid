@@ -185,9 +185,9 @@ final class AppModel {
         phase = .launching
         do {
             async let config = client.getConfig()
-            async let me = client.getMe()
+            async let loadingMe = client.getMe()
             self.config = try await config
-            let me = try await me
+            let me = try await loadingMe
             accountLocale = me.locale
             applyLocale()
             phase = .ready(me)

@@ -153,6 +153,19 @@ describe("Swift accessors", () => {
     assert.match(swift, /static func railDays\(count: Int, min: String\) -> String \{ L10n\.format\("rail\.days", count, min\) \}/);
   });
 
+  // A placeholder named like a Swift keyword would not compile as a bare parameter
+  // (typecheck-strings.sh: "expected expression in list of expressions").
+  it("escapes a placeholder named like a Swift keyword", () => {
+    const entries = collectEntries(
+      { es: { t: { a: "{{default}}" } }, pt: { t: { a: "{{default}}" } }, en: { t: { a: "{{default}}" } } },
+      {},
+    );
+    assert.match(
+      swiftAccessors(entries),
+      /static func a\(`default`: String\) -> String \{ L10n\.format\("a", `default`\) \}/,
+    );
+  });
+
   it("documents each accessor with its Spanish text", () => {
     assert.match(swift, /\/\/\/ Actualizado el \{\{date\}\}\n/);
   });

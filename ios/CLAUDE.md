@@ -62,7 +62,8 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
   node ios/scripts/sync-strings.mjs            gera Localizable.xcstrings, InfoPlist.xcstrings e OpenDollars/Generated/Strings.generated.swift a partir de web/src/i18n/locales e de ios/strings/ios-only.json
   node ios/scripts/sync-strings.mjs --check    falha se algum gerado estiver desatualizado (roda no CI)
   node --test "ios/scripts/*.test.mjs"         testes do gerador
-  Rodar depois de qualquer mudança na cópia do web ou em ios-only.json. Nunca editar os gerados à mão.
+  Rodar depois de qualquer mudança na cópia do web ou em ios-only.json. Nunca editar os gerados à mão; um erro no Strings.generated.swift se corrige no gerador, com teste.
+- O test-core-wsl.sh também roda scripts/typecheck-strings.sh: swiftc -typecheck do Strings.generated.swift só com Foundation (único arquivo do app que compila fora do iOS), para pegar erro do gerador antes do push.
 - Texto na tela sempre pelos acessores gerados (Strings.homeUpdatedAt(date:)). L10n.text(chave) só para chave montada no core (AccountStatusCopy, AccountTimeline, copyKey), coberta pelo DynamicKeyTests.
 - Texto só do iOS (permissões, notificações, estados que o web não tem) entra em ios/strings/ios-only.json, com tela e observação para o jurídico. Chaves dev.* não vão para o copy-review.
 - Regra de apresentação que dá para testar (roteamento, linha do tempo, chaves de texto) vai para OpenDollarsCore/Presentation, com teste.

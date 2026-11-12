@@ -78,6 +78,62 @@
       "pt": "Pular",
       "en": "Skip"
     },
+    "ios.upload.scan": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "Botão que abre o scanner de documentos do iOS (câmera). Só aparece em aparelhos com câmera. O resultado é um PDF.",
+      "es": "Escanear documento",
+      "pt": "Digitalizar documento",
+      "en": "Scan document"
+    },
+    "ios.upload.fromPhotos": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "Opção do menu \"Elegir archivo\": abre a galeria de fotos do iOS. Não pede permissão de fotos (o seletor do sistema roda fora do app).",
+      "es": "Elegir de Fotos",
+      "pt": "Escolher de Fotos",
+      "en": "Choose from Photos"
+    },
+    "ios.upload.fromFiles": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "Opção do menu \"Elegir archivo\": abre o app Arquivos do iOS (JPG, PNG ou PDF).",
+      "es": "Elegir de Archivos",
+      "pt": "Escolher de Arquivos",
+      "en": "Choose from Files"
+    },
+    "ios.upload.scannedName": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "Nome mostrado na linha para um documento escaneado (o scanner não dá nome ao arquivo). Não é enviado ao servidor.",
+      "es": "Documento escaneado",
+      "pt": "Documento digitalizado",
+      "en": "Scanned document"
+    },
+    "ios.upload.photoName": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "Nome mostrado na linha para uma foto escolhida da galeria (a galeria não dá o nome do arquivo). Não é enviado ao servidor.",
+      "es": "Foto de la galería",
+      "pt": "Foto da galeria",
+      "en": "Photo from your library"
+    },
+    "ios.upload.interrupted": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "O envio caiu no meio (conexão perdida ou lenta demais). Acompanha o botão Reintentar; o arquivo escolhido continua na linha.",
+      "es": "El envío se cortó. Revisá tu conexión y volvé a intentar.",
+      "pt": "O envio foi interrompido. Verifique sua conexão e tente de novo.",
+      "en": "The upload was cut off. Check your connection and try again."
+    },
+    "ios.upload.cameraDenied": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "O cliente negou o acesso à câmera antes. Sem promessa: só como liberar.",
+      "es": "Para escanear, permití el acceso a la cámara en Ajustes.",
+      "pt": "Para digitalizar, permita o acesso à câmera nos Ajustes.",
+      "en": "To scan, allow camera access in Settings."
+    },
+    "ios.upload.openSettings": {
+      "screen": "T3 Status da conta, envio de documentos",
+      "note": "Abre os Ajustes do iOS na página do app.",
+      "es": "Abrir Ajustes",
+      "pt": "Abrir Ajustes",
+      "en": "Open Settings"
+    },
     "dev.catalog.title": {
       "screen": "dev",
       "note": "Catálogo de componentes (só DEBUG).",

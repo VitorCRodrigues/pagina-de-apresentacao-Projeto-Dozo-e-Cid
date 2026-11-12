@@ -6163,6 +6163,198 @@
         }
       }
     },
+    "ios.upload.cameraDenied" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To scan, allow camera access in Settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para escanear, permití el acceso a la cámara en Ajustes."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para digitalizar, permita o acesso à câmera nos Ajustes."
+          }
+        }
+      }
+    },
+    "ios.upload.fromFiles" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose from Files"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir de Archivos"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher de Arquivos"
+          }
+        }
+      }
+    },
+    "ios.upload.fromPhotos" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose from Photos"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir de Fotos"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher de Fotos"
+          }
+        }
+      }
+    },
+    "ios.upload.interrupted" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The upload was cut off. Check your connection and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El envío se cortó. Revisá tu conexión y volvé a intentar."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O envio foi interrompido. Verifique sua conexão e tente de novo."
+          }
+        }
+      }
+    },
+    "ios.upload.openSettings" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes"
+          }
+        }
+      }
+    },
+    "ios.upload.photoName" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo from your library"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto de la galería"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto da galeria"
+          }
+        }
+      }
+    },
+    "ios.upload.scan" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan document"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear documento"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitalizar documento"
+          }
+        }
+      }
+    },
+    "ios.upload.scannedName" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanned document"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documento escaneado"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documento digitalizado"
+          }
+        }
+      }
+    },
     "language.en" : {
       "comment" : "web: translation.json",
       "extractionState" : "manual",

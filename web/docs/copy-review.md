@@ -2,7 +2,7 @@
 
 Gerado por `npm run copy:review` a partir de `src/i18n/locales` e dos textos editoriais do mock (`src/mocks/fixtures.ts`). Não edite à mão: comente em `copy-review.csv`, que tem o mesmo conteúdo, e os ajustes voltam para os arquivos de idioma.
 
-Total: 558 textos (9 só no app iOS). Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
+Total: 561 textos (12 só no app iOS). Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
 
 ## 1. Depende da confirmação do registro RIA antes do piloto
 
@@ -576,12 +576,15 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 
 ## 4. Só no app iOS
 
-9 textos que o app web não tem: permissões do sistema (`ios:InfoPlist.`), a tela antes do pedido de notificações e estados próprios do app. Vêm de `ios/strings/ios-only.json`; o app iOS usa os mesmos textos do web para todo o resto.
+12 textos que o app web não tem: permissões do sistema (`ios:InfoPlist.`), a tela antes do pedido de notificações e estados próprios do app. Vêm de `ios/strings/ios-only.json`; o app iOS usa os mesmos textos do web para todo o resto.
 
 | Chave | Tela | ES | PT | EN | Status jurídico | Observação |
 | --- | --- | --- | --- | --- | --- | --- |
 | `account.title.unknown` | iOS: T3 Status da conta | Estamos actualizando el estado de tu cuenta | Estamos atualizando o status da sua conta | We are updating your account status | pendente | Status de conta que esta versão do app não conhece (iOS, TODO(decisão) 1). |
 | `account.body.unknown` | iOS: T3 Status da conta | Para ver el detalle, actualizá la app o escribinos. | Para ver os detalhes, atualize o app ou fale com o suporte. | To see the details, update the app or contact support. | pendente | Status de conta que esta versão do app não conhece (iOS, TODO(decisão) 1). |
+| `ios.onboarding.birthDatePick` | iOS: T2 Onboarding, etapa 2 | Elegir fecha | Escolher data | Choose a date | pendente | Campo de data vazio até o cliente escolher (seletor nativo do iOS; no web é o campo de data do navegador). |
+| `ios.picker.choose` | iOS: T2 Onboarding | Elegir | Escolher | Choose | pendente | Seletor sem opção escolhida (país, província). |
+| `ios.datePicker.confirm` | iOS: T2 Onboarding, etapa 2 | Confirmar | Confirmar | Confirm | pendente | Botão que confirma a data escolhida no seletor. |
 | `blockReason.unknown.message` | iOS: T4 Início, T6 Aportar | No es posible hacer aportes en este momento. | Não é possível fazer aportes no momento. | Deposits are not possible right now. | pendente | Bloqueio de aporte com motivo que esta versão do app não conhece (iOS, TODO(decisão) 1). Mesma frase neutra de blockReason.compliance_hold: não revela o motivo. |
 | `blockReason.unknown.action` | iOS: T4 Início, T6 Aportar | Hablar con soporte | Falar com o suporte | Contact support | pendente | Mesma ação de blockReason.ibkr_restricted. |
 | `ios.notifications.prompt.title` | iOS: Antes do pedido de notificações do iOS | ¿Querés recibir avisos? | Quer receber avisos? | Do you want notifications? | pendente | Tela própria antes do alerta do sistema, cujo texto é fixo da Apple. Sem promessa de prazo. |

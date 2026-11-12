@@ -736,6 +736,9 @@ enum Strings {
     /// Próxima ventana de inversión
     static var homeWindowTitle: String { L10n.text("home.window.title") }
 
+    /// Confirmar
+    static var iosDatePickerConfirm: String { L10n.text("ios.datePicker.confirm") }
+
     /// Activar avisos
     static var iosNotificationsPromptAllow: String { L10n.text("ios.notifications.prompt.allow") }
 
@@ -747,6 +750,12 @@ enum Strings {
 
     /// ¿Querés recibir avisos?
     static var iosNotificationsPromptTitle: String { L10n.text("ios.notifications.prompt.title") }
+
+    /// Elegir fecha
+    static var iosOnboardingBirthDatePick: String { L10n.text("ios.onboarding.birthDatePick") }
+
+    /// Elegir
+    static var iosPickerChoose: String { L10n.text("ios.picker.choose") }
 
     /// English
     static var languageEn: String { L10n.text("language.en") }

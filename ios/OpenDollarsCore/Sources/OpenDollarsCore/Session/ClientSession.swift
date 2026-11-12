@@ -63,6 +63,9 @@ public final class ClientSession {
     public private(set) var generation = 0
     /// The pending deposit intent's key (PRD section 8). Dropped by every exit.
     public var depositKeys = IdempotencyKeyTracker<CreateDepositRequest>()
+    /// The onboarding wizard with what the client typed and has not saved (T2). Dropped by every
+    /// exit, so a second client never sees the first one's draft.
+    public private(set) var onboarding: OnboardingFlow?
 
     /// The block on deposits, once the account loaded (decision 14).
     public var accountBlock: AccountBlock? {
@@ -82,15 +85,20 @@ public final class ClientSession {
     @ObservationIgnored private var wipeHandlers: [@MainActor () -> Void] = []
     @ObservationIgnored private var inactivityWatch: Task<Void, Never>?
     @ObservationIgnored private let inactivityCheckInterval: Duration
+    @ObservationIgnored private let now: @Sendable () -> Date
     /// Bumped by every scene change: a check started by an older change cannot lift the cover.
     @ObservationIgnored private var sceneChanges = 0
 
     /// `inactivityCheckInterval`: how often the inactivity watch checks while signed in.
-    public init(session: SessionManager, client: APIClient, isFirstLaunch: Bool, inactivityCheckInterval: Duration = .seconds(5)) {
+    public init(
+        session: SessionManager, client: APIClient, isFirstLaunch: Bool, inactivityCheckInterval: Duration = .seconds(5),
+        now: @escaping @Sendable () -> Date = { Date() }
+    ) {
         self.session = session
         self.client = client
         self.isFirstLaunch = isFirstLaunch
         self.inactivityCheckInterval = inactivityCheckInterval
+        self.now = now
     }
 
     /// The watch runs only while signed in: it starts with the session and stops at any exit.
@@ -154,6 +162,7 @@ public final class ClientSession {
         inactivityDeadline = nil
         signInFailed = false
         depositKeys.reset()
+        onboarding = nil
         for handler in wipeHandlers { handler() }
         phase = .signedOut(reason)
         onEvent?(.signedOut(reason))
@@ -225,6 +234,28 @@ public final class ClientSession {
         sceneIsActive = active
         awaitingInactivityCheck = awaitingCheck
         if mayUncover != before { onMayUncoverChange?(mayUncover) }
+    }
+
+    // MARK: Onboarding and the waitlist
+
+    /// The wizard of this session, created on first use. Its answers count only while this
+    /// session lasts; after an exit they are discarded.
+    public func openOnboarding() -> OnboardingFlow {
+        if let onboarding { return onboarding }
+        let generation = generation
+        let flow = OnboardingFlow(
+            client: client,
+            isCurrent: { [weak self] in self?.generation == generation },
+            now: now,
+            liveMarkets: { [weak self] in self?.config?.liveMarkets ?? [] },
+            onSubmitted: { [weak self] in await self?.loadSession() })
+        onboarding = flow
+        return flow
+    }
+
+    /// T1 and onboarding step 1: a country outside the pilot. Throws the API's error.
+    public func joinWaitlist(email: String, country: String) async throws {
+        try await client.joinWaitlist(WaitlistRequest(email: email.trimmingCharacters(in: .whitespaces), country: country))
     }
 
     // MARK: Data

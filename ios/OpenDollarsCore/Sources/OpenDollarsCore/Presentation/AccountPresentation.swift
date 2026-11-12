@@ -6,15 +6,27 @@ public enum Landing: Sendable, Equatable {
     /// The tab bar (decision 13). Only for an account that opened; a restricted account keeps
     /// the navigation and deposits are blocked inside (decision 14).
     case tabs
+    /// The onboarding (T2): the account is still a draft (TODO(decisão) 24, as the web).
+    case onboarding
     /// The account status screen (T3): before the account opens, or a status this version does not
     /// know (TODO(decisão) 1), so no deposit instruction can ever show before "open".
     case accountStatus
+    /// T1: the client's country is not in the pilot. Only the waitlist (web: RequireSession;
+    /// TODO(decisão) 25).
+    case notAvailable
 
     public static func `for`(_ status: AccountStatus) -> Landing {
         switch status {
         case .open, .restricted: .tabs
+        case .draft: .onboarding
         default: .accountStatus
         }
+    }
+
+    /// The country comes first: outside config.liveMarkets there is only the waitlist, whatever
+    /// the account's status (PRD T1).
+    public static func `for`(_ me: Me, liveMarkets: [Country]) -> Landing {
+        liveMarkets.contains(me.country) ? .for(me.accountStatus) : .notAvailable
     }
 }
 

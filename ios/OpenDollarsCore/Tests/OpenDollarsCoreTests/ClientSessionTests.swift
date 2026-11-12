@@ -32,6 +32,11 @@ actor GatedTransport: HTTPTransport {
     /// The server revoked the session: every authenticated request answers 401 session_expired.
     func revokeSession() { revoked = true }
 
+    private var rejection: (route: String, fields: [String: String])?
+
+    /// The next request to `route` answers 422 validation_failed with these field errors.
+    func rejectNext(_ route: String, fields: [String: String]) { rejection = (route, fields) }
+
     func release() {
         heldRoute = nil
         waiting.forEach { $0.resume() }
@@ -45,6 +50,12 @@ actor GatedTransport: HTTPTransport {
         if let heldRoute, request.path.hasSuffix(heldRoute) {
             await withCheckedContinuation { waiting.append($0) }
         }
+        if let rejection, request.path.hasSuffix(rejection.route) {
+            self.rejection = nil
+            let body = try JSONEncoder().encode(["error": RejectionBody(code: "validation_failed", message: "Rejected", fields: rejection.fields)])
+            statuses.append(422)
+            return HTTPResponse(status: 422, body: body)
+        }
         if revoked, request.headers["Authorization"] != nil {
             statuses.append(401)
             return HTTPResponse(status: 401, body: Data(#"{"error":{"code":"session_expired","message":"Revoked"}}"#.utf8))
@@ -53,6 +64,12 @@ actor GatedTransport: HTTPTransport {
         statuses.append(response.status)
         return response
     }
+}
+
+struct RejectionBody: Encodable {
+    let code: String
+    let message: String
+    let fields: [String: String]
 }
 
 @MainActor
@@ -76,7 +93,7 @@ final class Harness {
         session = SessionManager(store: store, auth: auth, now: { clock.now }, uptime: { clock.uptime })
         client = APIClient(transport: transport, tokens: session, locale: { .es }, now: { clock.now })
         // The watch runs, but never ticks during a test: the tests check inactivity themselves.
-        model = ClientSession(session: session, client: client, isFirstLaunch: isFirstLaunch, inactivityCheckInterval: .seconds(3600))
+        model = ClientSession(session: session, client: client, isFirstLaunch: isFirstLaunch, inactivityCheckInterval: .seconds(3600), now: { clock.now })
         model.addWipeHandler { [unowned self] in self.wipes += 1 }
     }
 

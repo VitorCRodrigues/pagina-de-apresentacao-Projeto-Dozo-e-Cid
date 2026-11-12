@@ -10,7 +10,11 @@ import Testing
         #expect(Landing.for(.restricted) == .tabs)
     }
 
-    @Test(arguments: [AccountStatus.draft, .submitted, .kyc_review, .ibkr_pending, .action_required, .rejected])
+    @Test func aDraftLandsOnTheOnboarding() {
+        #expect(Landing.for(.draft) == .onboarding)
+    }
+
+    @Test(arguments: [AccountStatus.submitted, .kyc_review, .ibkr_pending, .action_required, .rejected])
     func anyOtherStatusLandsOnTheAccountStatus(status: AccountStatus) {
         #expect(Landing.for(status) == .accountStatus)
     }

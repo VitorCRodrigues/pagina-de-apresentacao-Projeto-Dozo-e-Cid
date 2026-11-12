@@ -20,7 +20,10 @@ struct DesignCatalogView: View {
                 section(Strings.devCatalogColors) { ColorSwatches() }
                 section(Strings.devCatalogType) { TypeSamples() }
                 section(Strings.devCatalogButtons) { ButtonSamples() }
-                section(Strings.devCatalogFields) { TextFieldSamples() }
+                section(Strings.devCatalogFields) {
+                    TextFieldSamples()
+                    ChoiceSamples()
+                }
                 section(Strings.devCatalogLedger) {
                     SectionHeaderSamples()
                     LedgerSamples()

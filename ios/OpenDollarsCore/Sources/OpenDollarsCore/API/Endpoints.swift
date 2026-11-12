@@ -1,6 +1,6 @@
 // One function per route of PRD section 8 used in phase 0, plus the api-gaps.md ones the deposit
 // flow needs. Creations require an Idempotency-Key by signature, so none can be sent without one.
-// The remaining routes (onboarding, terms, notifications, preferences) arrive with their screens.
+// The remaining routes (notifications, preferences) arrive with their screens.
 
 extension APIClient {
     public func getConfig() async throws -> AppConfig {
@@ -58,5 +58,34 @@ extension APIClient {
 
     public func updatePlan(id: String, _ body: UpdatePlanRequest) async throws -> Plan {
         try await request(.PATCH, "/plans/\(Self.segment(id))", body: body)
+    }
+
+    // MARK: Onboarding (T2) and the waitlist (T1), api-gaps.md, item 2
+
+    public func getOnboarding() async throws -> OnboardingDraft {
+        try await request(.GET, "/onboarding")
+    }
+
+    /// Saves one step; field errors come back in APIError.fields with the onboarding error codes.
+    public func saveOnboardingStep(_ step: OnboardingStep, _ body: [String: JSONValue]) async throws -> OnboardingDraft {
+        try await request(.PUT, "/onboarding/\(step.rawValue)", body: body)
+    }
+
+    /// Already translated by Accept-Language.
+    public func getQuestionnaire() async throws -> Questionnaire {
+        try await request(.GET, "/onboarding/questionnaire")
+    }
+
+    public func getTerms() async throws -> [TermsDocument] {
+        try await request(.GET, "/account/terms")
+    }
+
+    /// Only from draft; the account comes back submitted.
+    public func submitOnboarding() async throws -> Account {
+        try await request(.POST, "/onboarding/submit")
+    }
+
+    public func joinWaitlist(_ body: WaitlistRequest) async throws {
+        try await requestNoContent(.POST, "/waitlist", body: body)
     }
 }

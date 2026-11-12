@@ -64,6 +64,22 @@ public actor MockServer: HTTPTransport {
         switch (method, segments.first, segments.count) {
         case (.GET, "me", 1):
             return json(200, db.me)
+        case (.GET, "onboarding", 1):
+            return json(200, db.onboarding)
+        case (.GET, "onboarding", 2) where segments[1] == "questionnaire":
+            return json(200, OnboardingFixtures.questionnaire(lang))
+        case (.PUT, "onboarding", 2):
+            return saveOnboardingStep(segments[1], request, lang)
+        case (.POST, "onboarding", 2) where segments[1] == "submit":
+            // api-gaps.md, item 7: only from draft; the account comes back submitted.
+            guard db.accountStatus == .draft else { return error(422, "validation_failed", "Already submitted") }
+            db.accountStatus = .submitted
+            db.me.accountStatus = .submitted
+            return json(200, db.accountPayload(lang))
+        case (.GET, "account", 2) where segments[1] == "terms":
+            return json(200, OnboardingFixtures.termsDocuments(lang))
+        case (.POST, "waitlist", 1):
+            return joinWaitlist(request)
         case (.GET, "account", 1):
             return json(200, db.accountPayload(lang))
         case (.GET, "portfolio", 1):
@@ -84,6 +100,54 @@ public actor MockServer: HTTPTransport {
         default:
             return notFound()
         }
+    }
+
+    // MARK: Onboarding
+
+    /// PUT /onboarding/{step}: the same forms as the app validate the body, so the server's field
+    /// errors carry the same codes. currentStep moves to the step after the saved one and never
+    /// back (editing from the review keeps the review).
+    private func saveOnboardingStep(_ name: String, _ request: HTTPRequest, _ lang: AppLocale) -> HTTPResponse {
+        guard let step = OnboardingStep(rawValue: name) else { return notFound() }
+        guard let data = request.body, let body = try? decoder.decode([String: JSONValue].self, from: data) else {
+            return error(422, "validation_failed", "Invalid request body", fields: ["body": "invalid"])
+        }
+        let errors: FieldErrors
+        switch step {
+        case .residence: errors = ResidenceForm(draft: body).validate()
+        case .personal: errors = PersonalForm(draft: body).validate(today: CalendarDate(now()))
+        case .address: errors = AddressForm(draft: body).validate()
+        case .suitability:
+            let questionnaire = OnboardingFixtures.questionnaire(lang)
+            errors = SuitabilityForm(questionnaire: questionnaire, draft: body).validate(questionnaire)
+        case .funds: errors = FundsForm(draft: body).validate()
+        case .identity: errors = IdentityForm(draft: body).validate()
+        case .terms:
+            let docs = OnboardingFixtures.termsDocuments(lang)
+            errors = TermsForm(docs: docs, draft: body).validate(docs)
+        case .review: errors = [:]
+        }
+        guard errors.isEmpty else {
+            return error(422, "validation_failed", "Invalid step", fields: errors.mapValues(\.rawValue))
+        }
+        let steps = OnboardingStep.allCases
+        let saved = steps.firstIndex(of: step) ?? 0
+        let current = steps.firstIndex(of: db.onboarding.currentStep) ?? 0
+        db.onboarding.steps[step] = body
+        db.onboarding.currentStep = steps[max(current, min(saved + 1, steps.count - 1))]
+        return json(200, db.onboarding)
+    }
+
+    /// POST /waitlist: { email, country } with any ISO 3166-1 alpha-2 country (api-gaps.md).
+    private func joinWaitlist(_ request: HTTPRequest) -> HTTPResponse {
+        guard let data = request.body, let body = try? decoder.decode(WaitlistRequest.self, from: data) else {
+            return error(422, "validation_failed", "Invalid request body", fields: ["body": "invalid"])
+        }
+        var fields: [String: String] = [:]
+        if !WaitlistForm(email: body.email).validate().isEmpty { fields["email"] = OnboardingError.invalidEmail.rawValue }
+        if !Patterns.matches(body.country, "^[A-Z]{2}$") { fields["country"] = OnboardingError.pickOne.rawValue }
+        guard fields.isEmpty else { return error(422, "validation_failed", "Invalid waitlist request", fields: fields) }
+        return HTTPResponse(status: 204, headers: headers())
     }
 
     // MARK: Deposits

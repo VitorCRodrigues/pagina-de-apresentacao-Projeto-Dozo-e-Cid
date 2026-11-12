@@ -58,6 +58,8 @@ struct MockDatabase: Sendable {
     var depositRefusal: ApiErrorCode?
     var quotes: [String: Quote] = [:]
     var depositsByKey: [String: (body: Data, depositId: String)] = [:]
+    /// The onboarding draft (T2): the web's draft scenario resumes at the address.
+    var onboarding = OnboardingFixtures.emptyDraft
 
     // MARK: Payloads, in the language the request asked for
 
@@ -236,7 +238,8 @@ enum MockBuilder {
             portfolio: opened
                 ? portfolio(heldPositions(), cash: cash, inFlight: .zero, now: now)
                 : portfolio([], cash: .zero, inFlight: .zero, now: now),
-            deposits: opened ? pastDeposits(now, windowDay: config.investmentWindowDay) : [])
+            deposits: opened ? pastDeposits(now, windowDay: config.investmentWindowDay) : [],
+            onboarding: OnboardingFixtures.draft(for: status))
     }
 
     /// Puts "dep-scenario" first, in the given state, and moves the money buckets to match.
@@ -269,6 +272,7 @@ enum MockBuilder {
         case .market_not_live:
             db = base(.draft, now: now)
             db.me = Fixtures.rafael
+            db.onboarding = OnboardingFixtures.emptyDraft
         case .compliance_hold:
             db.blockReasons = [.compliance_hold]
             db.quoteRefusal = .compliance_hold

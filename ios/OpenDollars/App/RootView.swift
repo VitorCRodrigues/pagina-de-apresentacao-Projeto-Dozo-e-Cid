@@ -63,9 +63,14 @@ struct RootView: View {
         case .failed(let error):
             StatePage { ErrorState(error: error, titleSize: .title) { Task { await session.loadSession() } } }
         case .ready(let me):
-            switch Landing.for(me.accountStatus) {
+            // The country first (T1), then the account's status (decisions 24 and 25).
+            switch Landing.for(me, liveMarkets: session.config?.liveMarkets ?? []) {
             case .tabs:
                 MainTabView()
+            case .notAvailable:
+                NotAvailableView(me: me)
+            case .onboarding:
+                OnboardingView()
             case .accountStatus:
                 // Before the account opens there is no navigation, and so no way to a deposit
                 // instruction (PRD section 5, failure B2).

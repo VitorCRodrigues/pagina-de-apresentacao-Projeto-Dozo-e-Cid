@@ -17,9 +17,12 @@ final class SessionUITests: XCTestCase {
         let signOut = waitFor(app, "profile.signOut")
         signOut.tap()
 
-        // Rafael signs in on the same device: his account is still opening.
+        // Rafael signs in on the same device: Brazil is not in the pilot, so only the waitlist
+        // (decision 25), with his own e-mail.
         signIn(app, as: "rafael")
-        _ = waitFor(app, "account.title")
+        _ = waitFor(app, "waitlist.title")
+        let email = waitFor(app, "waitlist.email")
+        XCTAssertEqual(email.value as? String, "rafael.souza@example.com")
 
         XCTAssertFalse(app.descendants(matching: .any)["home.total"].exists, "Lucía's balance is on screen")
         let luciaTexts = NSPredicate(format: "label == %@ OR label CONTAINS[c] %@", luciaTotal, "Lucía")

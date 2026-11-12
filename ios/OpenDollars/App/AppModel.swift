@@ -17,14 +17,20 @@ final class AppModel {
     /// Created with the model, before the scene connects, so it hears the very first scene change;
     /// the design catalog (DEBUG, -catalog) has no session and gets none.
     @ObservationIgnored let shield: PrivacyShield?
+    /// The identity vendor behind its protocol (onboarding step 6). TODO(fase 11): the vendor's SDK.
+    @ObservationIgnored let identityVerifier: any IdentityVerifier
     @ObservationIgnored private let localeChoice: LocaleChoiceStore
     @ObservationIgnored private let systemLocale: AppLocale
     #if DEBUG
     let signInPage: SimulatedSignInPage
     #endif
 
-    private init(session: ClientSession, localeChoice: LocaleChoiceStore, systemLocale: AppLocale, coversScreen: Bool) {
+    private init(
+        session: ClientSession, identityVerifier: any IdentityVerifier, localeChoice: LocaleChoiceStore,
+        systemLocale: AppLocale, coversScreen: Bool
+    ) {
         self.session = session
+        self.identityVerifier = identityVerifier
         self.shield = coversScreen ? PrivacyShield(session: session) : nil
         self.localeChoice = localeChoice
         self.systemLocale = systemLocale
@@ -67,13 +73,14 @@ final class AppModel {
         let scenario = Scenario(arguments: ProcessInfo.processInfo.arguments) ?? .default
         let client = APIClient(transport: MockServer(scenario: scenario), tokens: sessionManager, locale: { L10n.locale })
         let coversScreen = !ProcessInfo.processInfo.arguments.contains(DesignCatalogView.launchArgument)
+        let identityVerifier = SimulatedIdentityVerifier()
         #else
         #error("Release needs the real OIDC provider and API origin (TODO(fase 11)); the simulated provider and MockServer exist only in DEBUG builds.")
         #endif
 
         let session = ClientSession(session: sessionManager, client: client, isFirstLaunch: isFirstLaunch())
         let model = AppModel(
-            session: session, localeChoice: LocaleChoiceStore(), systemLocale: systemLocale,
+            session: session, identityVerifier: identityVerifier, localeChoice: LocaleChoiceStore(), systemLocale: systemLocale,
             coversScreen: coversScreen)
         #if DEBUG
         bridge.page = model.signInPage

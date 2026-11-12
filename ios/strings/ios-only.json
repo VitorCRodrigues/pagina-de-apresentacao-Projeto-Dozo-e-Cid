@@ -15,6 +15,27 @@
       "pt": "Para ver os detalhes, atualize o app ou fale com o suporte.",
       "en": "To see the details, update the app or contact support."
     },
+    "ios.onboarding.birthDatePick": {
+      "screen": "T2 Onboarding, etapa 2",
+      "note": "Campo de data vazio até o cliente escolher (seletor nativo do iOS; no web é o campo de data do navegador).",
+      "es": "Elegir fecha",
+      "pt": "Escolher data",
+      "en": "Choose a date"
+    },
+    "ios.picker.choose": {
+      "screen": "T2 Onboarding",
+      "note": "Seletor sem opção escolhida (país, província).",
+      "es": "Elegir",
+      "pt": "Escolher",
+      "en": "Choose"
+    },
+    "ios.datePicker.confirm": {
+      "screen": "T2 Onboarding, etapa 2",
+      "note": "Botão que confirma a data escolhida no seletor.",
+      "es": "Confirmar",
+      "pt": "Confirmar",
+      "en": "Confirm"
+    },
     "blockReason.unknown.message": {
       "screen": "T4 Início, T6 Aportar",
       "note": "Bloqueio de aporte com motivo que esta versão do app não conhece (iOS, TODO(decisão) 1). Mesma frase neutra de blockReason.compliance_hold: não revela o motivo.",

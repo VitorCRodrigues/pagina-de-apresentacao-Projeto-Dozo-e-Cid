@@ -19,6 +19,12 @@ struct ODTextField: View {
     /// Fixed text before the value, e.g. "US$".
     var leading: String?
     var keyboard: UIKeyboardType = .default
+    /// What the field holds, so iOS can offer AutoFill (name, address, e-mail, phone).
+    var contentType: UITextContentType?
+    var capitalization: TextInputAutocapitalization = .sentences
+    /// Identifiers, codes and names are not words: no autocorrection.
+    var autocorrects = true
+    var identifier: String?
 
     @FocusState private var isFocused: Bool
     @Environment(\.isEnabled) private var isEnabled
@@ -71,7 +77,11 @@ struct ODTextField: View {
             .odText(style)
             .foregroundStyle(isEnabled ? ODColor.graphite900 : ODColor.gray500)
             .keyboardType(keyboard)
+            .textContentType(contentType)
+            .textInputAutocapitalization(capitalization)
+            .autocorrectionDisabled(!autocorrects)
             .focused($isFocused)
+            .accessibilityIdentifier(identifier ?? "")
             .accessibilityLabel(isOptional ? "\(label) (\(Strings.commonOptional))" : label)
             .accessibilityHint([error, help].compactMap { $0 }.joined(separator: ". "))
         }

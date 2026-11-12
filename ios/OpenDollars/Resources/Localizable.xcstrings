@@ -5995,6 +5995,30 @@
         }
       }
     },
+    "ios.datePicker.confirm" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmar"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmar"
+          }
+        }
+      }
+    },
     "ios.notifications.prompt.allow" : {
       "comment" : "iOS only: ios/strings/ios-only.json",
       "extractionState" : "manual",
@@ -6087,6 +6111,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quer receber avisos?"
+          }
+        }
+      }
+    },
+    "ios.onboarding.birthDatePick" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a date"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir fecha"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher data"
+          }
+        }
+      }
+    },
+    "ios.picker.choose" : {
+      "comment" : "iOS only: ios/strings/ios-only.json",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher"
           }
         }
       }

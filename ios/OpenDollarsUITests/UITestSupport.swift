@@ -3,11 +3,11 @@ import XCTest
 extension XCTestCase {
     /// Launches the app signed out, with no session left by a previous test (`-resetSession`
     /// treats the launch as the first after install, which wipes the Keychain). Key/value pairs
-    /// first, bare flags last.
-    func launchSignedOut(scenario: String = "open", flags: [String] = []) -> XCUIApplication {
+    /// first (`options`, e.g. ["-screen", "account"]), bare flags last.
+    func launchSignedOut(scenario: String = "open", options: [String] = [], flags: [String] = []) -> XCUIApplication {
         continueAfterFailure = false
         let app = XCUIApplication()
-        app.launchArguments = ["-scenario", scenario, "-resetSession"] + flags
+        app.launchArguments = ["-scenario", scenario] + options + ["-resetSession"] + flags
         app.launch()
         return app
     }

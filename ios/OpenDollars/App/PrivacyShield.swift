@@ -26,18 +26,39 @@ final class PrivacyShield {
         session.onMayUncoverChange = { [weak self] mayUncover in
             if mayUncover { self?.hide() }
         }
+        // queue: .main delivers synchronously on the main thread, inside the scene's transition,
+        // so assumeIsolated holds and the cover is up before the snapshot. Only the scene's
+        // identity (Sendable) crosses into the isolated block, never the Notification itself;
+        // the scene is looked up again on the main actor.
         let center = NotificationCenter.default
         observers = [
             center.addObserver(forName: UIScene.willDeactivateNotification, object: nil, queue: .main) { [weak self] note in
-                MainActor.assumeIsolated { self?.left(note.object as? UIWindowScene, toBackground: false) }
+                let sceneID = Self.sceneID(of: note)
+                MainActor.assumeIsolated { self?.left(Self.scene(sceneID), toBackground: false) }
             },
             center.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] note in
-                MainActor.assumeIsolated { self?.left(note.object as? UIWindowScene, toBackground: true) }
+                let sceneID = Self.sceneID(of: note)
+                MainActor.assumeIsolated { self?.left(Self.scene(sceneID), toBackground: true) }
             },
             center.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] note in
-                MainActor.assumeIsolated { self?.returned(note.object as? UIWindowScene) }
+                let sceneID = Self.sceneID(of: note)
+                MainActor.assumeIsolated { self?.returned(Self.scene(sceneID)) }
             },
         ]
+    }
+
+    /// The identity of the notification's scene: a Sendable value, read without touching the
+    /// scene's main-actor state.
+    private nonisolated static func sceneID(of note: Notification) -> ObjectIdentifier? {
+        (note.object as? UIWindowScene).map(ObjectIdentifier.init)
+    }
+
+    /// The connected scene with that identity (nil when the notification had none).
+    private static func scene(_ id: ObjectIdentifier?) -> UIWindowScene? {
+        guard let id else { return nil }
+        return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { ObjectIdentifier($0) == id }
     }
 
     private func left(_ scene: UIWindowScene?, toBackground: Bool) {

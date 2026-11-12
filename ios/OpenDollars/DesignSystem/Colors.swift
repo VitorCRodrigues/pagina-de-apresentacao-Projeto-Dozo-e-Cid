@@ -55,6 +55,9 @@ enum ODColor {
 }
 
 extension Color {
+    /// The same token for drawing with UIKit or Core Graphics (the scanner's debug fixtures).
+    var uiColor: UIColor { UIColor(self) }
+
     fileprivate init(token: ColorToken) {
         let c = token.components
         self.init(.sRGB, red: c.red, green: c.green, blue: c.blue, opacity: 1)

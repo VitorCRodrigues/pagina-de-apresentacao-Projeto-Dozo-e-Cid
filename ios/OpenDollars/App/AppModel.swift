@@ -24,6 +24,10 @@ final class AppModel {
     #if DEBUG
     let signInPage: SimulatedSignInPage
     #endif
+    /// `-screen account` (DEBUG): the account status screen (T3) whatever the status, for the
+    /// screenshots of draft, open and restricted, which land elsewhere (TODO(decisão) 35). Always
+    /// false in Release.
+    private(set) var showsAccountStatus = false
 
     private init(
         session: ClientSession, identityVerifier: any IdentityVerifier, localeChoice: LocaleChoiceStore,
@@ -37,6 +41,10 @@ final class AppModel {
         self.locale = LocalePreference.resolve(explicit: localeChoice.read(), account: nil, system: systemLocale)
         #if DEBUG
         self.signInPage = SimulatedSignInPage()
+        let arguments = ProcessInfo.processInfo.arguments
+        if let index = arguments.firstIndex(of: "-screen"), index + 1 < arguments.count, arguments[index + 1] == "account" {
+            self.showsAccountStatus = true
+        }
         #endif
         L10n.use(locale)
         session.onAccountLocaleChange = { [weak self] _ in self?.applyLocale() }
@@ -71,7 +79,12 @@ final class AppModel {
         let sessionManager = SessionManager(store: KeychainRefreshTokenStore(), auth: SimulatedAuthProvider { await bridge.ask() })
         // `-scenario <id>` picks Lucía's mock data (default "open").
         let scenario = Scenario(arguments: ProcessInfo.processInfo.arguments) ?? .default
-        let client = APIClient(transport: MockServer(scenario: scenario), tokens: sessionManager, locale: { L10n.locale })
+        let server = MockServer(scenario: scenario)
+        // `-failFirstUpload`: the first document upload drops halfway, for "Reintentar".
+        if ProcessInfo.processInfo.arguments.contains("-failFirstUpload") { Task { await server.failNextUpload() } }
+        // `-slowUpload`: 2 s per progress step, for a screenshot while the bar moves.
+        if ProcessInfo.processInfo.arguments.contains("-slowUpload") { Task { await server.setUploadStep(.seconds(2)) } }
+        let client = APIClient(transport: server, tokens: sessionManager, locale: { L10n.locale })
         let coversScreen = !ProcessInfo.processInfo.arguments.contains(DesignCatalogView.launchArgument)
         let identityVerifier = SimulatedIdentityVerifier()
         #else
@@ -106,6 +119,9 @@ final class AppModel {
     var screenTreeID: String { "\(session.generation)-\(locale.rawValue)" }
 
     func start() async { await session.start() }
+
+    /// "Continuar la solicitud" on T3 (draft): back to the routing, which opens the onboarding.
+    func leaveAccountStatus() { showsAccountStatus = false }
 
     // MARK: Language
 

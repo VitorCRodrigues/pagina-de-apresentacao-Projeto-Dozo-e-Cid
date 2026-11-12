@@ -64,7 +64,7 @@ struct RootView: View {
             StatePage { ErrorState(error: error, titleSize: .title) { Task { await session.loadSession() } } }
         case .ready(let me):
             // The country first (T1), then the account's status (decisions 24 and 25).
-            switch Landing.for(me, liveMarkets: session.config?.liveMarkets ?? []) {
+            switch Landing.for(me, liveMarkets: session.config?.liveMarkets ?? [], showingAccountStatus: model.showsAccountStatus) {
             case .tabs:
                 MainTabView()
             case .notAvailable:

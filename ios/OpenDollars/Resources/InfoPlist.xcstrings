@@ -1,0 +1,54 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "NSCameraUsageDescription" : {
+      "comment" : "iOS only: ios/strings/ios-only.json (Info.plist)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We use the camera so you can photograph the documents we ask for to open your account."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos la cámara para que puedas fotografiar los documentos que te pedimos para abrir tu cuenta."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos a câmera para você fotografar os documentos que pedimos para abrir sua conta."
+          }
+        }
+      }
+    },
+    "NSFaceIDUsageDescription" : {
+      "comment" : "iOS only: ios/strings/ios-only.json (Info.plist)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We use Face ID to confirm it is you when you open the app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos Face ID para confirmar que sos vos al abrir la app."
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usamos o Face ID para confirmar que é você ao abrir o app."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

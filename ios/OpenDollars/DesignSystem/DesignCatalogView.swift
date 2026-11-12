@@ -11,22 +11,22 @@ struct DesignCatalogView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: ODMetric.space10) {
-                Text(L10n.text("devCatalog.title"))
+                Text(Strings.devCatalogTitle)
                     .odText(.title)
                     .foregroundStyle(ODColor.navy900)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("catalog.title")
 
-                section("devCatalog.colors") { ColorSwatches() }
-                section("devCatalog.type") { TypeSamples() }
-                section("devCatalog.buttons") { ButtonSamples() }
-                section("devCatalog.fields") { TextFieldSamples() }
-                section("devCatalog.ledger") {
+                section(Strings.devCatalogColors) { ColorSwatches() }
+                section(Strings.devCatalogType) { TypeSamples() }
+                section(Strings.devCatalogButtons) { ButtonSamples() }
+                section(Strings.devCatalogFields) { TextFieldSamples() }
+                section(Strings.devCatalogLedger) {
                     SectionHeaderSamples()
                     LedgerSamples()
                 }
-                section("devCatalog.notices") { NoticeSamples() }
-                section("devCatalog.states") {
+                section(Strings.devCatalogNotices) { NoticeSamples() }
+                section(Strings.devCatalogStates) {
                     StateSamples()
                     LoadingState(shape: .form)
                     LoadingState(shape: .timeline)
@@ -39,9 +39,9 @@ struct DesignCatalogView: View {
         .background(ODColor.cream50)
     }
 
-    private func section<Content: View>(_ key: String, @ViewBuilder content: () -> Content) -> some View {
+    private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: ODMetric.space5) {
-            Text(L10n.text(key))
+            Text(title)
                 .odText(.label)
                 .foregroundStyle(ODColor.gray600)
                 .accessibilityAddTraits(.isHeader)
@@ -79,12 +79,12 @@ private struct TypeSamples: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.space4) {
-            sample(.display) { Text(L10n.text("portfolio.total")) }
-            sample(.title) { Text(L10n.text("home.title")) }
-            sample(.heading) { Text(L10n.text("account.timeline.label")) }
-            sample(.body) { Text(L10n.text("portfolio.asOf")) }
-            sample(.label) { Text(L10n.text("deposit.amount.label")) }
-            sample(.caption) { Text(L10n.text("custody.note")) }
+            sample(.display) { Text(Strings.portfolioTotal) }
+            sample(.title) { Text(Strings.homeTitle) }
+            sample(.heading) { Text(Strings.accountTimelineLabel) }
+            sample(.body) { Text(Strings.portfolioAsOf) }
+            sample(.label) { Text(Strings.depositAmountLabel) }
+            sample(.caption) { Text(Strings.custodyNote) }
             money(.value)
             money(.valueLarge)
             VStack(alignment: .leading, spacing: ODMetric.space1) {

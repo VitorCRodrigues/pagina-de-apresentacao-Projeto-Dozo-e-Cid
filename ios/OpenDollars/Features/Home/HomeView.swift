@@ -10,7 +10,7 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: ODMetric.sectionSpacing) {
-                Text(L10n.text("home.title"))
+                Text(Strings.homeTitle)
                     .odText(.title)
                     .foregroundStyle(ODColor.navy900)
                     .accessibilityAddTraits(.isHeader)
@@ -51,7 +51,7 @@ private struct BalanceBlock: View {
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.space4) {
             VStack(alignment: .leading, spacing: ODMetric.space1) {
-                Text(L10n.text("portfolio.total"))
+                Text(Strings.portfolioTotal)
                     .odText(.label)
                     .foregroundStyle(total > .zero ? ODColor.gold500 : ODColor.cream50)
                 Group {
@@ -69,14 +69,14 @@ private struct BalanceBlock: View {
             .accessibilityIdentifier("home.total")
 
             Ledger(tone: .inverse) {
-                LedgerRow(label: L10n.text("portfolio.bucketsShort.invested"), money: portfolio.buckets.investedCents, locale: locale)
-                LedgerRow(label: L10n.text("portfolio.bucketsShort.ibkrCash"), money: portfolio.buckets.ibkrCashCents, locale: locale)
-                LedgerRow(label: L10n.text("portfolio.bucketsShort.inFlight"), money: portfolio.buckets.inFlightCents, locale: locale)
+                LedgerRow(label: Strings.portfolioBucketsShortInvested, money: portfolio.buckets.investedCents, locale: locale)
+                LedgerRow(label: Strings.portfolioBucketsShortIbkrCash, money: portfolio.buckets.ibkrCashCents, locale: locale)
+                LedgerRow(label: Strings.portfolioBucketsShortInFlight, money: portfolio.buckets.inFlightCents, locale: locale)
             }
             .accessibilityElement(children: .contain)
-            .accessibilityLabel(L10n.text("home.splitLabel"))
+            .accessibilityLabel(Strings.homeSplitLabel)
 
-            Text(L10n.format("home.updatedAt", portfolio.asOf.formatted(date: .long, time: .shortened)))
+            Text(Strings.homeUpdatedAt(date: portfolio.asOf.formatted(Date.FormatStyle(date: .long, time: .shortened).locale(L10n.foundationLocale))))
                 .odText(.caption)
                 .foregroundStyle(ODColor.cream50)
         }
@@ -101,7 +101,7 @@ private struct BalanceBlockSkeleton: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(RoundedRectangle(cornerRadius: ODMetric.radiusBlock).fill(ODColor.navy900))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(L10n.text("common.loading"))
+        .accessibilityLabel(Strings.commonLoading)
         .accessibilityIdentifier("state.loading")
     }
 }
@@ -113,14 +113,14 @@ private struct AccountNotes: View {
 
     var body: some View {
         if account.status == .restricted {
-            Notice(tone: .warning, title: L10n.text("account.title.restricted"), message: L10n.text("account.body.restricted")) {
-                Link(L10n.text("account.actions.contact"), destination: AppConstants.supportURL)
+            Notice(tone: .warning, title: Strings.accountTitleRestricted, message: Strings.accountBodyRestricted) {
+                Link(Strings.accountActionsContact, destination: AppConstants.supportURL)
                     .buttonStyle(.odGhost)
             }
         }
         if !account.pending.isEmpty {
             // TODO(decisão) 13: the link to Pendientes arrives with that tab (later phase).
-            Notice(title: L10n.plural("home.pending", count: account.pending.count))
+            Notice(title: Strings.homePending(count: account.pending.count))
         }
     }
 }

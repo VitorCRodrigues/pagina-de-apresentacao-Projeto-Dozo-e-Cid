@@ -41,8 +41,8 @@ struct SectionHeader: View {
 /// Samples shared by the previews and the catalog.
 struct SectionHeaderSamples: View {
     var body: some View {
-        SectionHeader(title: L10n.text("account.timeline.label"))
-        SectionHeader(title: L10n.text("home.splitLabel"), actionTitle: L10n.text("home.pendingAction")) {}
+        SectionHeader(title: Strings.accountTimelineLabel)
+        SectionHeader(title: Strings.homeSplitLabel, actionTitle: Strings.homePendingAction) {}
     }
 }
 

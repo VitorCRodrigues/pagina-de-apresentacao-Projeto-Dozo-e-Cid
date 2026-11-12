@@ -65,11 +65,11 @@ struct ErrorState: View {
 
     var body: some View {
         StateLayout(
-            title: L10n.text("states.error.title"),
-            message: L10n.text(error?.code.copyKey ?? "states.error.body"),
+            title: Strings.statesErrorTitle,
+            message: error.map { L10n.text($0.code.copyKey) } ?? Strings.statesErrorBody,
             titleSize: titleSize
         ) {
-            Button(L10n.text("common.retry"), action: retry).buttonStyle(.odPrimary)
+            Button(Strings.commonRetry, action: retry).buttonStyle(.odPrimary)
         }
         .accessibilityIdentifier("state.error")
     }
@@ -81,10 +81,10 @@ struct InlineError: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.space2) {
-            Text(L10n.text("states.error.title"))
+            Text(Strings.statesErrorTitle)
                 .odText(.body)
                 .foregroundStyle(ODColor.graphite900)
-            Button(L10n.text("common.retry"), action: retry)
+            Button(Strings.commonRetry, action: retry)
                 .buttonStyle(.odGhost)
                 .padding(.leading, -ODMetric.space1)
         }
@@ -95,14 +95,14 @@ struct MaintenanceView: View {
     let until: Date?
 
     var body: some View {
-        StateLayout(title: L10n.text("states.maintenance.title"), message: message, titleSize: .title) { EmptyView() }
+        StateLayout(title: Strings.statesMaintenanceTitle, message: message, titleSize: .title) { EmptyView() }
             .accessibilityIdentifier("state.maintenance")
     }
 
     private var message: String {
-        let body = L10n.text("states.maintenance.body")
+        let body = Strings.statesMaintenanceBody
         guard let until else { return body }
-        return body + " " + L10n.format("states.maintenance.until", until.formatted(date: .omitted, time: .shortened))
+        return body + " " + Strings.statesMaintenanceUntil(time: until.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(L10n.foundationLocale)))
     }
 }
 
@@ -116,11 +116,11 @@ struct SignedOutView: View {
 
     var body: some View {
         StateLayout(
-            title: L10n.text(explains ? "states.sessionExpired.title" : "app.name"),
-            message: explains ? L10n.text("states.sessionExpired.body") : nil,
+            title: explains ? Strings.statesSessionExpiredTitle : Strings.appName,
+            message: explains ? Strings.statesSessionExpiredBody : nil,
             titleSize: .title
         ) {
-            Button(L10n.text("states.sessionExpired.action"), action: signIn).buttonStyle(.odPrimary)
+            Button(Strings.statesSessionExpiredAction, action: signIn).buttonStyle(.odPrimary)
         }
         .accessibilityIdentifier("state.signedOut")
     }
@@ -198,7 +198,7 @@ struct LoadingState: View {
         }
         .padding(.vertical, ODMetric.space2)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(L10n.text("states.loading"))
+        .accessibilityLabel(Strings.statesLoading)
         .accessibilityIdentifier("state.loading")
     }
 }
@@ -211,7 +211,7 @@ struct InlineLoading: View {
             Skeleton(width: 110, height: 16)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(L10n.text("common.loading"))
+        .accessibilityLabel(Strings.commonLoading)
     }
 }
 
@@ -233,8 +233,8 @@ struct StatePage<Content: View>: View {
 /// Samples shared by the previews and the catalog.
 struct StateSamples: View {
     var body: some View {
-        EmptyState(title: L10n.text("portfolio.empty.title"), message: L10n.text("portfolio.empty.body")) {
-            Button(L10n.text("portfolio.empty.action")) {}.buttonStyle(.odPrimary)
+        EmptyState(title: Strings.portfolioEmptyTitle, message: Strings.portfolioEmptyBody) {
+            Button(Strings.portfolioEmptyAction) {}.buttonStyle(.odPrimary)
         }
         ErrorState {}
         InlineError {}

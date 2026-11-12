@@ -1,5 +1,6 @@
 // Generates docs/copy-review.md and docs/copy-review.csv for the legal review, from the locale
-// files and the editorial texts the mock API serves. Run with: npm run copy:review
+// files, the editorial texts the mock API serves, and the texts only the iOS app has
+// (../ios/strings/ios-only.json). Run with: npm run copy:review
 // Node strips the types of fixtures.ts by itself (Node 22.18 or later).
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -143,6 +144,23 @@ for (const question of fixtures.questionnaire.questions) {
 }
 for (const doc of fixtures.termsDocuments) addLocalized(`mock:terms.${doc.id}`, doc.title);
 
+// Texts only the iOS app has (system permissions, the notification prompt, states the web does
+// not have), so the legal review sees both apps in one place. dev.* never reaches a client.
+const iosOnly = JSON.parse(readFileSync(join(web, "../ios/strings/ios-only.json"), "utf8"));
+const iosRows = [
+  ...Object.entries(iosOnly.strings).filter(([key]) => !key.startsWith("dev.")),
+  ...Object.entries(iosOnly.infoPlist).map(([key, text]) => [`ios:InfoPlist.${key}`, text]),
+].map(([key, text]) => ({
+  key,
+  screen: `iOS: ${text.screen}`,
+  es: text.es,
+  pt: text.pt,
+  en: text.en,
+  section: "4. Só no app iOS",
+  status: PENDING,
+  note: text.note,
+}));
+
 const complianceNote = (key) => complianceRules.find(([prefix]) => key.startsWith(prefix))?.[1];
 
 const ria = [];
@@ -178,7 +196,7 @@ const markdown = `# Revisão jurídica dos textos
 
 Gerado por \`npm run copy:review\` a partir de \`src/i18n/locales\` e dos textos editoriais do mock (\`src/mocks/fixtures.ts\`). Não edite à mão: comente em \`copy-review.csv\`, que tem o mesmo conteúdo, e os ajustes voltam para os arquivos de idioma.
 
-Total: ${rows.length} textos. Chaves \`mock:\` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. \`{{min}}\`, \`{{date}}\` e semelhantes são valores preenchidos pelo app.
+Total: ${rows.length + iosRows.length} textos (${iosRows.length} só no app iOS). Chaves \`mock:\` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. \`{{min}}\`, \`{{date}}\` e semelhantes são valores preenchidos pelo app.
 
 ## 1. Depende da confirmação do registro RIA antes do piloto
 
@@ -197,13 +215,19 @@ ${table(compliance)}
 ${others.length} textos.
 
 ${table(others)}
+
+## 4. Só no app iOS
+
+${iosRows.length} textos que o app web não tem: permissões do sistema (\`ios:InfoPlist.\`), a tela antes do pedido de notificações e estados próprios do app. Vêm de \`ios/strings/ios-only.json\`; o app iOS usa os mesmos textos do web para todo o resto.
+
+${table(iosRows)}
 `;
 
 const csvCell = (text) => `"${String(text).replaceAll('"', '""')}"`;
 const header = ["Seção", "Chave", "Tela", "ES", "PT", "EN", "Status jurídico", "Observação"];
 const csv = [
   header.map(csvCell).join(","),
-  ...[...ria, ...compliance, ...others].map((r) =>
+  ...[...ria, ...compliance, ...others, ...iosRows].map((r) =>
     [r.section, r.key, r.screen, r.es, r.pt, r.en, r.status, r.note].map(csvCell).join(","),
   ),
 ].join("\r\n");
@@ -212,5 +236,5 @@ writeFileSync(join(web, "docs/copy-review.md"), markdown);
 // With a BOM, so spreadsheets read the accents as UTF-8.
 writeFileSync(join(web, "docs/copy-review.csv"), `\uFEFF${csv}\r\n`);
 console.log(
-  `copy-review: ${String(rows.length)} texts (${String(ria.length)} RIA, ${String(compliance.length)} compliance)`,
+  `copy-review: ${String(rows.length + iosRows.length)} texts (${String(ria.length)} RIA, ${String(compliance.length)} compliance, ${String(iosRows.length)} iOS only)`,
 );

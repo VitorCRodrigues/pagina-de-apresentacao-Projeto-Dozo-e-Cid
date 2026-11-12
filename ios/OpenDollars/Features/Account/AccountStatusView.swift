@@ -53,7 +53,7 @@ private struct AccountStatusContent: View {
             // TODO(decisão): document upload (camera, files) arrives with the onboarding phase.
             if account.status == .action_required, !documents.isEmpty {
                 VStack(alignment: .leading, spacing: ODMetric.space3) {
-                    SectionHeader(title: L10n.text("account.documents"))
+                    SectionHeader(title: Strings.accountDocuments)
                     Ledger {
                         ForEach(documents) { item in
                             LedgerItem {
@@ -70,12 +70,12 @@ private struct AccountStatusContent: View {
 
             if account.status == .open, let masked = account.ibkrAccountMasked {
                 Ledger {
-                    LedgerRow(label: L10n.text("account.accountNumber")) { Text(masked) }
+                    LedgerRow(label: Strings.accountAccountNumber) { Text(masked) }
                 }
             }
 
             if AccountStatusCopy.offersSupport(account.status) {
-                Link(L10n.text("account.actions.contact"), destination: AppConstants.supportURL)
+                Link(Strings.accountActionsContact, destination: AppConstants.supportURL)
                     .buttonStyle(.odSecondary)
             }
 
@@ -90,7 +90,7 @@ private struct OpeningTimeline: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.space4) {
-            SectionHeader(title: L10n.text("account.timeline.label"))
+            SectionHeader(title: Strings.accountTimelineLabel)
             ForEach(steps) { step in
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: symbol(step.status))
@@ -98,18 +98,18 @@ private struct OpeningTimeline: View {
                         .font(.title3)
                         .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(L10n.text("account.timeline.\(step.id.rawValue)"))
+                        Text(L10n.text(step.id.copyKey))
                             .odText(step.status == .current ? .label : .body)
                             .foregroundStyle(step.status == .upcoming ? ODColor.gray600 : ODColor.graphite900)
                         if step.needsDocuments {
-                            Text(L10n.text("account.timeline.actionNote"))
+                            Text(Strings.accountTimelineActionNote)
                                 .odText(.caption)
                                 .foregroundStyle(ODColor.amber700)
                         }
                     }
                 }
                 .accessibilityElement(children: .combine)
-                .accessibilityValue(L10n.text("timeline.status.\(step.status.rawValue)"))
+                .accessibilityValue(L10n.text(step.status.copyKey))
             }
         }
     }

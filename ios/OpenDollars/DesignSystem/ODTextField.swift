@@ -51,7 +51,7 @@ struct ODTextField: View {
     }
 
     private var labelText: some View {
-        (Text(label) + (isOptional ? Text(verbatim: " ") + Text(verbatim: "(\(L10n.text("common.optional")))") : Text(verbatim: "")))
+        (Text(label) + (isOptional ? Text(verbatim: " ") + Text(verbatim: "(\(Strings.commonOptional))") : Text(verbatim: "")))
             .odText(.label)
             .foregroundStyle(ODColor.graphite900)
             .accessibilityHidden(true) // the field carries it
@@ -72,7 +72,7 @@ struct ODTextField: View {
             .foregroundStyle(isEnabled ? ODColor.graphite900 : ODColor.gray500)
             .keyboardType(keyboard)
             .focused($isFocused)
-            .accessibilityLabel(isOptional ? "\(label) (\(L10n.text("common.optional")))" : label)
+            .accessibilityLabel(isOptional ? "\(label) (\(Strings.commonOptional))" : label)
             .accessibilityHint([error, help].compactMap { $0 }.joined(separator: ". "))
         }
         .padding(.horizontal, ODMetric.space3)
@@ -105,13 +105,13 @@ struct TextFieldSamples: View {
 
     var body: some View {
         ODTextField(
-            label: L10n.text("deposit.amount.label"), text: $empty,
-            help: L10n.format("deposit.amount.help", minimum), variant: .amount, leading: currency, keyboard: .decimalPad)
+            label: Strings.depositAmountLabel, text: $empty,
+            help: Strings.depositAmountHelp(min: minimum), variant: .amount, leading: currency, keyboard: .decimalPad)
         ODTextField(
-            label: L10n.text("deposit.amount.label"), text: $amount,
-            error: L10n.format("deposit.amount.belowMinimum", minimum), variant: .amount, leading: currency, keyboard: .decimalPad)
-        ODTextField(label: L10n.text("deposit.amount.label"), text: $wrong, error: L10n.text("deposit.amount.invalidAmount"), isOptional: true)
-        ODTextField(label: L10n.text("deposit.amount.label"), text: $amount).disabled(true)
+            label: Strings.depositAmountLabel, text: $amount,
+            error: Strings.depositAmountBelowMinimum(min: minimum), variant: .amount, leading: currency, keyboard: .decimalPad)
+        ODTextField(label: Strings.depositAmountLabel, text: $wrong, error: Strings.depositAmountInvalidAmount, isOptional: true)
+        ODTextField(label: Strings.depositAmountLabel, text: $amount).disabled(true)
     }
 }
 

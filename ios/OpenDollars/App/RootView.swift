@@ -7,21 +7,25 @@ struct RootView: View {
 
     var body: some View {
         content
+            // Texts are read through L10n, which SwiftUI does not observe: a new language rebuilds
+            // the tree, and the environment locale follows it for system controls.
+            .id(model.locale)
+            .environment(\.locale, L10n.foundationLocale)
             .background(ODColor.cream50.ignoresSafeArea())
             // Any tap counts as activity for the 15-minute rule.
             .simultaneousGesture(TapGesture().onEnded { model.recordActivity() })
             .alert(
-                L10n.text("session.timeout.title"),
+                Strings.sessionTimeoutTitle,
                 isPresented: Binding(
                     get: { model.inactivityDeadline != nil },
                     set: { shown in if !shown { model.staySignedIn() } }),
                 actions: {
-                    Button(L10n.text("session.timeout.stay")) { model.staySignedIn() }
-                    Button(L10n.text("session.timeout.signOut"), role: .destructive) {
+                    Button(Strings.sessionTimeoutStay) { model.staySignedIn() }
+                    Button(Strings.sessionTimeoutSignOut, role: .destructive) {
                         Task { await model.signOut() }
                     }
                 },
-                message: { Text(L10n.text("session.timeout.body")) })
+                message: { Text(Strings.sessionTimeoutBody) })
     }
 
     @ViewBuilder
@@ -53,15 +57,15 @@ struct MainTabView: View {
     var body: some View {
         TabView {
             NavigationStack { HomeView() }
-                .tabItem { Label(L10n.text("nav.home"), systemImage: "house") }
-            NavigationStack { ComingSoonView(titleKey: "nav.deposit") }
-                .tabItem { Label(L10n.text("nav.deposit"), systemImage: "plus.circle") }
-            NavigationStack { ComingSoonView(titleKey: "nav.portfolio") }
-                .tabItem { Label(L10n.text("nav.portfolio"), systemImage: "square.stack.3d.up") }
-            NavigationStack { ComingSoonView(titleKey: "nav.pending") }
-                .tabItem { Label(L10n.text("nav.pending"), systemImage: "checklist") }
+                .tabItem { Label(Strings.navHome, systemImage: "house") }
+            NavigationStack { ComingSoonView(title: Strings.navDeposit) }
+                .tabItem { Label(Strings.navDeposit, systemImage: "plus.circle") }
+            NavigationStack { ComingSoonView(title: Strings.navPortfolio) }
+                .tabItem { Label(Strings.navPortfolio, systemImage: "square.stack.3d.up") }
+            NavigationStack { ComingSoonView(title: Strings.navPending) }
+                .tabItem { Label(Strings.navPending, systemImage: "checklist") }
             NavigationStack { ProfilePlaceholderView() }
-                .tabItem { Label(L10n.text("nav.profile"), systemImage: "person.crop.circle") }
+                .tabItem { Label(Strings.navProfile, systemImage: "person.crop.circle") }
         }
         .tint(ODColor.navy900)
     }

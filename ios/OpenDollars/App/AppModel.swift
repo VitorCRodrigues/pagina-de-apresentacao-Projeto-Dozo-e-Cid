@@ -28,29 +28,39 @@ final class AppModel {
     private(set) var portfolio: Loadable<Portfolio> = .idle
     /// Set inside the last minute before the inactivity sign-out (the warning alert).
     private(set) var inactivityDeadline: Date?
-    let locale: AppLocale
+    /// The app's language: a choice on this device > the account's > the system's
+    /// (LocalePreference). Texts, Accept-Language and formatting follow it.
+    private(set) var locale: AppLocale
 
     private let client: APIClient
     private let session: SessionManager
     private let isFirstLaunch: Bool
+    private let localeChoice: LocaleChoiceStore
+    private let systemLocale: AppLocale
+    private var accountLocale: AppLocale?
     private var started = false
     private var inactivityTask: Task<Void, Never>?
 
-    init(client: APIClient, session: SessionManager, locale: AppLocale, isFirstLaunch: Bool) {
+    init(client: APIClient, session: SessionManager, localeChoice: LocaleChoiceStore, systemLocale: AppLocale, isFirstLaunch: Bool) {
         self.client = client
         self.session = session
-        self.locale = locale
+        self.localeChoice = localeChoice
+        self.systemLocale = systemLocale
         self.isFirstLaunch = isFirstLaunch
+        self.locale = LocalePreference.resolve(explicit: localeChoice.read(), account: nil, system: systemLocale)
+        L10n.use(locale)
     }
 
     /// Wiring for a real launch. `-scenario <id>` picks the mock data set (default "open").
     static func live() -> AppModel {
         let scenario = Scenario(arguments: ProcessInfo.processInfo.arguments) ?? .default
-        let locale = AppLocale(languageTag: Locale.preferredLanguages.first)
+        // The localization iOS picked for this app: the system's languages, or the per-app
+        // language set in Settings.
+        let systemLocale = AppLocale(languageTag: Bundle.main.preferredLocalizations.first)
         // TODO(decisão): phase 0 always talks to the in-memory mock; the real API origin and the
         // OIDC provider arrive with the backend (PRD section 12).
         let session = SessionManager(store: KeychainRefreshTokenStore(), auth: MockAuthProvider())
-        let client = APIClient(transport: MockServer(scenario: scenario), tokens: session, locale: { locale })
+        let client = APIClient(transport: MockServer(scenario: scenario), tokens: session, locale: { L10n.locale })
 
         // Not personal data: only whether this install launched before (Keychain items survive
         // uninstalling, so a fresh install wipes them).
@@ -58,7 +68,9 @@ final class AppModel {
         let launchedKey = "od.hasLaunchedBefore"
         let isFirstLaunch = !defaults.bool(forKey: launchedKey)
         defaults.set(true, forKey: launchedKey)
-        return AppModel(client: client, session: session, locale: locale, isFirstLaunch: isFirstLaunch)
+        return AppModel(
+            client: client, session: session, localeChoice: LocaleChoiceStore(), systemLocale: systemLocale,
+            isFirstLaunch: isFirstLaunch)
     }
 
     // MARK: Session
@@ -128,6 +140,9 @@ final class AppModel {
         config = nil
         account = .idle
         portfolio = .idle
+        // The account's language leaves with the account; a choice made on this device stays.
+        accountLocale = nil
+        applyLocale()
         phase = .signedOut(reason)
     }
 
@@ -149,6 +164,21 @@ final class AppModel {
         }
     }
 
+    // MARK: Language
+
+    /// The client's choice on this device (the Profile screen, T12); nil goes back to the
+    /// account's or the system's language.
+    func chooseLocale(_ choice: AppLocale?) {
+        localeChoice.save(choice)
+        applyLocale()
+    }
+
+    private func applyLocale() {
+        let resolved = LocalePreference.resolve(explicit: localeChoice.read(), account: accountLocale, system: systemLocale)
+        L10n.use(resolved)
+        if resolved != locale { locale = resolved }
+    }
+
     // MARK: Data
 
     func loadSession() async {
@@ -157,7 +187,10 @@ final class AppModel {
             async let config = client.getConfig()
             async let me = client.getMe()
             self.config = try await config
-            phase = .ready(try await me)
+            let me = try await me
+            accountLocale = me.locale
+            applyLocale()
+            phase = .ready(me)
         } catch {
             phase = .failed(Self.apiError(error))
         }

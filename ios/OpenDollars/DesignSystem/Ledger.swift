@@ -117,10 +117,10 @@ extension EnvironmentValues {
 struct LedgerSamples: View {
     var body: some View {
         Ledger {
-            LedgerRow(label: L10n.text("portfolio.bucketsShort.invested"), money: Money(cents: 1_190_050), locale: .es)
-            LedgerRow(label: L10n.text("portfolio.bucketsShort.ibkrCash"), money: Money(cents: 58_000), locale: .es)
-            LedgerRow(label: L10n.text("portfolio.bucketsShort.inFlight"), money: Money(cents: 0), locale: .es)
-            LedgerRow(label: L10n.text("account.accountNumber")) { Text(verbatim: "U•••4821") }
+            LedgerRow(label: Strings.portfolioBucketsShortInvested, money: Money(cents: 1_190_050), locale: .es)
+            LedgerRow(label: Strings.portfolioBucketsShortIbkrCash, money: Money(cents: 58_000), locale: .es)
+            LedgerRow(label: Strings.portfolioBucketsShortInFlight, money: Money(cents: 0), locale: .es)
+            LedgerRow(label: Strings.accountAccountNumber) { Text(verbatim: "U•••4821") }
         }
     }
 }

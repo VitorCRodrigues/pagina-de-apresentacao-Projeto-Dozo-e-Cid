@@ -2,18 +2,18 @@ import SwiftUI
 
 /// Phase 0 skeleton: a tab whose screens arrive in later phases. Never shipped to clients.
 struct ComingSoonView: View {
-    let titleKey: String
+    let title: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.space3) {
-            Text(L10n.text(titleKey))
+            Text(title)
                 .odText(.title)
                 .foregroundStyle(ODColor.navy900)
                 .accessibilityAddTraits(.isHeader)
-            Text(L10n.text("comingSoon.title"))
+            Text(Strings.devComingSoonTitle)
                 .odText(.label)
                 .foregroundStyle(ODColor.gray600)
-            Text(L10n.text("comingSoon.body"))
+            Text(Strings.devComingSoonBody)
                 .odText(.body)
                 .foregroundStyle(ODColor.gray600)
             Spacer()
@@ -32,8 +32,8 @@ struct ProfilePlaceholderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.sectionSpacing) {
-            ComingSoonView(titleKey: "nav.profile").frame(maxHeight: 200)
-            Button(L10n.text("session.timeout.signOut")) {
+            ComingSoonView(title: Strings.navProfile).frame(maxHeight: 200)
+            Button(Strings.sessionTimeoutSignOut) {
                 Task { await model.signOut() }
             }
             .buttonStyle(.odSecondary)

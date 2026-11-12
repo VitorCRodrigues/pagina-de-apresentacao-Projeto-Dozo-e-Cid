@@ -6,6 +6,8 @@ on:
     branches: [app-swift]
     paths:
       - "ios/**"
+      # The iOS texts are generated from the web copy (ios/scripts/sync-strings.mjs).
+      - "web/src/i18n/locales/**"
       - ".github/workflows/ios.yml"
   workflow_dispatch:
 
@@ -58,6 +60,17 @@ jobs:
       - name: Core tests on macOS
         working-directory: ios/OpenDollarsCore
         run: swift test
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The string catalogs and Strings.generated.swift must match the web copy and
+      # ios/strings/ios-only.json: a copy change without running the script fails here.
+      - name: Strings generator tests and freshness
+        run: |
+          node --test "ios/scripts/*.test.mjs"
+          node ios/scripts/sync-strings.mjs --check
 
       - name: Install XcodeGen
         run: brew install xcodegen && xcodegen --version

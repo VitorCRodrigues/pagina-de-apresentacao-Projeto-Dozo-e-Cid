@@ -22,10 +22,16 @@ public enum Landing: Sendable, Equatable {
 public enum AccountTimeline {
     public enum StepID: String, Sendable, CaseIterable {
         case submitted, kyc_review, ibkr_pending, open
+
+        /// The step's label (account.json).
+        public var copyKey: String { "account.timeline.\(rawValue)" }
     }
 
     public enum StepStatus: String, Sendable {
         case done, current, upcoming
+
+        /// How VoiceOver reads the step's state (translation.json).
+        public var copyKey: String { "timeline.status.\(rawValue)" }
     }
 
     public struct Step: Sendable, Equatable, Identifiable {

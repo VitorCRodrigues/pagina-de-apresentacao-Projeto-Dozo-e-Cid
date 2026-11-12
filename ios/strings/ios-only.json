@@ -1,0 +1,73 @@
+{
+  "about": "Texts only the iOS app has. sync-strings.mjs puts them in the app's string catalogs; web/scripts/copy-review.mjs lists them (except dev.*) in the legal review. Same rules as the web copy: PRD section 10, voseo, buttons in the infinitive. TODO(compliance): all pending review.",
+  "strings": {
+    "account.title.unknown": {
+      "screen": "T3 Status da conta",
+      "note": "Status de conta que esta versão do app não conhece (iOS, TODO(decisão) 1).",
+      "es": "Estamos actualizando el estado de tu cuenta",
+      "pt": "Estamos atualizando o status da sua conta",
+      "en": "We are updating your account status"
+    },
+    "account.body.unknown": {
+      "screen": "T3 Status da conta",
+      "note": "Status de conta que esta versão do app não conhece (iOS, TODO(decisão) 1).",
+      "es": "Para ver el detalle, actualizá la app o escribinos.",
+      "pt": "Para ver os detalhes, atualize o app ou fale com o suporte.",
+      "en": "To see the details, update the app or contact support."
+    },
+    "ios.notifications.prompt.title": {
+      "screen": "Antes do pedido de notificações do iOS",
+      "note": "Tela própria antes do alerta do sistema, cujo texto é fixo da Apple. Sem promessa de prazo.",
+      "es": "¿Querés recibir avisos?",
+      "pt": "Quer receber avisos?",
+      "en": "Do you want notifications?"
+    },
+    "ios.notifications.prompt.body": {
+      "screen": "Antes do pedido de notificações do iOS",
+      "note": "Diz para que servem os avisos. Sem promessa de prazo.",
+      "es": "Te avisamos cuando un aporte cambie de estado o cuando tengas algo pendiente en tu cuenta.",
+      "pt": "Avisamos quando um aporte mudar de status ou quando houver algo pendente na sua conta.",
+      "en": "We let you know when a deposit changes status or when something in your account needs you."
+    },
+    "ios.notifications.prompt.allow": {
+      "screen": "Antes do pedido de notificações do iOS",
+      "note": "Botão que abre o alerta do sistema.",
+      "es": "Activar avisos",
+      "pt": "Ativar avisos",
+      "en": "Turn on notifications"
+    },
+    "ios.notifications.prompt.dismiss": {
+      "screen": "Antes do pedido de notificações do iOS",
+      "note": "Botão para seguir sem avisos.",
+      "es": "Omitir",
+      "pt": "Pular",
+      "en": "Skip"
+    },
+    "dev.catalog.title": { "screen": "dev", "note": "Catálogo de componentes (só DEBUG).", "es": "Catálogo de componentes", "pt": "Catálogo de componentes", "en": "Component catalog" },
+    "dev.catalog.colors": { "screen": "dev", "note": "", "es": "Colores", "pt": "Cores", "en": "Colours" },
+    "dev.catalog.type": { "screen": "dev", "note": "", "es": "Tipografía", "pt": "Tipografia", "en": "Type" },
+    "dev.catalog.buttons": { "screen": "dev", "note": "", "es": "Botones", "pt": "Botões", "en": "Buttons" },
+    "dev.catalog.fields": { "screen": "dev", "note": "", "es": "Campos", "pt": "Campos", "en": "Fields" },
+    "dev.catalog.ledger": { "screen": "dev", "note": "", "es": "Líneas de extracto", "pt": "Linhas de extrato", "en": "Statement lines" },
+    "dev.catalog.notices": { "screen": "dev", "note": "", "es": "Avisos", "pt": "Avisos", "en": "Notices" },
+    "dev.catalog.states": { "screen": "dev", "note": "", "es": "Estados", "pt": "Estados", "en": "States" },
+    "dev.comingSoon.title": { "screen": "dev", "note": "Abas que chegam em fases seguintes; não vai para clientes.", "es": "Próximamente", "pt": "Em breve", "en": "Coming soon" },
+    "dev.comingSoon.body": { "screen": "dev", "note": "", "es": "Esta sección llega en una próxima versión de la app.", "pt": "Esta seção chega em uma próxima versão do app.", "en": "This section arrives in a future version of the app." }
+  },
+  "infoPlist": {
+    "NSCameraUsageDescription": {
+      "screen": "Permissão do sistema: câmera",
+      "note": "Mostrado pelo iOS ao pedir a câmera, para fotografar documentos pedidos na abertura da conta.",
+      "es": "Usamos la cámara para que puedas fotografiar los documentos que te pedimos para abrir tu cuenta.",
+      "pt": "Usamos a câmera para você fotografar os documentos que pedimos para abrir sua conta.",
+      "en": "We use the camera so you can photograph the documents we ask for to open your account."
+    },
+    "NSFaceIDUsageDescription": {
+      "screen": "Permissão do sistema: Face ID",
+      "note": "Mostrado pelo iOS ao pedir o Face ID.",
+      "es": "Usamos Face ID para confirmar que sos vos al abrir la app.",
+      "pt": "Usamos o Face ID para confirmar que é você ao abrir o app.",
+      "en": "We use Face ID to confirm it is you when you open the app."
+    }
+  }
+}

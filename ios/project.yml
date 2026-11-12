@@ -40,6 +40,8 @@ targets:
         CFBundleDevelopmentRegion: es
         CFBundleLocalizations: [es, pt, en]
         UIAppFonts: [InterVariable.ttf]
+        # TODO(decisão) 17: NSCameraUsageDescription and NSFaceIDUsageDescription come in with the
+        # features that ask for them; their texts are already in InfoPlist.xcstrings.
         UILaunchScreen:
           UIColorName: LaunchBackground
         # The brand has a light palette only (web/src/styles/tokens.css has no dark theme). Locked

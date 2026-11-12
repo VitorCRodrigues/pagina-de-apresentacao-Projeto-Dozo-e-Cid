@@ -72,7 +72,7 @@ private struct ODButtonBody: View {
             }
         }
         .contentShape(RoundedRectangle(cornerRadius: ODMetric.radiusControl))
-        .accessibilityValue(isLoading ? L10n.text("common.loading") : "")
+        .accessibilityValue(isLoading ? Strings.commonLoading : "")
     }
 
     private var ghost: some View {
@@ -104,13 +104,13 @@ private struct ODButtonBody: View {
 /// Samples shared by the previews and the catalog.
 struct ButtonSamples: View {
     var body: some View {
-        Button(L10n.text("portfolio.empty.action")) {}.buttonStyle(.odPrimary)
-        Button(L10n.text("portfolio.empty.action")) {}.odButtonStyle(.primary, loading: true)
-        Button(L10n.text("portfolio.empty.action")) {}.buttonStyle(.odPrimary).disabled(true)
-        Button(L10n.text("account.actions.contact")) {}.buttonStyle(.odSecondary)
-        Button(L10n.text("account.actions.contact")) {}.buttonStyle(.odSecondary).disabled(true)
-        Button(L10n.text("home.pendingAction")) {}.buttonStyle(.odGhost)
-        Button(L10n.text("home.pendingAction")) {}.buttonStyle(.odGhost).disabled(true)
+        Button(Strings.portfolioEmptyAction) {}.buttonStyle(.odPrimary)
+        Button(Strings.portfolioEmptyAction) {}.odButtonStyle(.primary, loading: true)
+        Button(Strings.portfolioEmptyAction) {}.buttonStyle(.odPrimary).disabled(true)
+        Button(Strings.accountActionsContact) {}.buttonStyle(.odSecondary)
+        Button(Strings.accountActionsContact) {}.buttonStyle(.odSecondary).disabled(true)
+        Button(Strings.homePendingAction) {}.buttonStyle(.odGhost)
+        Button(Strings.homePendingAction) {}.buttonStyle(.odGhost).disabled(true)
     }
 }
 

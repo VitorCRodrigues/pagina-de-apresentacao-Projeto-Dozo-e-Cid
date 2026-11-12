@@ -64,7 +64,7 @@ struct CustodyNote: View {
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.space4) {
             Rule()
-            Text(L10n.text("custody.note"))
+            Text(Strings.custodyNote)
                 .odText(.caption)
                 .foregroundStyle(ODColor.gray600)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -75,14 +75,14 @@ struct CustodyNote: View {
 /// Samples shared by the previews and the catalog.
 struct NoticeSamples: View {
     var body: some View {
-        Notice(title: L10n.plural("home.pending", count: 2)) {
-            Button(L10n.text("home.pendingAction")) {}.buttonStyle(.odGhost)
+        Notice(title: Strings.homePending(count: 2)) {
+            Button(Strings.homePendingAction) {}.buttonStyle(.odGhost)
         }
-        Notice(tone: .warning, title: L10n.text("blockReason.quote_expired.message")) {
-            Button(L10n.text("blockReason.quote_expired.action")) {}.buttonStyle(.odGhost)
+        Notice(tone: .warning, title: Strings.blockReasonQuoteExpiredMessage) {
+            Button(Strings.blockReasonQuoteExpiredAction) {}.buttonStyle(.odGhost)
         }
-        Notice(tone: .error, title: L10n.text("states.error.title"), message: L10n.text("states.error.body"))
-        Notice(title: L10n.text("portfolio.asOf"), quiet: true)
+        Notice(tone: .error, title: Strings.statesErrorTitle, message: Strings.statesErrorBody)
+        Notice(title: Strings.portfolioAsOf, quiet: true)
         CustodyNote()
     }
 }

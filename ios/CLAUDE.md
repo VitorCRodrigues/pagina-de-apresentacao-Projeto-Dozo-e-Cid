@@ -58,7 +58,13 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 - Core, no WSL (o Swift nativo do Windows é bloqueado pelo Smart App Control):
   wsl -d Ubuntu -- bash -lc "cd /mnt/c/Users/Vitor/Documents/GitHub/pagina-de-apresentacao-Projeto-Dozo-e-Cid/ios/OpenDollarsCore && swift test --scratch-path ~/.build/opendollars-core"
   Atalho com saída filtrada: wsl -d Ubuntu -- bash -lc "bash /mnt/c/Users/Vitor/Documents/GitHub/pagina-de-apresentacao-Projeto-Dozo-e-Cid/ios/scripts/test-core-wsl.sh"
-- Textos: depois de mudar a cópia no web, rodar python -I ios/scripts/sync-strings-from-web.py. Nunca editar o Localizable.xcstrings à mão.
+- Textos (Node 22+, a partir da raiz do repositório):
+  node ios/scripts/sync-strings.mjs            gera Localizable.xcstrings, InfoPlist.xcstrings e OpenDollars/Generated/Strings.generated.swift a partir de web/src/i18n/locales e de ios/strings/ios-only.json
+  node ios/scripts/sync-strings.mjs --check    falha se algum gerado estiver desatualizado (roda no CI)
+  node --test "ios/scripts/*.test.mjs"         testes do gerador
+  Rodar depois de qualquer mudança na cópia do web ou em ios-only.json. Nunca editar os gerados à mão.
+- Texto na tela sempre pelos acessores gerados (Strings.homeUpdatedAt(date:)). L10n.text(chave) só para chave montada no core (AccountStatusCopy, AccountTimeline, copyKey), coberta pelo DynamicKeyTests.
+- Texto só do iOS (permissões, notificações, estados que o web não tem) entra em ios/strings/ios-only.json, com tela e observação para o jurídico. Chaves dev.* não vão para o copy-review.
 - Regra de apresentação que dá para testar (roteamento, linha do tempo, chaves de texto) vai para OpenDollarsCore/Presentation, com teste.
 - Windows nativo: verificado pelo job core-windows do workflow .github/workflows/ios.yml.
 - App e UI tests: só compilam no GitHub Actions (job ios, macOS).
@@ -70,3 +76,4 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 - Nunca faça git commit nem git push. Deixe as mudanças no working tree. Ao terminar, liste os arquivos alterados agrupados por assunto e sugira uma mensagem de commit para cada grupo.
 - Mensagens de commit sugeridas em inglês, no padrão Conventional Commits.
 - Não mexer em App/ (backend), em web/ nem na landing page da branch main.
+- Exceção autorizada em 11/11/2026: web/scripts/copy-review.mjs (lê ios/strings/ios-only.json para o jurídico ver os textos do iOS junto com os do web) e os dois arquivos que ele gera, web/docs/copy-review.md e web/docs/copy-review.csv. Depois de regenerar, rodar os testes do web que leem o copy-review: cd web && npx vitest run src/i18n/legal-docs.test.ts. Nada mais em web/.

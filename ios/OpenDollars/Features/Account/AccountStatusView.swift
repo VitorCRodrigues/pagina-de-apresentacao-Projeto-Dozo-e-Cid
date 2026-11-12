@@ -1,9 +1,11 @@
 import OpenDollarsCore
 import SwiftUI
 
-/// T3. Where the opening stands, told calmly. Never a deposit instruction here: money only moves
-/// once the account is open (PRD section 5, failure B2). An unknown status gets generic text and
-/// the support action (TODO(decisão) 1).
+/// T3. Where the opening stands, told calmly, for every status (AccountStatusScreen in the core).
+/// Never a deposit instruction here: money only moves once the account is open (PRD section 5,
+/// failure B2). An unknown status gets generic text and the support action (TODO(decisão) 1).
+/// While the account waits, the screen checks back every minute (AccountPolling), and the routing
+/// follows a new status.
 struct AccountStatusView: View {
     @Environment(AppModel.self) private var model
 
@@ -16,66 +18,84 @@ struct AccountStatusView: View {
                 StatePage { ErrorState(error: error, titleSize: .title) { Task { await model.session.loadAccount() } } }
             case .loaded(let account):
                 ScrollView {
-                    AccountStatusContent(account: account)
+                    AccountStatusContent(screen: AccountStatusScreen(account))
                         .padding(ODMetric.gutter)
                 }
                 .odStatusBarBackground()
+                .task(id: account.status) { await checkBack(while: account.status) }
             }
         }
         .background(ODColor.cream50)
         .toolbar(.hidden, for: .navigationBar)
         .task { await model.session.loadAccount() }
-        .refreshable { await model.session.loadAccount() }
+        .refreshable { await model.session.refreshAccount() }
+    }
+
+    /// Cancelled with the view, and restarted when the status changes.
+    private func checkBack(while status: AccountStatus) async {
+        guard AccountPolling.isWaiting(status) else { return }
+        while !Task.isCancelled {
+            try? await Task.sleep(for: AccountPolling.interval)
+            guard !Task.isCancelled else { return }
+            await model.session.refreshAccount()
+        }
     }
 }
 
 private struct AccountStatusContent: View {
-    let account: Account
-
-    private var documents: [PendingItem] { account.pending.filter { $0.kind == .document } }
+    @Environment(AppModel.self) private var model
+    let screen: AccountStatusScreen
 
     var body: some View {
         VStack(alignment: .leading, spacing: ODMetric.sectionSpacing) {
             VStack(alignment: .leading, spacing: ODMetric.space3) {
-                Text(L10n.text(AccountStatusCopy.titleKey(account.status)))
+                Text(L10n.text(screen.titleKey))
                     .odText(.title)
                     .foregroundStyle(ODColor.navy900)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("account.title")
-                Text(L10n.text(AccountStatusCopy.bodyKey(account.status)))
+                Text(L10n.text(screen.bodyKey))
                     .odText(.body)
                     .foregroundStyle(ODColor.gray600)
+                    .accessibilityIdentifier("account.body")
             }
 
-            if let steps = AccountTimeline.steps(for: account.status) {
+            if screen.action == .continueOnboarding {
+                Button(Strings.accountActionsContinue) { model.leaveAccountStatus() }
+                    .buttonStyle(.odPrimary)
+                    .accessibilityIdentifier("account.continue")
+            }
+
+            if let steps = screen.timeline {
                 OpeningTimeline(steps: steps)
             }
 
-            // TODO(decisão): document upload (camera, files) arrives with the onboarding phase.
-            if account.status == .action_required, !documents.isEmpty {
+            if !screen.documents.isEmpty {
                 VStack(alignment: .leading, spacing: ODMetric.space3) {
                     SectionHeader(title: Strings.accountDocuments)
                     Ledger {
-                        ForEach(documents) { item in
-                            LedgerItem {
-                                VStack(alignment: .leading, spacing: ODMetric.space1) {
-                                    Text(item.title).odText(.body).foregroundStyle(ODColor.graphite900)
-                                    Text(item.description).odText(.caption).foregroundStyle(ODColor.gray600)
-                                }
-                                .accessibilityElement(children: .combine)
-                            }
+                        ForEach(screen.documents) { item in
+                            LedgerItem { DocumentUploadRow(item: item) }
                         }
                     }
                 }
             }
 
-            if account.status == .open, let masked = account.ibkrAccountMasked {
+            if screen.showsAllSent {
+                Notice(title: Strings.accountAllSent, quiet: true)
+                    .accessibilityIdentifier("account.allSent")
+            }
+
+            if let number = screen.accountNumber {
                 Ledger {
-                    LedgerRow(label: Strings.accountAccountNumber) { Text(masked) }
+                    LedgerRow(label: Strings.accountAccountNumber) { Text(number) }
                 }
             }
 
-            if AccountStatusCopy.offersSupport(account.status) {
+            // TODO(decisão): "Crear plan mensual" arrives with the plan screen (T5); until then an
+            // open account lands on the tabs and this screen only shows here with -screen account.
+
+            if screen.action == .contactSupport {
                 Link(Strings.accountActionsContact, destination: AppConstants.supportURL)
                     .buttonStyle(.odSecondary)
             }

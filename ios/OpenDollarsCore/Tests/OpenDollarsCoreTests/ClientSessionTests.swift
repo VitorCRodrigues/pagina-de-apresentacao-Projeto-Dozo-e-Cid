@@ -18,7 +18,8 @@ actor OutcomeQueue {
 /// The mock server, with the power to hold one route until `release()`: an answer that arrives
 /// after the session ended.
 actor GatedTransport: HTTPTransport {
-    private let server: MockServer
+    let server: MockServer
+    private var uploadFailure: (any Error)?
     private var heldRoute: String?
     private var waiting: [CheckedContinuation<Void, Never>] = []
     private var revoked = false
@@ -36,6 +37,9 @@ actor GatedTransport: HTTPTransport {
 
     /// The next request to `route` answers 422 validation_failed with these field errors.
     func rejectNext(_ route: String, fields: [String: String]) { rejection = (route, fields) }
+
+    /// The next upload sends part of the file, then the connection drops with this error.
+    func failNextUpload(with error: any Error) { uploadFailure = error }
 
     func release() {
         heldRoute = nil
@@ -61,6 +65,23 @@ actor GatedTransport: HTTPTransport {
             return HTTPResponse(status: 401, body: Data(#"{"error":{"code":"session_expired","message":"Revoked"}}"#.utf8))
         }
         let response = try await server.send(request)
+        statuses.append(response.status)
+        return response
+    }
+
+    func upload(_ request: HTTPRequest, progress: @escaping @Sendable (Double) -> Void) async throws -> HTTPResponse {
+        if let uploadFailure {
+            requests.append(request)
+            self.uploadFailure = nil
+            progress(0.4)
+            throw uploadFailure
+        }
+        guard !revoked, rejection == nil, heldRoute == nil || !request.path.hasSuffix(heldRoute ?? "") else {
+            // Held, revoked or rejected routes behave as in send.
+            return try await send(request)
+        }
+        requests.append(request)
+        let response = try await server.upload(request, progress: progress)
         statuses.append(response.status)
         return response
     }

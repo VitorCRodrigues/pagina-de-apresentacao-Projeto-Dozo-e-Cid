@@ -27,6 +27,14 @@ struct MockDeposit: Sendable {
     var returnReason: Localized?
 }
 
+/// A document the mock received, for the tests to inspect what really left the app.
+public struct ReceivedDocument: Sendable, Equatable {
+    public var pendingItemId: String
+    public var fileName: String?
+    public var contentType: String?
+    public var data: Data
+}
+
 struct MockFailure: Sendable {
     var status: Int
     var code: ApiErrorCode
@@ -60,6 +68,10 @@ struct MockDatabase: Sendable {
     var depositsByKey: [String: (body: Data, depositId: String)] = [:]
     /// The onboarding draft (T2): the web's draft scenario resumes at the address.
     var onboarding = OnboardingFixtures.emptyDraft
+    /// T3: documents received (POST /account/documents), and which pending item each
+    /// Idempotency-Key was used for.
+    var receivedDocuments: [ReceivedDocument] = []
+    var documentsByKey: [String: String] = [:]
 
     // MARK: Payloads, in the language the request asked for
 

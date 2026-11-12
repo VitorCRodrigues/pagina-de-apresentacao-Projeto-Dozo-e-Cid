@@ -8,13 +8,8 @@ final class ScreenshotTests: XCTestCase {
         shootSignedIn(scenario: "open", name: "01-inicio-open", waitFor: "home.total")
     }
 
-    func testAccountStatusWhileIBKRReviews() {
-        shootSignedIn(scenario: "ibkr_pending", name: "02-estado-ibkr_pending", waitFor: "account.title")
-    }
-
-    func testAccountStatusWithDocumentsRequested() {
-        shootSignedIn(scenario: "action_required", name: "03-estado-action_required", waitFor: "account.title")
-    }
+    // 02 and 03 (ibkr_pending, action_required) moved to AccountStatusUITests (40 to 52), with
+    // the other T3 statuses and the document upload.
 
     func testHomeWithARestrictedAccount() {
         shootSignedIn(scenario: "restricted", name: "04-inicio-restricted", waitFor: "account.block")

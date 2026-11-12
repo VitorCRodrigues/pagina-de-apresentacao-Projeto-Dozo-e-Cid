@@ -76,6 +76,8 @@ public actor MockServer: HTTPTransport {
             db.accountStatus = .submitted
             db.me.accountStatus = .submitted
             return json(200, db.accountPayload(lang))
+        case (.POST, "account", 2) where segments[1] == "documents":
+            return receiveDocument(request, lang)
         case (.GET, "account", 2) where segments[1] == "terms":
             return json(200, OnboardingFixtures.termsDocuments(lang))
         case (.POST, "waitlist", 1):
@@ -100,6 +102,76 @@ public actor MockServer: HTTPTransport {
         default:
             return notFound()
         }
+    }
+
+    /// Sending a document reports progress in steps over about 1.5 s, so the bar is seen in
+    /// development and in the screenshots; then the request is answered as any other.
+    public func upload(_ request: HTTPRequest, progress: @escaping @Sendable (Double) -> Void) async throws -> HTTPResponse {
+        let drops = dropNextUpload
+        dropNextUpload = false
+        for step in 1...4 {
+            try await sleep(uploadStep)
+            if drops, step == 3 { throw URLError(.networkConnectionLost) }
+            progress(Double(step) / 4)
+        }
+        return try await send(request)
+    }
+
+    private var dropNextUpload = false
+    private var uploadStep: Duration = .milliseconds(375)
+
+    /// Each of the four progress steps takes this long (`-slowUpload`, DEBUG: a screenshot while
+    /// the bar moves).
+    public func setUploadStep(_ step: Duration) { uploadStep = step }
+
+    /// The next upload drops halfway, as on a weak connection (`-failFirstUpload`, DEBUG): the
+    /// app's "Reintentar" can be seen and tested. Nothing is recorded.
+    public func failNextUpload() { dropNextUpload = true }
+
+    // MARK: Test and development hooks
+
+    /// The documents this client sent, oldest first.
+    public func receivedDocuments(for identity: SimulatedIdentity) -> [ReceivedDocument] {
+        databases[identity]?.receivedDocuments ?? []
+    }
+
+    /// The account moves on, as when Interactive Brokers answers (T3 checks back every minute).
+    public func setAccountStatus(_ status: AccountStatus, for identity: SimulatedIdentity) {
+        guard var changed = databases[identity] else { return }
+        changed.accountStatus = status
+        changed.me.accountStatus = status
+        if status == .open { changed.ibkrAccountMasked = "U****4821"; changed.blockReasons = [] }
+        if status != .action_required { changed.pending.removeAll { $0.kind == .document } }
+        databases[identity] = changed
+    }
+
+    // MARK: Documents
+
+    /// POST /account/documents (api-gaps.md): multipart with `pendingItemId` and `file`; answers
+    /// the account without that pending item. TODO(api) 2: as proposed to the backend, the same
+    /// Idempotency-Key for the same item answers again without recording the document twice.
+    private func receiveDocument(_ request: HTTPRequest, _ lang: AppLocale) -> HTTPResponse {
+        let key = request.headers["Idempotency-Key"].flatMap { $0.isEmpty ? nil : $0 }
+        guard let contentType = request.headers["Content-Type"],
+              let parts = MultipartBody.parts(of: request.body ?? Data(), contentType: contentType)
+        else { return error(422, "validation_failed", "Invalid multipart body", fields: ["body": "invalid"]) }
+        let itemId = parts.first { $0.name == "pendingItemId" }.map { String(decoding: $0.data, as: UTF8.self) }
+        let file = parts.first { $0.name == "file" && !$0.data.isEmpty }
+        var fields: [String: String] = [:]
+        if itemId?.isEmpty ?? true { fields["pendingItemId"] = "invalid" }
+        if file == nil { fields["file"] = "invalid" }
+        guard let itemId, let file, fields.isEmpty else {
+            return error(422, "validation_failed", "pendingItemId and file are required", fields: fields)
+        }
+        if let key, let previous = db.documentsByKey[key] {
+            guard previous == itemId else { return error(409, "idempotency_conflict", "Key reused") }
+            return json(200, db.accountPayload(lang))
+        }
+        guard db.pending.contains(where: { $0.id == itemId && $0.kind == .document }) else { return notFound() }
+        db.receivedDocuments.append(ReceivedDocument(pendingItemId: itemId, fileName: file.fileName, contentType: file.contentType, data: file.data))
+        if let key { db.documentsByKey[key] = itemId }
+        db.pending.removeAll { $0.id == itemId }
+        return json(200, db.accountPayload(lang))
     }
 
     // MARK: Onboarding

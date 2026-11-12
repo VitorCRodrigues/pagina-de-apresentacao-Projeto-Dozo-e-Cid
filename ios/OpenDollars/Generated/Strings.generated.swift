@@ -757,6 +757,30 @@ enum Strings {
     /// Elegir
     static var iosPickerChoose: String { L10n.text("ios.picker.choose") }
 
+    /// Para escanear, permití el acceso a la cámara en Ajustes.
+    static var iosUploadCameraDenied: String { L10n.text("ios.upload.cameraDenied") }
+
+    /// Elegir de Archivos
+    static var iosUploadFromFiles: String { L10n.text("ios.upload.fromFiles") }
+
+    /// Elegir de Fotos
+    static var iosUploadFromPhotos: String { L10n.text("ios.upload.fromPhotos") }
+
+    /// El envío se cortó. Revisá tu conexión y volvé a intentar.
+    static var iosUploadInterrupted: String { L10n.text("ios.upload.interrupted") }
+
+    /// Abrir Ajustes
+    static var iosUploadOpenSettings: String { L10n.text("ios.upload.openSettings") }
+
+    /// Foto de la galería
+    static var iosUploadPhotoName: String { L10n.text("ios.upload.photoName") }
+
+    /// Escanear documento
+    static var iosUploadScan: String { L10n.text("ios.upload.scan") }
+
+    /// Documento escaneado
+    static var iosUploadScannedName: String { L10n.text("ios.upload.scannedName") }
+
     /// English
     static var languageEn: String { L10n.text("language.en") }
 

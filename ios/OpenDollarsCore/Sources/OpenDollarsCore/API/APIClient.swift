@@ -70,6 +70,31 @@ public actor APIClient {
         body: (some Encodable & Sendable)?, idempotencyKey: IdempotencyKey?
     ) async throws -> HTTPResponse {
         let bodyData: Data? = try body.map { try encoder.encode($0) }
+        return try await perform(
+            method, path, query: query, body: bodyData.map { ($0, "application/json") },
+            idempotencyKey: idempotencyKey, progress: nil)
+    }
+
+    /// A multipart upload (POST /account/documents), with the fraction sent reported. A retry
+    /// after a renewed token sends the same body with the same Idempotency-Key.
+    func upload<Response: Decodable>(
+        _ path: String, body: MultipartBody, idempotencyKey: IdempotencyKey,
+        progress: @escaping @Sendable (Double) -> Void, as type: Response.Type = Response.self
+    ) async throws -> Response {
+        let response = try await perform(
+            .POST, path, query: [], body: (body.data, body.contentType), idempotencyKey: idempotencyKey, progress: progress)
+        do {
+            return try decoder.decode(Response.self, from: response.body)
+        } catch {
+            throw APIError(status: response.status, code: .invalid_response, message: "Invalid response for \(path)")
+        }
+    }
+
+    private func perform(
+        _ method: HTTPMethod, _ path: String, query: [(String, String)],
+        body: (data: Data, contentType: String)?, idempotencyKey: IdempotencyKey?,
+        progress: (@Sendable (Double) -> Void)?
+    ) async throws -> HTTPResponse {
         let fullPath = OpenDollarsCore.apiBasePath + path + Self.queryString(query)
         var refreshed = false
 
@@ -77,11 +102,16 @@ public actor APIClient {
             var headers = ["Accept": "application/json", "Accept-Language": locale().rawValue]
             if let token = await tokens.accessToken() { headers["Authorization"] = "Bearer \(token)" }
             if let idempotencyKey { headers["Idempotency-Key"] = idempotencyKey.rawValue }
-            if bodyData != nil { headers["Content-Type"] = "application/json" }
+            if let body { headers["Content-Type"] = body.contentType }
 
+            let request = HTTPRequest(method: method, path: fullPath, headers: headers, body: body?.data)
             let response: HTTPResponse
             do {
-                response = try await transport.send(HTTPRequest(method: method, path: fullPath, headers: headers, body: bodyData))
+                if let progress {
+                    response = try await transport.upload(request, progress: progress)
+                } else {
+                    response = try await transport.send(request)
+                }
             } catch is CancellationError {
                 throw CancellationError()
             } catch let error as URLError where error.code == .cancelled {

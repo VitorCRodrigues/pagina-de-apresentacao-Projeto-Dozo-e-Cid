@@ -2,7 +2,7 @@
 
 Gerado por `npm run copy:review` a partir de `src/i18n/locales` e dos textos editoriais do mock (`src/mocks/fixtures.ts`). Não edite à mão: comente em `copy-review.csv`, que tem o mesmo conteúdo, e os ajustes voltam para os arquivos de idioma.
 
-Total: 561 textos (12 só no app iOS). Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
+Total: 569 textos (20 só no app iOS). Chaves `mock:` são exemplos do que a API vai servir; o texto final vem do backend. Ficam de fora os nomes das províncias argentinas (nomes próprios) e o seletor de cenários do mock, que o cliente não vê. `{{min}}`, `{{date}}` e semelhantes são valores preenchidos pelo app.
 
 ## 1. Depende da confirmação do registro RIA antes do piloto
 
@@ -576,7 +576,7 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 
 ## 4. Só no app iOS
 
-12 textos que o app web não tem: permissões do sistema (`ios:InfoPlist.`), a tela antes do pedido de notificações e estados próprios do app. Vêm de `ios/strings/ios-only.json`; o app iOS usa os mesmos textos do web para todo o resto.
+20 textos que o app web não tem: permissões do sistema (`ios:InfoPlist.`), a tela antes do pedido de notificações e estados próprios do app. Vêm de `ios/strings/ios-only.json`; o app iOS usa os mesmos textos do web para todo o resto.
 
 | Chave | Tela | ES | PT | EN | Status jurídico | Observação |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -591,4 +591,12 @@ Nenhum texto do app diz "registrada" nem cita a SEC. Estes 7 pressupõem o statu
 | `ios.notifications.prompt.body` | iOS: Antes do pedido de notificações do iOS | Te avisamos cuando un aporte cambie de estado o cuando tengas algo pendiente en tu cuenta. | Avisamos quando um aporte mudar de status ou quando houver algo pendente na sua conta. | We let you know when a deposit changes status or when something in your account needs you. | pendente | Diz para que servem os avisos. Sem promessa de prazo. |
 | `ios.notifications.prompt.allow` | iOS: Antes do pedido de notificações do iOS | Activar avisos | Ativar avisos | Turn on notifications | pendente | Botão que abre o alerta do sistema. |
 | `ios.notifications.prompt.dismiss` | iOS: Antes do pedido de notificações do iOS | Omitir | Pular | Skip | pendente | Botão para seguir sem avisos. |
+| `ios.upload.scan` | iOS: T3 Status da conta, envio de documentos | Escanear documento | Digitalizar documento | Scan document | pendente | Botão que abre o scanner de documentos do iOS (câmera). Só aparece em aparelhos com câmera. O resultado é um PDF. |
+| `ios.upload.fromPhotos` | iOS: T3 Status da conta, envio de documentos | Elegir de Fotos | Escolher de Fotos | Choose from Photos | pendente | Opção do menu "Elegir archivo": abre a galeria de fotos do iOS. Não pede permissão de fotos (o seletor do sistema roda fora do app). |
+| `ios.upload.fromFiles` | iOS: T3 Status da conta, envio de documentos | Elegir de Archivos | Escolher de Arquivos | Choose from Files | pendente | Opção do menu "Elegir archivo": abre o app Arquivos do iOS (JPG, PNG ou PDF). |
+| `ios.upload.scannedName` | iOS: T3 Status da conta, envio de documentos | Documento escaneado | Documento digitalizado | Scanned document | pendente | Nome mostrado na linha para um documento escaneado (o scanner não dá nome ao arquivo). Não é enviado ao servidor. |
+| `ios.upload.photoName` | iOS: T3 Status da conta, envio de documentos | Foto de la galería | Foto da galeria | Photo from your library | pendente | Nome mostrado na linha para uma foto escolhida da galeria (a galeria não dá o nome do arquivo). Não é enviado ao servidor. |
+| `ios.upload.interrupted` | iOS: T3 Status da conta, envio de documentos | El envío se cortó. Revisá tu conexión y volvé a intentar. | O envio foi interrompido. Verifique sua conexão e tente de novo. | The upload was cut off. Check your connection and try again. | pendente | O envio caiu no meio (conexão perdida ou lenta demais). Acompanha o botão Reintentar; o arquivo escolhido continua na linha. |
+| `ios.upload.cameraDenied` | iOS: T3 Status da conta, envio de documentos | Para escanear, permití el acceso a la cámara en Ajustes. | Para digitalizar, permita o acesso à câmera nos Ajustes. | To scan, allow camera access in Settings. | pendente | O cliente negou o acesso à câmera antes. Sem promessa: só como liberar. |
+| `ios.upload.openSettings` | iOS: T3 Status da conta, envio de documentos | Abrir Ajustes | Abrir Ajustes | Open Settings | pendente | Abre os Ajustes do iOS na página do app. |
 | `ios:InfoPlist.NSCameraUsageDescription` | iOS: Permissão do sistema: câmera | Usamos la cámara para que puedas fotografiar los documentos que te pedimos para abrir tu cuenta. | Usamos a câmera para você fotografar os documentos que pedimos para abrir sua conta. | We use the camera so you can photograph the documents we ask for to open your account. | pendente | Mostrado pelo iOS ao pedir a câmera, para fotografar documentos pedidos na abertura da conta. |

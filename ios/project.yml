@@ -40,8 +40,11 @@ targets:
         CFBundleDevelopmentRegion: es
         CFBundleLocalizations: [es, pt, en]
         UIAppFonts: [InterVariable.ttf]
-        # TODO(decisão) 17: NSCameraUsageDescription comes in with the
-        # document upload; its text is already in InfoPlist.xcstrings. No Face ID in the pilot (22).
+        # The document scanner (T3). The shown text comes from InfoPlist.xcstrings (ios-only.json,
+        # reviewed by legal); this is its Spanish source, kept equal by PermissionTextTests.
+        # No photo library permission: PhotosPicker runs outside the app (decision 37). No Face ID
+        # in the pilot (22).
+        NSCameraUsageDescription: "Usamos la cámara para que puedas fotografiar los documentos que te pedimos para abrir tu cuenta."
         UILaunchScreen:
           UIColorName: LaunchBackground
         # The brand has a light palette only (web/src/styles/tokens.css has no dark theme). Locked

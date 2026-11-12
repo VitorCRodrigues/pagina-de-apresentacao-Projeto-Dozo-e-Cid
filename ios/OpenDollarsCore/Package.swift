@@ -11,7 +11,8 @@ let package = Package(
     ],
     targets: [
         .target(name: "OpenDollarsCore"),
-        .testTarget(name: "OpenDollarsCoreTests", dependencies: ["OpenDollarsCore"]),
+        // Fixtures: sample photos with EXIF and GPS, for the metadata tests (DocumentTests).
+        .testTarget(name: "OpenDollarsCoreTests", dependencies: ["OpenDollarsCore"], resources: [.copy("Fixtures")]),
     ],
     swiftLanguageModes: [.v6]
 )

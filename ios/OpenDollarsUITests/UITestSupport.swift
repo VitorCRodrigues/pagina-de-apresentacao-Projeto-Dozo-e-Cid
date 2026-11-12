@@ -28,6 +28,22 @@ extension XCTestCase {
         return element
     }
 
+    /// Swipes `container` up until `identifier` exists and can be tapped. A lazy List (the country
+    /// sheet) creates rows only when they come near the screen, and a tap on a button still under
+    /// a scroll's deceleration can land nowhere; this brings it on screen first. Fails like
+    /// `waitFor` when it never shows.
+    @discardableResult
+    func scrollTo(_ app: XCUIApplication, _ identifier: String, in container: XCUIElement, maxSwipes: Int = 15) -> XCUIElement {
+        let element = app.descendants(matching: .any)[identifier]
+        var swipes = 0
+        while !(element.exists && element.isHittable), swipes < maxSwipes {
+            container.swipeUp(velocity: .slow)
+            swipes += 1
+        }
+        XCTAssertTrue(element.exists && element.isHittable, "\(identifier) did not come on screen after \(swipes) swipes")
+        return element
+    }
+
     /// Kept in the .xcresult (lifetime .keepAlways); the workflow exports it per device.
     func attachScreenshot(_ app: XCUIApplication, name: String) {
         let device = ProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] ?? "device"

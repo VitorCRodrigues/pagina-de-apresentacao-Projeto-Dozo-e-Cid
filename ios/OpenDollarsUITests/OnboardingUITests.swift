@@ -52,10 +52,16 @@ final class OnboardingUITests: XCTestCase {
 
         _ = waitFor(app, "onboarding.step.review")
         attachScreenshot(app, name: "27-onboarding-8-revision")
-        tap(app, "onboarding.submit")
+        // The review is long: bring "Enviar solicitud" fully on screen, settled, before the tap.
+        _ = waitFor(app, "onboarding.submit", timeout: 10)
+        scrollTo(app, "onboarding.submit", in: app.scrollViews.firstMatch).tap()
 
-        // Submitted: the account status screen takes over.
-        _ = waitFor(app, "account.title")
+        // Submitted: the account status screen takes over. If it does not, the screen as it was
+        // goes into the .xcresult, to see where the flow stopped.
+        if !app.descendants(matching: .any)["account.title"].waitForExistence(timeout: 30) {
+            attachScreenshot(app, name: "28-onboarding-enviado-FALHOU")
+        }
+        _ = waitFor(app, "account.title", timeout: 1)
         attachScreenshot(app, name: "28-onboarding-enviado")
         app.terminate()
     }
@@ -94,7 +100,10 @@ final class OnboardingUITests: XCTestCase {
         tap(app, "onboarding.back")
         _ = waitFor(app, "onboarding.step.residence")
         tap(app, "field.country")
-        tap(app, "field.country.UY")
+        // The sheet's List is lazy: Uruguay, near the end of the list, exists only once scrolled to.
+        let countries = app.collectionViews.firstMatch
+        XCTAssertTrue(countries.waitForExistence(timeout: 10), "the country list did not open")
+        scrollTo(app, "field.country.UY", in: countries).tap()
         tap(app, "onboarding.continue")
         _ = waitFor(app, "onboarding.waitlist")
         attachScreenshot(app, name: "30-onboarding-lista-de-espera")

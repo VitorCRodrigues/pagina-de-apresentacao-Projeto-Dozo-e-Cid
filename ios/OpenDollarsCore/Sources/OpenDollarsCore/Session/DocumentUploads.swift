@@ -20,6 +20,7 @@ public final class DocumentUploads {
     }
 
     private var states: [String: State] = [:]
+    @ObservationIgnored private var inFlight: [String: Task<Account, any Error>] = [:]
 
     public var isEmpty: Bool { states.isEmpty }
 
@@ -64,8 +65,20 @@ public final class DocumentUploads {
         let shown = Task {
             for await fraction in fractions { progressed(pendingItemId, document.id, fraction) }
         }
+        // Its own task, kept so that every exit cancels it (clear()): an upload can last minutes,
+        // and a 401 at its end must not be retried with the next client's token.
+        let client = client
+        let upload = Task {
+            try await client.uploadDocument(pendingItemId: pendingItemId, document: document) { reporter.yield($0) }
+        }
+        inFlight[pendingItemId] = upload
+        defer { if inFlight[pendingItemId] == upload { inFlight[pendingItemId] = nil } }
         do {
-            let account = try await client.uploadDocument(pendingItemId: pendingItemId, document: document) { reporter.yield($0) }
+            let account = try await withTaskCancellationHandler {
+                try await upload.value
+            } onCancel: {
+                upload.cancel()
+            }
             reporter.finish()
             await shown.value
             guard isCurrent() else { return }
@@ -100,6 +113,10 @@ public final class DocumentUploads {
         states[pendingItemId] = nil
     }
 
-    /// Every exit: the chosen files go with the session.
-    func clear() { states = [:] }
+    /// Every exit: the chosen files go with the session, and the sends under way are cancelled.
+    func clear() {
+        inFlight.values.forEach { $0.cancel() }
+        inFlight = [:]
+        states = [:]
+    }
 }

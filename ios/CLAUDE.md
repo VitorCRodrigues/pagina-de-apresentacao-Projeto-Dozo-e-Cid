@@ -75,7 +75,8 @@ Piloto: Argentina, espanhol, ~50 contas, celular.
 ## Definição de pronto
 
 - swift test passando no WSL e CI verde (core-windows e ios).
-- Nunca faça git commit nem git push. Deixe as mudanças no working tree. Ao terminar, liste os arquivos alterados agrupados por assunto e sugira uma mensagem de commit para cada grupo.
+- Nunca faça git commit nem git push. Deixe as mudanças no working tree.
+- Nunca refaça (reset, rebase, amend, squash, split) um commit que já está no GitHub. Ao terminar, liste os arquivos alterados agrupados por assunto e sugira uma mensagem de commit para cada grupo.
 - Mensagens de commit sugeridas em inglês, no padrão Conventional Commits.
 - Não mexer em App/ (backend), em web/ nem na landing page da branch main.
 - Exceção autorizada em 11/11/2026: web/scripts/copy-review.mjs (lê ios/strings/ios-only.json para o jurídico ver os textos do iOS junto com os do web) e os dois arquivos que ele gera, web/docs/copy-review.md e web/docs/copy-review.csv. Depois de regenerar, rodar os testes do web que leem o copy-review: cd web && npx vitest run src/i18n/legal-docs.test.ts. Nada mais em web/.

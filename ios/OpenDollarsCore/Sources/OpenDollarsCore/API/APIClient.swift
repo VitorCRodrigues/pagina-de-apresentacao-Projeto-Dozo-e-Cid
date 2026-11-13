@@ -129,6 +129,9 @@ public actor APIClient {
             if error.code == .session_expired {
                 // One silent refresh per request; the retry keeps the same Idempotency-Key.
                 if !refreshed, await tokens.refreshAccessToken() {
+                    // Cancelled meanwhile (the client left): the renewed token may already be
+                    // the next client's, so nothing is sent again.
+                    try Task.checkCancellation()
                     refreshed = true
                     continue
                 }

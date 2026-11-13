@@ -303,6 +303,41 @@ private func signedIn(_ scenario: Scenario = .action_required) async -> Harness 
         #expect(harness.model.account == .idle)
     }
 
+    // Any exit cancels the sends under way. Client A leaves while a document is on its way and
+    // client B signs in; the server then answers A's upload with 401. Nothing of A may be sent
+    // again with B's token.
+    @Test func aSendUnderWayWhenTheClientLeavesIsCancelledAndNeverResentWithTheNextClientsToken() async throws {
+        let harness = Harness([.identity(.lucia), .identity(.rafael)], scenario: .action_required)
+        await harness.model.start()
+        await harness.model.signIn()
+        await harness.model.loadAccount()
+        let uploads = harness.model.documents
+        await harness.transport.hold("/account/documents")
+        await harness.transport.expireNext("/account/documents")
+        uploads.choose(DocumentFixtures.pdf, displayName: "a.pdf", for: "pend-address-proof")
+        let sending = Task { await uploads.send("pend-address-proof") }
+        await harness.settle()
+        #expect(await harness.transport.waitingCount == 1)
+
+        await harness.model.signOut()
+        await harness.model.signIn()
+        guard case .ready(let me) = harness.model.phase else {
+            Issue.record("client B did not sign in: \(harness.model.phase)")
+            return
+        }
+        #expect(me.id == Fixtures.rafael.id)
+
+        await harness.transport.release()
+        await sending.value
+        await harness.settle()
+        let posts = await harness.transport.requests.filter { $0.path.hasSuffix("/account/documents") }
+        #expect(posts.count == 1)
+        #expect(await harness.transport.server.receivedDocuments(for: .rafael).isEmpty)
+        #expect(await harness.transport.server.receivedDocuments(for: .lucia).isEmpty)
+        #expect(uploads.state(of: "pend-address-proof") == nil)
+        #expect(harness.model.documents.isEmpty)
+    }
+
     // A photo still being shrunk when the session ends: the file must not reach the next client.
     @Test func aFileReadyAfterTheExitGoesNowhere() async {
         let harness = await signedIn()

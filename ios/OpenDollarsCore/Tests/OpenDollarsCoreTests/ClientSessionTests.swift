@@ -38,6 +38,12 @@ actor GatedTransport: HTTPTransport {
     /// The next request to `route` answers 422 validation_failed with these field errors.
     func rejectNext(_ route: String, fields: [String: String]) { rejection = (route, fields) }
 
+    private var expiring: String?
+
+    /// The next request to `route` answers 401 session_expired (its access token expired on the
+    /// way), so the APIClient renews the token and sends it again.
+    func expireNext(_ route: String) { expiring = route }
+
     /// The next upload sends part of the file, then the connection drops with this error.
     func failNextUpload(with error: any Error) { uploadFailure = error }
 
@@ -55,6 +61,11 @@ actor GatedTransport: HTTPTransport {
             await withCheckedContinuation { waiting.append($0) }
             // As URLSession: a request whose task was cancelled while it waited ends cancelled.
             try Task.checkCancellation()
+        }
+        if let expiring, request.path.hasSuffix(expiring) {
+            self.expiring = nil
+            statuses.append(401)
+            return HTTPResponse(status: 401, body: Data(#"{"error":{"code":"session_expired","message":"Expired"}}"#.utf8))
         }
         if let rejection, request.path.hasSuffix(rejection.route) {
             self.rejection = nil
